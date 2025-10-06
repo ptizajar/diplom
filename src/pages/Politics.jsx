@@ -1,10 +1,6 @@
-import React from "react"
+import React from "react";
 function Politics() {
-    return (
-        <div>
-            Politics
-        </div>
-    )
+  return <div>Politics</div>;
 }
 
-export default Politics
+export default Politics;

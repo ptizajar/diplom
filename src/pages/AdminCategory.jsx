@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { categories } from "../../data/data";
 import { items } from "../../data/data";
-import AdminItemCard from "../components/AdminItemCard"
+import AdminItemCard from "../components/AdminItemCard";
 import { Link } from "react-router-dom";
 
 function AdminCategory() {
@@ -14,8 +14,10 @@ function AdminCategory() {
   const categoryArray = items.filter(
     (item) => item.categoryId === thisCategory.id
   );
-  return <div>{thisCategory.name}
-      <ul style={{ display: "flex", flexDirection:"column" }}>
+  return (
+    <div>
+      {thisCategory.name}
+      <ul style={{ display: "flex", flexDirection: "column" }}>
         {categoryArray.map((item) => (
           <li key={item.id}>
             <AdminItemCard
@@ -26,7 +28,9 @@ function AdminCategory() {
             ></AdminItemCard>
           </li>
         ))}
-      </ul></div>;
+      </ul>
+    </div>
+  );
 }
 
 export default AdminCategory;

@@ -1,11 +1,6 @@
-import React from "react"
+import React from "react";
 function Favourites() {
-    return (
-        <div>
-            Favourites
-            
-        </div>
-    )
+  return <div>Favourites</div>;
 }
 
-export default Favourites
+export default Favourites;

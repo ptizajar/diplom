@@ -1,14 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-function AdminCategoryCard({ categoryId, name }) {
+import CategoryCard from "./CategoryCard";
+function AdminCategoryCard({ categoryId, name, url }) {
   return (
-    <div style={{border: "solid red 1px"}}>
-      <Link to={`/admin_category/${categoryId}`}>
-        <img src={"../../public/pool.jpg"} alt="бассейн" /><br />
-        <p>{name}</p><br />
-        <button>Edit</button>
-        <button>Delete</button>
-      </Link>
+    <div>
+      <CategoryCard categoryId={categoryId} name={name} url={url} />
+      <button>Edit</button>
+      <button>Delete</button>
     </div>
   );
 }

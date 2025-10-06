@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-function CategoryCard({ categoryId, name }) {
+function CategoryCard({ categoryId, name, url }) {
   return (
-    <div style={{border: "solid red 1px"}}>
-      <Link to={`/category/${categoryId}`}>
-        <img src={"../../public/pool.jpg"} alt="бассейн" /><br />
-        <p>{name}</p><br />
+    <div >
+      <Link to={`/${url}/${categoryId}`}>
+        <img src={"../../public/pool.jpg"} alt="бассейн" />
+        <br />
+        <p>{name}</p>
+        <br />
       </Link>
     </div>
   );

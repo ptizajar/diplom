@@ -8,7 +8,6 @@ function Category() {
   const thisCategory = categories.find(
     (category) => category.id === categoryId
   );
-  
 
   const categoryArray = items.filter(
     (item) => item.categoryId === thisCategory.id
@@ -23,6 +22,7 @@ function Category() {
           <li key={item.id}>
             <ItemCard
               itemId={item.id}
+              url={"item"}
               name={item.name}
               size={item.size}
               price={item.price}

@@ -1,10 +1,6 @@
-import React from "react"
+import React from "react";
 function Bids() {
-    return (
-        <div>
-            Bids
-        </div>
-    )
+  return <div>Bids</div>;
 }
 
-export default Bids
+export default Bids;

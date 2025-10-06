@@ -1,22 +1,43 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React from "react";
+import { Link } from "react-router-dom";
+import "../../src/index.css";
 function Header() {
-    return (
-        <div>Header
-            <Link to={"/favourites"}>
-				<button>Избранное</button>
-			</Link>
-             <Link to={"/catalog"}>
-				<button>Каталог</button>
-			</Link>
-             <Link to={"/admin"}>
-				<button>Админчик</button>
-			</Link>
-             
-             <Link to={"/"}>
-				<button>Главная</button>
-			</Link></div>
-    )
+  return (
+    <nav className="header">
+      <ul className="header-menu">
+        <Link to={"/"} className="menu-link--logo">
+          <li className="menu-item--logo">
+            <img src="/public/logo.svg" className="menu-icon--logo"></img>
+            INTEX Ростов
+          </li>
+        </Link>
+        <Link to={"/catalog"} className="menu-link">
+          <li className="menu-item">
+            <img src="/public/catalog.svg" className="menu-icon"></img>
+            Каталог
+          </li>
+        </Link>
+        <Link className="menu-link">
+          <li className="menu-item">
+            <img src="/public/login.svg" className="menu-icon"></img>
+            Войти
+          </li>
+        </Link>
+        <Link to={"/favourites"} className="menu-link">
+          <li className="menu-item">
+            <img src="/public/favourites.svg" className="menu-icon"></img>
+            Избранное
+          </li>
+        </Link>
+        <Link to={"/admin"} className="menu-link">
+          <li className="menu-item">
+            <img src="/public/admin.svg" className="menu-icon"></img>
+            Администрирование
+          </li>
+        </Link>
+      </ul>
+    </nav>
+  );
 }
 
-export default Header
+export default Header;

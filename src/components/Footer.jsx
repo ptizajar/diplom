@@ -1,14 +1,14 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React from "react";
+import { Link } from "react-router-dom";
 function Footer() {
-    return (
-        <div>
-            Footer
-             <Link to={"/politics"}>
-				<button>Политика конфиденциальности</button>
-			</Link>
-        </div>
-    )
+  return (
+    <div>
+      Footer
+      <Link to={"/politics"}>
+        <button>Политика конфиденциальности</button>
+      </Link>
+    </div>
+  );
 }
 
-export default Footer
+export default Footer;

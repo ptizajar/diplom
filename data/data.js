@@ -1,9 +1,9 @@
 export const categories = [
-  { id: "1", name: "Каркасные прямоугольные бассейны"},
-  { id: "2", name: "Каркасные круглые бассейны", },
-  { id: "3", name: "Каркасные бассейны BESTWAY",  },
-  { id: "4", name: "Надувные бассейны Easy Set",},
-  { id: "5", name: "Детские бассейны",},
+  { id: "1", name: "Каркасные прямоугольные бассейны" },
+  { id: "2", name: "Каркасные круглые бассейны" },
+  { id: "3", name: "Каркасные бассейны BESTWAY" },
+  { id: "4", name: "Надувные бассейны Easy Set" },
+  { id: "5", name: "Детские бассейны" },
 ];
 
 export const items = [
@@ -12,70 +12,79 @@ export const items = [
     categoryId: "1",
     name: "Бассейн1",
     price: 1200,
-    size: "200*300"
+    size: "200*300",
+    hit: true,
   },
-   {
+  {
     id: 2,
     categoryId: "1",
     name: "Бассейн2",
     price: 100,
-    size: "800*800"
+    size: "800*800",
+    hit: true,
   },
-   {
+  {
     id: 3,
     categoryId: "2",
     name: "Бассейн3",
     price: 900,
-    size: "600*700"
+    size: "600*700",
+    hit: true,
   },
-   {
+  {
     id: 4,
     categoryId: "2",
     name: "Бассейн4",
     price: 1800,
-    size: "900*900"
+    size: "900*900",
+    hit: false,
   },
-   {
+  {
     id: 5,
     categoryId: "3",
     name: "Бассейн5",
     price: 1200,
-    size: "2000*3000"
+    size: "2000*3000",
+    hit: false,
   },
-   {
+  {
     id: 6,
     categoryId: "3",
     name: "Бассейн6",
     price: 200,
-    size: "2000*100"
+    size: "2000*100",
+    hit: false,
   },
-   {
+  {
     id: 7,
     categoryId: "4",
     name: "Бассейн7",
     price: 1100,
-    size: "100*3000"
+    size: "100*3000",
+    hit: true,
   },
-   {
+  {
     id: 8,
     categoryId: "4",
     name: "Бассейн8",
     price: 300,
-    size: "2700*3080"
+    size: "2700*3080",
+    hit: true,
   },
-   {
+  {
     id: 9,
     categoryId: "5",
     name: "Бассейн9",
     price: 1280,
-    size: "2110*3300"
+    size: "2110*3300",
+    hit: false,
   },
-   {
+  {
     id: 10,
     categoryId: "5",
     name: "Бассейн10",
     price: 1290,
-    size: "299990*3000"
+    size: "299990*3000",
+    hit: false,
   },
-  
 ];
