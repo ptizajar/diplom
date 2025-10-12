@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../../src/reset.css";
 import "../../src/index.css";
 function Header() {
   return (
@@ -32,7 +33,7 @@ function Header() {
         <Link to={"/admin"} className="menu-link">
           <li className="menu-item">
             <img src="/public/admin.svg" className="menu-icon"></img>
-            Администрирование
+            Управление
           </li>
         </Link>
       </ul>
