@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { merge } = require('webpack-merge');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
-const common = require('./webpack.common');
+const common = require('./webpack.frontend.common');
 
 module.exports = merge(common, {
   mode: 'production',

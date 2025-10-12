@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../src/reset.css";
-import "../../src/index.css";
+import "../reset.css";
+import "../index.css";
 function Header() {
   return (
     <nav className="header">

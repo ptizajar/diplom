@@ -5,8 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "start-front": "webpack serve --open --config webpack.frontend.dev.js",
+    "build-front-prod": "webpack --config webpack.frontend.prod.js",
+    "build-front-dev": "webpack --config webpack.frontend.dev.js",
+    "build-back-prod": "webpack --config webpack.backend.prod.js",
+    "build-back-dev": "webpack --config webpack.backend.dev.js",
+    "build-all-dev": "npm run build-front-dev && npm run build-back-dev",
+    "start-back-dev": "npm run build-all-dev && node dist/back/main.js",
+    "start-back-prod": "npm run build-all-prod && node dist/back/main.js"
   },
   "repository": {
     "type": "git",
@@ -42,6 +48,8 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
     "react": "^18.3.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.9.1"

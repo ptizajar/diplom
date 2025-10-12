@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { categories } from "../../data/data";
-import { items } from "../../data/data";
+import { categories } from "../../../data/data";
+import { items } from "../../../data/data";
 import AdminItemCard from "../components/AdminItemCard";
 import { Link } from "react-router-dom";
 

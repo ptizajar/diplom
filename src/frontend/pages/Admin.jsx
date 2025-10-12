@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { categories } from "../../data/data";
+import { categories } from "../../../data/data";
 import AdminCategoryCard from "../components/AdminCategoryCard";
 function Admin() {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { categories, items } from "../../data/data";
+import { categories, items } from "../../../data/data";
 import { Link } from "react-router-dom";
 import ItemCard from "../components/ItemCard";
 function Category() {
