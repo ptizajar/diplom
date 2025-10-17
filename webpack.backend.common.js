@@ -2,6 +2,7 @@
 const path = require("path");
 
 module.exports = {
+  target: "node",
   entry: "./src/backend/server.js",
   output: {
     filename: "main.js",
