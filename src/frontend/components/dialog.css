@@ -1,0 +1,21 @@
+.dialog {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+.dialog-content{
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+}
