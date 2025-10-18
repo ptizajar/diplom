@@ -6,7 +6,9 @@ function Dialog({ Content, onCloseClick }) {
     return (
         <div className='dialog-content'>
             {Content()}
-            <button onClick={onCloseClick}>Close</button>
+            <div className='button-holder'> <button className='form-button' >ОК</button>
+                <button className='form-button' onClick={onCloseClick}>ОТМЕНА</button></div>
+
         </div>
     )
 }

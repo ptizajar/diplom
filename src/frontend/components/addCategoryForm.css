@@ -1,0 +1,36 @@
+.form{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+color: #2A52BE;
+font-family: Arial, Helvetica, sans-serif;
+font-weight: bold;
+font-size: 24px;
+gap: 35px;
+margin-bottom: 35px;
+width: 100%;
+}
+.form-image{
+    background-color:rgba(160,220,255,0.3);
+    border: 2px solid rgba(160,220,255);
+    border-radius: 15px;
+    width:100%;
+    min-height: 214px;
+}
+
+.form-name{
+    background-color:rgba(160,220,255,0.3);
+    border: 2px solid rgba(160,220,255);
+    border-radius: 15px;
+    width:100%;
+    min-height: 59px;
+    
+}
+
+.form-name::placeholder{
+    color: #2A52BE;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    padding-left: 10%;
+}
