@@ -27,20 +27,3 @@ body.no-scroll {
     padding: 47px 52px;
 }
 
-.button-holder{
-    display: flex;
-    flex-direction: row;
-     gap:35px;
-     width:100%;
-}
-
-.form-button{
-    width: 133px;
-    height: 41px;
-    background-color: #2A52BE;
-    border-radius: 15px;
-    border: 1px solid #2A52BE;
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-   
-}

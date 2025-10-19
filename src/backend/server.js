@@ -1,8 +1,16 @@
 const express = require("express");
   
 const app = express();
+
+const bodyParser= require('body-parser');
+
+ const multer = require('multer');
+
+ const upload = multer();
  
 const { Pool } = require('pg');
+
+const cors = require('cors')
 
 const pool = new Pool({
   user: "postgres",
@@ -10,7 +18,11 @@ const pool = new Pool({
   database: "intex_db"
 });
 
-app.put("/api/admin/category", async function(req,res){
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+app.put("/api/admin/category", upload.none(), async function(req,res){
     const { category_name} = req.body;
     try{
    const result = await pool.query('INSERT INTO category (category_name) values ($1) returning *', [category_name]);
