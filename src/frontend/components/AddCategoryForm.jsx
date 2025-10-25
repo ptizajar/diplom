@@ -13,16 +13,17 @@ export function AddCategoryForm({onCloseClick}) {
 
     const result = await response.json();
     console.log(result);
+    onCloseClick();
     }
     return (
-        <form className="form" onSubmit={save} id="addCategoryForm">
+        <form className="form" onSubmit={save} id="addCategoryForm" method="POST" encType="multipart/form-data">
             Добавить категорию
             <input type="text"  className="form-name" placeholder="Название" name="category_name" />
-            <input type="file" className="form-image" placeholder="Загрузите изображение"/>
+            <input type="file" className="form-image" placeholder="Загрузите изображение" name="category_image" accept="image/png, image/jpeg" required/>
 
             <div className='button-holder'>
                 <button className='form-button' type="submit">ОК</button>
-                <button className='form-button' onClick={onCloseClick}>ОТМЕНА</button>
+                <button className='form-button' onClick={onCloseClick}>Отмена</button>
 			</div>
         </form>
     )
