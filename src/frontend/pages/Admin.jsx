@@ -17,10 +17,14 @@ function Admin() {
   useEffect(() => {
     load();
   }, [])
+
+  function needRefresh(){
+      load();
+  }
   return (
     <div>
       Admin
-      <button onClick={() => showDialog(AddCategoryForm)}>Add new</button>
+      <button onClick={() => showDialog(AddCategoryForm, undefined, needRefresh)}>Add new</button>
       <Link to="/bids">Заявки</Link>
       <ul style={{ display: "flex", flexDirection: "column" }}>
         {categories.map((category) => (
@@ -29,6 +33,7 @@ function Admin() {
               categoryId={category.category_id}
               name={category.category_name}
               url={"admin_category"}
+              onClose={needRefresh()}
             ></AdminCategoryCard>
           </li>
         ))}
