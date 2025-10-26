@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import CategoryCard from "./CategoryCard";
-import { EditCategoryForm } from "./EditCategoryForm";
+import { AddCategoryForm } from "./AddCategoryForm";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
 function AdminCategoryCard({ categoryId, name, url }) {
@@ -14,7 +14,7 @@ function AdminCategoryCard({ categoryId, name, url }) {
   return (
     <div>
       <CategoryCard categoryId={categoryId} name={name} url={url} />
-      <button onClick={() => showDialog(EditCategoryForm)}>Edit</button>
+      <button onClick={() => showDialog(AddCategoryForm, {name, categoryId})}>Edit</button>
       <button onClick={deleteCategory}>Delete</button>
     </div>
   );
