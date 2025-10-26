@@ -25,19 +25,49 @@ app.put(
   "/api/admin/category",
   upload.single("category_image"),
   async function (req, res) {
-    const { category_name } = req.body;
+    const { category_name, category_id } = req.body;
+
     try {
-      const binaryData = req.file.buffer;
-      const result = await pool.query(
-        "INSERT INTO category (category_name, category_picture) values ($1, $2) returning *",
-        [category_name, binaryData]
-      );
-      res.status(200).json(result.rows[0]);
+      const binaryData = req.file?.buffer;
+      if (category_id) {
+        if (!binaryData) {
+          await pool.query(
+            "update category set category_name=$1 where category_id=$2",
+            [category_name, category_id]
+          );
+        } else {
+          await pool.query(
+            "update category set category_name=$1, category_picture=$2 where category_id=$3",
+            [category_name, binaryData, category_id]
+          );
+        }
+        res.status(200).json({});
+      } else {
+        const result = await pool.query(
+          "INSERT INTO category (category_name, category_picture) values ($1, $2) returning *",
+          [category_name, binaryData]
+        );
+        res.status(200).json(result.rows[0]);
+      }
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   }
 );
+
+
+app.delete("/api/admin/delete_category/:id", async function (req, res) {
+  try {
+    const param = req.params.id;
+    console.log(JSON.stringify(param));
+    await pool.query("delete from category where category_id=$1", [param]);
+    res.status(200).json({});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 
 app.get("/api/categories", async function (req, res) {
   try {
@@ -57,23 +87,13 @@ app.get("/api/category/image/:id", async function (req, res) {
       "select category_picture from category where category_id= $1",
       [param]
     );
-    res.status(200).contentType('image/jpeg');
+    res.status(200).contentType("image/jpeg");
     res.send(result.rows[0].category_picture);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.delete("/api/admin/delete_category/:id", async function (req, res) {
-  try{
-    const param = req.params.id;
-    console.log(JSON.stringify(param));
-  await pool.query( "delete from category where category_id=$1",[param]);
-    res.status(200).json({});
-  }catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-  
-})
+
 
 app.listen(3001);
