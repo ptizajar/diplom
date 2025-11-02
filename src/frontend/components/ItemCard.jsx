@@ -1,14 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-function ItemCard({ itemId, name, size, price }) {
+import { backend } from "../api-globals";
+function ItemCard({ item_id,item_name, price }) {
   return (
     <div >
-      <Link to={`/item/${itemId}`}>
-        <img src={"/public/pool.jpg"} alt="бассейн" />
+      <Link to={`/item/${item_id}`}>
+        <img src={`${backend}/api/item/image/${item_id}`} alt="бассейн" />
         <br />
-        <p>{name}</p>
-        <br />
-        <p>{size}</p>
+        <p>{item_name}</p>
         <br />
         <p>{price}</p>
         <br />

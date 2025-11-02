@@ -1,12 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ItemCard from "./ItemCard";
-function AdminItemCard({ itemId, name, size, price }) {
+import { showDialog } from "./Dialog";
+import { backend } from "../api-globals";
+function AdminItemCard({ item_id,name, price, onClose }) {
+   async function deleteItem() {
+      await fetch(`${backend}/api/admin/delete_item/${itemId}`, {
+        method: 'delete'
+      })
+  
+    }
   return (
     <div>
-      <ItemCard itemId={itemId} name={name} size={size} price={price} />
-      <button>Edit</button>
-      <button>Delete</button>
+      <ItemCard  item_id={item_id} name={name}  price={price} />
+       <button onClick={() => showDialog(AddItemForm, {item_id, onClose})}>Edit</button>
+           <button onClick={deleteItem} >Delete</button>
     </div>
   );
 }

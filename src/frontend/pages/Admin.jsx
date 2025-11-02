@@ -18,8 +18,8 @@ function Admin() {
     load();
   }, [])
 
-  function needRefresh(){
-      load();
+  function needRefresh() {
+    load();
   }
   return (
     <div>
@@ -33,7 +33,7 @@ function Admin() {
               categoryId={category.category_id}
               name={category.category_name}
               url={"admin_category"}
-              onClose={needRefresh()}
+              onClose={needRefresh}
             ></AdminCategoryCard>
           </li>
         ))}
