@@ -10,7 +10,7 @@ function Catalog() {
         {categories.map((category) => (
           <li key={category.id}>
             <CategoryCard
-              categoryId={category.id}
+              category_id={category.id}
               name={category.name}
               url={"category"}
             ></CategoryCard>

@@ -158,12 +158,12 @@ app.put(
         } else {
           await pool.query(
             "update item set article=$1, item_name=$2, length=$3, width=$4, height=$5, quantity=$6, price=$7, description=$8, show=$9, item_picture=$10 where item_id=$11",
-            [parseInt(article), item_name, parseFloat(length),parseFloat(width),parseFloat(height),parseInt(quantity),parseFloat(price),description , show=='on', binaryData, item_id]
+            [parseInt(article), item_name, parseFloat(length),parseFloat(width),parseFloat(height),parseInt(quantity),parseInt(price),description , show=='on', binaryData, item_id]
           );
         }
         res.status(200).json({});
       } else {
-        console.log(show);
+        console.log(JSON.stringify(req.body));
         const result = await pool.query(
           "INSERT INTO item (item_name,article,length,width,height,item_picture,price,description,show,category_id,quantity) values ($1, $2, $3,$4,$5,$6,$7,$8,$9,$10,$11) returning *",
           [ item_name, parseInt(article),parseFloat(length),parseFloat(width),parseFloat(height),binaryData,parseInt(price),description,show=='on',category_id,parseInt(quantity)]

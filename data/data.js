@@ -9,7 +9,7 @@ export const categories = [
 export const items = [
   {
     id: 1,
-    categoryId: "1",
+    category_id: "1",
     name: "Бассейн1",
     price: 1200,
     size: "200*300",
@@ -17,7 +17,7 @@ export const items = [
   },
   {
     id: 2,
-    categoryId: "1",
+    category_id: "1",
     name: "Бассейн2",
     price: 100,
     size: "800*800",
@@ -25,7 +25,7 @@ export const items = [
   },
   {
     id: 3,
-    categoryId: "2",
+    category_id: "2",
     name: "Бассейн3",
     price: 900,
     size: "600*700",
@@ -33,7 +33,7 @@ export const items = [
   },
   {
     id: 4,
-    categoryId: "2",
+    category_id: "2",
     name: "Бассейн4",
     price: 1800,
     size: "900*900",
@@ -41,7 +41,7 @@ export const items = [
   },
   {
     id: 5,
-    categoryId: "3",
+    category_id: "3",
     name: "Бассейн5",
     price: 1200,
     size: "2000*3000",
@@ -49,7 +49,7 @@ export const items = [
   },
   {
     id: 6,
-    categoryId: "3",
+    category_id: "3",
     name: "Бассейн6",
     price: 200,
     size: "2000*100",
@@ -57,7 +57,7 @@ export const items = [
   },
   {
     id: 7,
-    categoryId: "4",
+    category_id: "4",
     name: "Бассейн7",
     price: 1100,
     size: "100*3000",
@@ -65,7 +65,7 @@ export const items = [
   },
   {
     id: 8,
-    categoryId: "4",
+    category_id: "4",
     name: "Бассейн8",
     price: 300,
     size: "2700*3080",
@@ -73,7 +73,7 @@ export const items = [
   },
   {
     id: 9,
-    categoryId: "5",
+    category_id: "5",
     name: "Бассейн9",
     price: 1280,
     size: "2110*3300",
@@ -81,7 +81,7 @@ export const items = [
   },
   {
     id: 10,
-    categoryId: "5",
+    category_id: "5",
     name: "Бассейн10",
     price: 1290,
     size: "299990*3000",

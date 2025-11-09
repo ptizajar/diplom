@@ -12,7 +12,7 @@ function Home() {
             item.hit && (
               <li key={item.id}>
                 <ItemCard
-                  itemId={item.id}
+                  item_id={item.id}
                   name={item.name}
                   size={item.size}
                   price={item.price}

@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
-function CategoryCard({ categoryId, name, url }) {
+function CategoryCard({ category_id, name, url }) {
   return (
     <div >
-      <Link to={`/${url}/${categoryId}`}>
-        <img  src={`${backend}/api/category/image/${categoryId}`} alt="бассейн" />
+      <Link to={`/${url}/${category_id}`}>
+        <img src={`${backend}/api/category/image/${category_id}`} alt="бассейн" />
         <br />
         <p>{name}</p>
         <br />

@@ -4,17 +4,17 @@ import CategoryCard from "./CategoryCard";
 import { AddCategoryForm } from "./AddCategoryForm";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
-function AdminCategoryCard({ categoryId, name, url , onClose}) {
+function AdminCategoryCard({ category_id, name, url, onClose }) {
   async function deleteCategory() {
-    await fetch(`${backend}/api/admin/delete_category/${categoryId}`, {
+    await fetch(`${backend}/api/admin/delete_category/${category_id}`, {
       method: 'delete'
     })
 
   }
   return (
     <div>
-      <CategoryCard categoryId={categoryId} name={name} url={url} />
-      <button onClick={() => showDialog(AddCategoryForm, {name, categoryId, onClose})}>Edit</button>
+      <CategoryCard category_id={category_id} name={name} url={url} />
+      <button onClick={() => showDialog(AddCategoryForm, { name, category_id, onClose })}>Edit</button>
       <button onClick={deleteCategory}>Delete</button>
     </div>
   );

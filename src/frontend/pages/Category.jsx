@@ -4,13 +4,13 @@ import { categories, items } from "../../../data/data";
 import { Link } from "react-router-dom";
 import ItemCard from "../components/ItemCard";
 function Category() {
-  const { categoryId } = useParams();
+  const { category_id } = useParams();
   const thisCategory = categories.find(
-    (category) => category.id === categoryId
+    (category) => category.id === category_id
   );
 
   const categoryArray = items.filter(
-    (item) => item.categoryId === thisCategory.id
+    (item) => item.category_id === thisCategory.id
   );
   console.log(categoryArray);
 
@@ -21,7 +21,7 @@ function Category() {
         {categoryArray.map((item) => (
           <li key={item.id}>
             <ItemCard
-              itemId={item.id}
+              item_id={item.id}
               url={"item"}
               name={item.name}
               size={item.size}

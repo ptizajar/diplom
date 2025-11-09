@@ -30,7 +30,7 @@ function Admin() {
         {categories.map((category) => (
           <li key={category.category_id}>
             <AdminCategoryCard
-              categoryId={category.category_id}
+              category_id={category.category_id}
               name={category.category_name}
               url={"admin_category"}
               onClose={needRefresh}

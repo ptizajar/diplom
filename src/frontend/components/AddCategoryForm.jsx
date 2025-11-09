@@ -15,7 +15,7 @@ export function AddCategoryForm({ onCloseClick, param }) {
         console.log(result);
         onCloseClick();
     }
-    const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.categoryId}')` } : {};
+    const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.category_id}')` } : {};
     return (
         <form className="form" onSubmit={save} id="addCategoryForm" method="POST" encType="multipart/form-data">
             {param ? "Редактировать категорию" : "Добавить категорию"}
@@ -23,7 +23,7 @@ export function AddCategoryForm({ onCloseClick, param }) {
             <div className="form-image" style={style}>
                 <input type="file" placeholder="Загрузите изображение" name="category_image" accept="image/png, image/jpeg" required={!param} />
             </div>
-            <input type="hidden" name="category_id" value={param?.categoryId} />
+            <input type="hidden" name="category_id" value={param?.category_id} />
 
             <div className='button-holder'>
                 <button className='form-button' type="submit">ОК</button>

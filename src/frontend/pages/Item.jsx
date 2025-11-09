@@ -2,8 +2,8 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { items } from "../../../data/data";
 function ItemPage() {
-  const { itemId } = useParams();
-  const item = items.find((i) => i.id === parseInt(itemId, 10));
+  const { item_id } = useParams();
+  const item = items.find((i) => i.id === parseInt(item_id, 10));
 
   return (
     <div>
