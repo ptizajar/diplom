@@ -1,30 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { categories, items } from "../../../data/data";
-import { Link } from "react-router-dom";
 import ItemCard from "../components/ItemCard";
+import { Link } from "react-router-dom";
+import { backend } from "../api-globals";
+
+
 function Category() {
   const { category_id } = useParams();
-  const thisCategory = categories.find(
-    (category) => category.id === category_id
-  );
 
-  const categoryArray = items.filter(
-    (item) => item.category_id === thisCategory.id
-  );
-  console.log(categoryArray);
+  const [categoryName, setCategoryName] = useState(null);
+  const [items, setItems] = useState([]);
+
+  async function loadCategory() {
+    const result = await fetch(`${backend}/api/category/${category_id}`);
+    const data = await result.json();
+    setCategoryName(data.category_name);
+  }
+
+  async function loadItems() {
+    const res = await fetch(`${backend}/api/category/${category_id}/items`);
+    const data = await res.json();
+    setItems(data);
+  }
+  useEffect(() => { loadCategory() }, []);
+  useEffect(() => { loadItems() }, []);
+
 
   return (
     <div>
-      {thisCategory.name}
+      {categoryName}
       <ul style={{ display: "flex", flexDirection: "column" }}>
-        {categoryArray.map((item) => (
-          <li key={item.id}>
+        {items.map((item) => (
+          <li key={item.item_id}>
             <ItemCard
-              item_id={item.id}
-              url={"item"}
-              name={item.name}
-              size={item.size}
+              item_id={item.item_id}
+              name={item.item_name}
               price={item.price}
             ></ItemCard>
           </li>

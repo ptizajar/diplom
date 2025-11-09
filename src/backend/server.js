@@ -187,5 +187,12 @@ app.get("/api/item/:id", async function (req, res) {
   
 });
 
-
+app.get("/api/showed_items", async function (req, res) {
+  try{
+  const result = await pool.query("select item_id,item_name,article,length,width,height,price,description,quantity from item where show=$1 ", [true]);
+ res.status(200).json(result.rows);
+  }catch(err){
+     res.status(500).json({error: err.message})
+  }
+})
 app.listen(3001);

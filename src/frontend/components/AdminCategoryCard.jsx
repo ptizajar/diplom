@@ -5,10 +5,12 @@ import { AddCategoryForm } from "./AddCategoryForm";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
 function AdminCategoryCard({ category_id, name, url, onClose }) {
+  
   async function deleteCategory() {
     await fetch(`${backend}/api/admin/delete_category/${category_id}`, {
       method: 'delete'
-    })
+    });
+    onClose();
 
   }
   return (
