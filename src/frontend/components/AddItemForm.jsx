@@ -29,20 +29,22 @@ export function AddItemForm({ onCloseClick, param }) {
     return (
         <form className="form" onSubmit={save} id="addItemForm" method="POST" encType="multipart/form-data">
             {param.item_id ? "Редактировать товар" : "Добавить товар"}
-            <input type="text" className="item-artic" placeholder="Артикул" name="article" required defaultValue={item?.article} />
-            <input type="text" className="item-name" placeholder="Название" name="item_name" required defaultValue={item?.item_name} />
-            <input type="text" className="item-length" placeholder="Длина" name="length" required defaultValue={item?.length} />
-            <input type="text" className="item-width" placeholder="Ширина" name="width" required defaultValue={item?.width} />
-            <input type="text" className="item-heigth" placeholder="Высота" name="height" required defaultValue={item?.height} />
-            <input type="text" className="item-quantity" placeholder="Заказ от" name="quantity" required defaultValue={item?.quantity} />
-            <input type="text" className="item-price" placeholder="Цена" name="price" required defaultValue={item?.price} />
-            <textarea type="text" className="item-desc" placeholder="Описание" name="description" defaultValue={item?.description} />
+            <input type="text" className="form-field" placeholder="Артикул" name="article" required defaultValue={item?.article} />
+            <input type="text" className="form-field" placeholder="Название" name="item_name" required defaultValue={item?.item_name} />
+            <input type="text" className="form-field" placeholder="Длина" name="length" required defaultValue={item?.length} />
+            <input type="text" className="form-field" placeholder="Ширина" name="width" required defaultValue={item?.width} />
+            <input type="text" className="form-field" placeholder="Высота" name="height" required defaultValue={item?.height} />
+            <input type="text" className="form-field" placeholder="Заказ от" name="quantity" required defaultValue={item?.quantity} />
+            <input type="text" className="form-field" placeholder="Цена" name="price" required defaultValue={item?.price} />
+            <textarea type="text" className="form-field" placeholder="Описание" name="description" defaultValue={item?.description} />
             <div className="form-image" style={style}>
                 <input type="file" placeholder="Загрузите изображение" name="item_image" accept="image/png, image/jpeg" required={!param} />
             </div>
-            <label >Отображать на главной
-                <input type="checkbox" name="show" defaultChecked={item?.show}></input>
-            </label>
+            <div className="form-checkbox"> 
+                <label htmlFor="check1">Отображать на главной</label>
+                <input id="check1" type="checkbox" name="show" defaultChecked={item?.show}></input>
+            </div>
+
             <input type="hidden" name="item_id" value={param.item_id} />
             <input type="hidden" name="category_id" value={param.category_id} />
 

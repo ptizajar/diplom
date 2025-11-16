@@ -19,7 +19,7 @@ export function AddCategoryForm({ onCloseClick, param }) {
     return (
         <form className="form" onSubmit={save} id="addCategoryForm" method="POST" encType="multipart/form-data">
             {param ? "Редактировать категорию" : "Добавить категорию"}
-            <input type="text" className="form-name" placeholder="Название" name="category_name" required defaultValue={param?.name} />
+            <input type="text" className="form-field" placeholder="Название" name="category_name" required defaultValue={param?.name} />
             <div className="form-image" style={style}>
                 <input type="file" placeholder="Загрузите изображение" name="category_image" accept="image/png, image/jpeg" required={!param} />
             </div>

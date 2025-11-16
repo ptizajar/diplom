@@ -15,7 +15,6 @@ body.no-scroll {
 }
 
 .dialog-content {
-    padding: 10px;
     background-color: white;
 
     border: 3px solid #2A52BE;
@@ -24,6 +23,7 @@ body.no-scroll {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 47px 52px;
+    padding: 25px 52px;
+  
 }
 

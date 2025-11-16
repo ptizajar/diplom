@@ -14,7 +14,8 @@ function Home() {
     useEffect(() => { loadItems() }, []);
   return (
     <div>
-      Home
+      <p>Главная</p>
+      <p>Хиты продаж</p>
       <ul style={{ display: "flex", flexDirection: "column" }}>
         {items.map(
           (item) =>
@@ -22,7 +23,7 @@ function Home() {
               <li key={item.item_id}>
                 <ItemCard
                   item_id={item.item_id}
-                  name={item.item_name}
+                  item_name={item.item_name}
                   price={item.price}
                   url={"category"}
                 ></ItemCard>

@@ -29,8 +29,8 @@ function AdminCategory() {
 
   return (
     <div>
-      {categoryName}
-      <button onClick={() => showDialog(AddItemForm, { category_id }, loadItems)}>Add</button>
+      <p>{categoryName}</p>
+      <button onClick={() => showDialog(AddItemForm, { category_id }, loadItems)}>Добавить товар</button>
       <ul style={{ display: "flex", flexDirection: "column" }}>
         {items.map((item) => (
           <li key={item.item_id}>

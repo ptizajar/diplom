@@ -28,13 +28,13 @@ function Category() {
 
   return (
     <div>
-      {categoryName}
+      <p style={{fontSize:"20px"}}>{categoryName}</p>
       <ul style={{ display: "flex", flexDirection: "column" }}>
         {items.map((item) => (
           <li key={item.item_id}>
             <ItemCard
               item_id={item.item_id}
-              name={item.item_name}
+              item_name={item.item_name}
               price={item.price}
             ></ItemCard>
           </li>

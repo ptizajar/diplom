@@ -6,8 +6,8 @@ align-items: center;
 color: #2A52BE;
 font-family: Arial, Helvetica, sans-serif;
 font-weight: bold;
-font-size: 24px;
-gap: 35px;
+font-size: 20px;
+gap: 25px;
 width: 100%;
 }
 .form-image{
@@ -18,20 +18,22 @@ width: 100%;
     min-height: 214px;
 }
 
-.form-name{
+.form-field{
     background-color:rgba(160,220,255,0.3);
     border: 2px solid rgba(160,220,255);
-    border-radius: 15px;
+    border-radius: 10px;
     width:100%;
-    min-height: 59px;
+    min-height: 30px;
     
 }
 
-.form-name::placeholder{
+.form-field::placeholder{
     color: #2A52BE;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    padding-left: 10%;
+    font-size: 14px;
+    padding-left: 5%;
+    padding-top: 7px;
+   
 }
 
 .button-holder{
@@ -43,13 +45,23 @@ width: 100%;
 
 .form-button{
     width: 133px;
-    height: 41px;
+    height: 35px;
     background-color: #2A52BE;
-    border-radius: 15px;
+    border-radius: 10px;
     font-size: 1em;
     border: 1px solid #2A52BE;
     font-family: Arial, Helvetica, sans-serif;
     color: white;
     font-size: 16px;
    
+}
+
+.form-checkbox{
+    font-size: 16px;
+    font-weight: normal;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    /* margin-top: -10px;
+    margin-bottom: -10px; */
 }

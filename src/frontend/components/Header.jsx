@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../reset.css";
 import "./header.css";
+import { EnterForm } from "./EnterForm";
+import { showDialog } from "./Dialog";
 function Header() {
   return (
     <nav className="header">
@@ -9,7 +11,7 @@ function Header() {
         <Link to={"/"} className="menu-link--logo">
           <li className="menu-item--logo">
             <img src="/public/logo.svg" className="menu-icon--logo"></img>
-            INTEX Ростов
+            МАКС-МЕБЕЛЬ
           </li>
         </Link>
         <Link to={"/catalog"} className="menu-link">
@@ -18,7 +20,7 @@ function Header() {
             Каталог
           </li>
         </Link>
-        <Link className="menu-link">
+        <Link onClick={() => showDialog(EnterForm)} className="menu-link">
           <li className="menu-item">
             <img src="/public/login.svg" className="menu-icon"></img>
             Войти

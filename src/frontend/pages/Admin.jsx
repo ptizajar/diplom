@@ -23,8 +23,8 @@ function Admin() {
   }
   return (
     <div>
-      Admin
-      <button onClick={() => showDialog(AddCategoryForm, undefined, needRefresh)}>Add new</button>
+      <p>Admin</p>
+      <button onClick={() => showDialog(AddCategoryForm, undefined, needRefresh)}>Добавить категорию</button>
       <Link to="/bids">Заявки</Link>
       <ul style={{ display: "flex", flexDirection: "column" }}>
         {categories.map((category) => (
