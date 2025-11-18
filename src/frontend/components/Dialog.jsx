@@ -1,7 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import "./dialog.css"
-
+import "../css/dialog.css"
 
 export function showDialog(Content, param, onClose) {
 	const domNode = document.createElement('div');

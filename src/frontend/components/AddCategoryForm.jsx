@@ -1,5 +1,5 @@
 import React from "react"
-import "./addCategoryForm.css"
+import "../css/form.css"
 import "../api-globals"
 import { backend } from "../api-globals";
 

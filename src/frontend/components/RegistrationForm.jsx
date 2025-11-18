@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import "./addCategoryForm.css"
+import "../css/form.css"
 import "../api-globals"
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";

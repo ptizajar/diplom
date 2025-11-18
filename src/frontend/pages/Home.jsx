@@ -3,34 +3,36 @@ import { useState } from "react";
 import ItemCard from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
+import "../css/home.css"
+import "../css/itemCard.css"
 
 function Home() {
   const [items, setItems] = useState([]);
   async function loadItems() {
-      const res = await fetch(`${backend}/api/showed_items`);
-      const data = await res.json();
-      setItems(data);
-    }
-    useEffect(() => { loadItems() }, []);
+    const res = await fetch(`${backend}/api/showed_items`);
+    const data = await res.json();
+    setItems(data);
+  }
+  useEffect(() => { loadItems() }, []);
   return (
     <div>
       <p>Главная</p>
-      <p>Хиты продаж</p>
-      <ul style={{ display: "flex", flexDirection: "column" }}>
+      <div className="banner"><p> МАКС-МЕБЕЛЬ - лучшее решение для вашего офиса</p></div>
+      <h1 className="title">Хиты продаж</h1>
+      <div className="card-holder">
         {items.map(
           (item) =>
             !item.show && (
-              <li key={item.item_id}>
-                <ItemCard
-                  item_id={item.item_id}
-                  item_name={item.item_name}
-                  price={item.price}
-                  url={"category"}
-                ></ItemCard>
-              </li>
+              <ItemCard
+                key={item.item_id}
+                item_id={item.item_id}
+                item_name={item.item_name}
+                price={item.price}
+                url={"category"}
+              ></ItemCard>
             )
         )}
-      </ul>
+      </div>
     </div>
   );
 }

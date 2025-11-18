@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import ItemCard from "../components/ItemCard";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
+import "../css/itemCard.css"
 
 
 function Category() {
@@ -28,18 +29,19 @@ function Category() {
 
   return (
     <div>
-      <p style={{fontSize:"20px"}}>{categoryName}</p>
-      <ul style={{ display: "flex", flexDirection: "column" }}>
+      <p>{categoryName}</p>
+      <div className="card-holder" >
         {items.map((item) => (
-          <li key={item.item_id}>
-            <ItemCard
-              item_id={item.item_id}
-              item_name={item.item_name}
-              price={item.price}
-            ></ItemCard>
-          </li>
+
+          <ItemCard
+            key={item.item_id}
+            item_id={item.item_id}
+            item_name={item.item_name}
+            price={item.price}
+          ></ItemCard>
+
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../reset.css";
-import "./header.css";
+import "../css/header.css";
 import { EnterForm } from "./EnterForm";
 import { showDialog } from "./Dialog";
 function Header() {
