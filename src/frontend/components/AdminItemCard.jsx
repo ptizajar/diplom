@@ -4,6 +4,7 @@ import ItemCard from "./ItemCard";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
 import { AddItemForm } from "./AddItemForm";
+import "../css/itemCard.css"
 function AdminItemCard({ item_id, name, price, onClose }) {
 
   async function deleteItem() {
@@ -15,8 +16,11 @@ function AdminItemCard({ item_id, name, price, onClose }) {
   return (
     <div>
       <ItemCard item_id={item_id} name={name} price={price} />
-      <button onClick={() => showDialog(AddItemForm, { item_id, onClose })}>Edit</button>
-      <button onClick={deleteItem} >Delete</button>
+      <div className="admin-button-holder">
+        <button onClick={() => showDialog(AddItemForm, { item_id, onClose })}>Edit</button>
+        <button onClick={deleteItem} >Delete</button>
+      </div>
+
     </div>
   );
 }

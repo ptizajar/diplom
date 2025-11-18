@@ -26,7 +26,7 @@ function Home() {
               <ItemCard
                 key={item.item_id}
                 item_id={item.item_id}
-                item_name={item.item_name}
+                name={item.item_name}
                 price={item.price}
                 url={"category"}
               ></ItemCard>
