@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/home.css"
+import "../css/itemCard.css"
 function ItemCard({ item_id, name, price }) {
   return (
     <Link className="item-card" to={`/item/${item_id}`}>

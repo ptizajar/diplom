@@ -11,7 +11,7 @@
     "build-back-prod": "webpack --config webpack.backend.prod.js",
     "build-back-dev": "webpack --config webpack.backend.dev.js",
     "build-all-dev": "npm run build-front-dev && npm run build-back-dev",
-    "start-back-dev": "npm run build-all-dev && node dist/back/main.js",
+    "start-back-dev": "npm run build-all-dev && cd dist && node back/main.js",
     "start-back-prod": "npm run build-all-prod && node dist/back/main.js"
   },
   "repository": {
@@ -30,6 +30,7 @@
     "@babel/preset-env": "^7.19.4",
     "@babel/preset-react": "^7.18.6",
     "babel-loader": "^8.2.5",
+    "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^6.11.0",
     "eslint": "^8.25.0",
     "eslint-config-airbnb": "^19.0.4",

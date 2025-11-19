@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+    const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: "./src/frontend/index",
@@ -8,6 +9,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/frontend/index.html",
     }),
+     new CopyWebpackPlugin({
+          patterns: [
+            { from: 'public', to: 'public' }, 
+          ],
+        })
   ],
   output: {
     filename: "front.js",

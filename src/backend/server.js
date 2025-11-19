@@ -14,6 +14,8 @@ const cors = require("cors");
 
 const crypto = require("crypto");
 
+const path = require('path');
+
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
@@ -275,4 +277,7 @@ app.put("/api/registrate", upload.none(), async function (req, res) {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.use(express.static('static'));
+
 app.listen(3001);
