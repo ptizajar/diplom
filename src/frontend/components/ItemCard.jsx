@@ -6,8 +6,8 @@ import "../css/itemCard.css"
 function ItemCard({ item_id, name, price }) {
   return (
     <Link className="item-card" to={`/item/${item_id}`}>
-      <div className="item-image-holder" style={{backgroundImage: `url(${backend}/api/item/image/${item_id})`}}>
-        {/* <img className="item-image" src={`${backend}/api/item/image/${item_id}`} alt="товар" /> */}
+      <div className="item-image-holder" >
+        <img className="item-image" src={`${backend}/api/item/image/${item_id}`} alt="товар" />
         <button className="heart-icon"><img src="/public/favourites.svg" alt="в избранное" /></button>
       </div>
       <p className="item-name">{name}</p>

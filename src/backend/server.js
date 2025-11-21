@@ -14,7 +14,9 @@ const cors = require("cors");
 
 const crypto = require("crypto");
 
-const path = require('path');
+const path = require("path");
+
+const cookieParser = require("cookie-parser");
 
 const pool = new Pool({
   user: "postgres",
@@ -23,7 +25,17 @@ const pool = new Pool({
 });
 
 app.use(cors());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+function sessionParser(req, res, next) {
+  const sessionId = req.cookies.sessionId;
+  const currentUser = sessions.get(sessionId);
+  req.user = currentUser;
+  next();
+}
+
+app.use(sessionParser);
 
 app.put(
   "/api/admin/category",
@@ -241,6 +253,10 @@ app.get("/api/item/:id", async function (req, res) {
 
 app.get("/api/showed_items", async function (req, res) {
   try {
+    // const sessionId = req.cookies.sessionId;
+    // const currentUser = sessions.get(sessionId);
+    // console.log(JSON.stringify(currentUser));
+    console.log(req.user);
     const result = await pool.query(
       "select item_id,item_name,article,length,width,height,price,description,quantity from item where show=$1 ",
       [true]
@@ -250,6 +266,8 @@ app.get("/api/showed_items", async function (req, res) {
     res.status(500).json({ error: err.message });
   }
 });
+
+const sessions = new Map();
 
 app.put("/api/registrate", upload.none(), async function (req, res) {
   const { login, user_name, phone, password } = req.body;
@@ -261,23 +279,28 @@ app.put("/api/registrate", upload.none(), async function (req, res) {
 
   try {
     const findLogin = await pool.query("select * from users where login=$1", [
-      login
+      login,
     ]);
     console.log(findLogin.rowCount);
     if (findLogin.rowCount > 0) {
-      res.status(400).json({error: "Пользователь с таким логином уже существует"});
+      res
+        .status(400)
+        .json({ error: "Пользователь с таким логином уже существует" });
     } else {
       const result = await pool.query(
         "INSERT INTO users (login, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5) returning *",
         [login, hashPasswordMD5(password), user_name, phone, false]
       );
-      res.status(200).json(result.rows[0]);
+      const cookie = crypto.randomBytes(64).toString("base64");
+      const currentUser = result.rows[0];
+      res.status(200).cookie("sessionId", cookie).json(currentUser);
+      sessions.set(cookie, currentUser);
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.use(express.static('static'));
+app.use(express.static("static"));
 
 app.listen(3001);

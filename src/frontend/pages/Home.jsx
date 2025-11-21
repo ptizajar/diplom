@@ -9,7 +9,7 @@ import "../css/itemCard.css"
 function Home() {
   const [items, setItems] = useState([]);
   async function loadItems() {
-    const res = await fetch(`${backend}/api/showed_items`);
+    const res = await fetch(`${backend}/api/showed_items`, {credentials: "same-origin"});
     const data = await res.json();
     setItems(data);
   }

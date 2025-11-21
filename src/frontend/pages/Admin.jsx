@@ -5,6 +5,7 @@ import AdminCategoryCard from "../components/AdminCategoryCard";
 import { showDialog } from "../components/Dialog";
 import { AddCategoryForm } from "../components/AddCategoryForm";
 import { backend } from "../api-globals";
+import "../css/categoryCard.css"
 
 function Admin() {
   const [categories, setCategories] = useState([]);
@@ -23,21 +24,20 @@ function Admin() {
   }
   return (
     <div>
-      <p>Admin</p>
+      <p>Администрирование</p>
       <button onClick={() => showDialog(AddCategoryForm, undefined, needRefresh)}>Добавить категорию</button>
       <Link to="/bids">Заявки</Link>
-      <ul style={{ display: "flex", flexDirection: "column" }}>
+      <div className="card-holder">
         {categories.map((category) => (
-          <li key={category.category_id}>
             <AdminCategoryCard
+            key={category.category_id}
               category_id={category.category_id}
               name={category.category_name}
               url={"admin_category"}
               onClose={needRefresh}
             ></AdminCategoryCard>
-          </li>
         ))}
-      </ul>
+      </div>
 
     </div>
   );

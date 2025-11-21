@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import CategoryCard from "../components/CategoryCard";
 import { backend } from "../api-globals";
+import "../css/categoryCard.css"
 
 function Catalog() {
   const [categories, setCategories] = useState([]);
@@ -15,21 +16,20 @@ function Catalog() {
     load();
   }, [])
 
- 
+
   return (
     <div>
-      Catalog
-      <ul style={{ display: "flex", flexDirection: "column" }}>
+      Каталог
+      <div className="card-holder">
         {categories.map((category) => (
-          <li key={category.category_id}>
-            <CategoryCard
-              category_id={category.category_id}
-              name={category.category_name}
-              url={"category"}
-            ></CategoryCard>
-          </li>
+          <CategoryCard
+            key={category.category_id}
+            category_id={category.category_id}
+            name={category.category_name}
+            url={"category"}
+          ></CategoryCard>
         ))}
-      </ul>
+      </div>
 
     </div>
   );
