@@ -16,6 +16,10 @@ const crypto = require("crypto");
 
 const path = require("path");
 
+const { createClient } = require("redis");
+const client = createClient();
+client.on("error", (err) => console.log("Redis client error", err));
+
 const cookieParser = require("cookie-parser");
 
 const pool = new Pool({
@@ -28,14 +32,28 @@ app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-function sessionParser(req, res, next) {
+async function sessionParser(req, res, next) {
   const sessionId = req.cookies.sessionId;
-  const currentUser = sessions.get(sessionId);
+  const currentUser =  JSON.parse(await client.get(sessionId));
   req.user = currentUser;
   next();
 }
 
 app.use(sessionParser);
+
+async function connectToRedis() {
+  try {
+    await client.connect();
+    console.log("Connected to redis");
+    await client.set("myKey", "myValue");
+    const value = await client.get("myKey");
+    console.log("Value retrieved:", value);
+  } catch (err) {
+    console.log("Failed to connect to redis", err);
+  }
+}
+
+const redisConnection = connectToRedis();
 
 app.put(
   "/api/admin/category",
@@ -267,7 +285,7 @@ app.get("/api/showed_items", async function (req, res) {
   }
 });
 
-const sessions = new Map();
+
 
 app.put("/api/registrate", upload.none(), async function (req, res) {
   const { login, user_name, phone, password } = req.body;
@@ -294,7 +312,8 @@ app.put("/api/registrate", upload.none(), async function (req, res) {
       const cookie = crypto.randomBytes(64).toString("base64");
       const currentUser = result.rows[0];
       res.status(200).cookie("sessionId", cookie).json(currentUser);
-      sessions.set(cookie, currentUser);
+     await connectToRedis;
+     await client.set(cookie, JSON.stringify(currentUser));
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
