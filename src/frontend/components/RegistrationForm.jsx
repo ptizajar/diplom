@@ -1,9 +1,11 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import "../css/form.css"
 import "../api-globals"
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
-import { EnterForm } from "./EnterForm";
+import { LoginForm } from "./LoginForm";
+
+
 
 export function RegistrationForm({ onCloseClick }) {
     const [error, setError] = useState("");
@@ -44,7 +46,7 @@ export function RegistrationForm({ onCloseClick }) {
             <input type="password" className="form-field" placeholder="Пароль" name="password" required />
             <input type="password" className="form-field" placeholder="Повторите пароль" name="password2" required />
             <p>или</p>
-            <button className="form-button" onClick={() => switchForm(EnterForm)}>Войти</button>
+            <button className="form-button" onClick={() => switchForm(LoginForm)}>Войти</button>
 
             <div className='button-holder'>
                 <button className='form-button' type="submit">ОК</button>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Politics from "./pages/Politics";
@@ -12,6 +12,8 @@ import AdminCategory from "./pages/AdminCategory";
 
 import Bids from "./pages/Bids";
 import Item from "./pages/Item";
+
+
 
 const router = createBrowserRouter([
   {
@@ -33,7 +35,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const [user, setUser] = useState(null);
   return <RouterProvider router={router} />;
+
 }
 
 export default App;

@@ -34,7 +34,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 async function sessionParser(req, res, next) {
   const sessionId = req.cookies.sessionId;
-  const currentUser =  JSON.parse(await client.get(sessionId));
+  if (!sessionId) {
+    next();
+    return;
+  }
+  const currentUser = JSON.parse(await client.get(sessionId));
   req.user = currentUser;
   next();
 }
@@ -285,15 +289,13 @@ app.get("/api/showed_items", async function (req, res) {
   }
 });
 
-
+function hashPasswordMD5(password) {
+  const hash = crypto.createHash("md5").update(password).digest("hex");
+  return hash;
+}
 
 app.put("/api/registrate", upload.none(), async function (req, res) {
   const { login, user_name, phone, password } = req.body;
-
-  function hashPasswordMD5(password) {
-    const hash = crypto.createHash("md5").update(password).digest("hex");
-    return hash;
-  }
 
   try {
     const findLogin = await pool.query("select * from users where login=$1", [
@@ -312,9 +314,46 @@ app.put("/api/registrate", upload.none(), async function (req, res) {
       const cookie = crypto.randomBytes(64).toString("base64");
       const currentUser = result.rows[0];
       res.status(200).cookie("sessionId", cookie).json(currentUser);
-     await connectToRedis;
-     await client.set(cookie, JSON.stringify(currentUser));
+      await connectToRedis;
+      await client.set(cookie, JSON.stringify(currentUser));
     }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/login", upload.none(), async function (req, res) {
+  const { login, password } = req.body;
+  try {
+    const findLogin = await pool.query("select * from users where login=$1", [
+      login,
+    ]);
+    if (findLogin.rowCount === 0) {
+      res.status(401).json({ error: "Неверный логин или пароль" });
+      return;
+    }
+    const savedPassword = findLogin.rows[0].password;
+    const givenPassword = hashPasswordMD5(password);
+    if (savedPassword !== givenPassword) {
+      res.status(401).json({ error: "Неверный логин или пароль" });
+      return;
+    }
+    const cookie = crypto.randomBytes(64).toString("base64");
+    const currentUser = findLogin.rows[0];
+    res.status(200).cookie("sessionId", cookie).json(currentUser);
+    await connectToRedis;
+    await client.set(cookie, JSON.stringify(currentUser));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/logout", upload.none(), async function (req, res) {
+  try {
+    await connectToRedis;
+    const sessionId = req.cookies.sessionId;
+    await client.del(sessionId);
+    res.status(200).clearCookie("sessionId").json({});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

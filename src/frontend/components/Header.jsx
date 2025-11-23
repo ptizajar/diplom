@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "../reset.css";
 import "../css/header.css";
-import { EnterForm } from "./EnterForm";
+import { LoginForm } from "./LoginForm";
 import { showDialog } from "./Dialog";
+import { backend } from "../api-globals";
+
 function Header() {
+ async function save(e) {
+            e.preventDefault();
+            
+            const response = await fetch(`${backend}/api/logout`, {
+                method: 'POST'
+    
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                setError(err.error);
+                return;
+            }
+        }
   return (
     <nav className="header">
       <ul className="header-menu">
@@ -20,12 +35,13 @@ function Header() {
             Каталог
           </li>
         </Link>
-        <Link onClick={() => showDialog(EnterForm)} className="menu-link">
+        <Link onClick={() => showDialog(LoginForm)} className="menu-link">
           <li className="menu-item">
             <img src="/public/login.svg" className="menu-icon"></img>
             Войти
           </li>
         </Link>
+        <Link onClick={save}>Logout</Link>
         <Link to={"/favourites"} className="menu-link">
           <li className="menu-item">
             <img src="/public/favourites.svg" className="menu-icon"></img>
