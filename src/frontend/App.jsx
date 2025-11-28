@@ -12,6 +12,8 @@ import AdminCategory from "./pages/AdminCategory";
 
 import Bids from "./pages/Bids";
 import Item from "./pages/Item";
+import { store } from "./store";
+import { Provider } from "react-redux";
 
 
 
@@ -35,8 +37,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [user, setUser] = useState(null);
-  return <RouterProvider router={router} />;
+
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  )
 
 }
 
