@@ -4,6 +4,8 @@ import "../api-globals"
 import { showDialog } from "./Dialog";
 import { RegistrationForm } from "./RegistrationForm";
 import { backend } from "../api-globals";
+import { useDispatch} from "react-redux";
+import { setUser } from "../store";
 
 
 export function LoginForm({onCloseClick}) {
@@ -29,10 +31,14 @@ export function LoginForm({onCloseClick}) {
 
 
 
-    
+            dispatch(setUser(result));
             onCloseClick();
         }
+
+        const dispatch = useDispatch();
+
     return (
+        
         <form className="form" onSubmit={save} id="loginForm" method="POST" encType="multipart/form-data">
             <p>Войти</p>
             {error}

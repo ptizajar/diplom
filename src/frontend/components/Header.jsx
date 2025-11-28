@@ -5,21 +5,26 @@ import "../css/header.css";
 import { LoginForm } from "./LoginForm";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../store";
 
 function Header() {
- async function save(e) {
-            e.preventDefault();
-            
-            const response = await fetch(`${backend}/api/logout`, {
-                method: 'POST'
-    
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                setError(err.error);
-                return;
-            }
-        }
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  async function logout(e) {
+    e.preventDefault();
+
+    const response = await fetch(`${backend}/api/logout`, {
+      method: 'POST'
+
+    });
+    if (!response.ok) {
+      const err = await response.json();
+      setError(err.error);
+      return;
+    }
+    dispatch(setUser(null))
+  }
   return (
     <nav className="header">
       <ul className="header-menu">
@@ -35,13 +40,13 @@ function Header() {
             Каталог
           </li>
         </Link>
-        <Link onClick={() => showDialog(LoginForm)} className="menu-link">
+        {!currentUser && <Link onClick={() => showDialog(LoginForm)} className="menu-link">
           <li className="menu-item">
             <img src="/public/login.svg" className="menu-icon"></img>
             Войти
           </li>
-        </Link>
-        <Link onClick={save}>Logout</Link>
+        </Link>}
+        {currentUser && <Link onClick={logout}>Logout</Link>}
         <Link to={"/favourites"} className="menu-link">
           <li className="menu-item">
             <img src="/public/favourites.svg" className="menu-icon"></img>
