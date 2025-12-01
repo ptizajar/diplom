@@ -4,11 +4,14 @@ import "../api-globals"
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
 import { LoginForm } from "./LoginForm";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store";
 
 
 
 export function RegistrationForm({ onCloseClick }) {
     const [error, setError] = useState("");
+    const dispatch = useDispatch();
     async function save(e) {
         e.preventDefault();
         const reqBody = new FormData(registrationForm);
@@ -30,7 +33,10 @@ export function RegistrationForm({ onCloseClick }) {
         }
         const result = await response.json();
 
+        dispatch(setUser(result));
+        console.log(result);
         onCloseClick();
+
     }
     function switchForm(newform) {
         onCloseClick();
