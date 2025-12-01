@@ -53,12 +53,12 @@ function Header() {
             Избранное
           </li>
         </Link>
-        <Link to={"/admin"} className="menu-link">
+       { currentUser?.is_admin && <Link to={"/admin"} className="menu-link">
           <li className="menu-item">
             <img src="/public/admin.svg" className="menu-icon"></img>
             Управление
           </li>
-        </Link>
+        </Link>}
       </ul>
     </nav>
   );
