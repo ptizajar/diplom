@@ -5,8 +5,10 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const crypto = require("crypto");
 const cookieParser = require("cookie-parser");
+import { serialize } from "v8";
 import { adminRouter } from "./adminRouter";
 import { pool, redisConnection, client } from "./connections";
+import path from "path";
 const multer = require("multer");
 const upload = multer();
 
@@ -200,5 +202,9 @@ app.post("/api/logout", upload.none(), async function (req, res) {
 });
 
 app.use(express.static("static"));
+
+app.get('/*splat',(req,res)=>{
+  res.sendFile(path.resolve("./static","index.html"));
+});
 
 app.listen(3001);
