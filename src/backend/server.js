@@ -1,36 +1,20 @@
 const express = require("express");
-
 const app = express();
-
+exports.app = app;
 const bodyParser = require("body-parser");
-
+const cors = require("cors");
+const crypto = require("crypto");
+const cookieParser = require("cookie-parser");
+import { adminRouter } from "./adminRouter";
+import { pool, redisConnection, client } from "./connections";
 const multer = require("multer");
-
 const upload = multer();
 
-const { Pool } = require("pg");
-
-const cors = require("cors");
-
-const crypto = require("crypto");
-
-const path = require("path");
-
-const { createClient } = require("redis");
-const client = createClient();
-client.on("error", (err) => console.log("Redis client error", err));
-
-const cookieParser = require("cookie-parser");
-
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "intex_db",
-});
 
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 async function sessionParser(req, res, next) {
   const sessionId = req.cookies.sessionId;
@@ -44,64 +28,11 @@ async function sessionParser(req, res, next) {
 }
 
 app.use(sessionParser);
+app.use('/api/admin', adminRouter);
 
-async function connectToRedis() {
-  try {
-    await client.connect();
-    console.log("Connected to redis");
-    await client.set("myKey", "myValue");
-    const value = await client.get("myKey");
-    console.log("Value retrieved:", value);
-  } catch (err) {
-    console.log("Failed to connect to redis", err);
-  }
-}
 
-const redisConnection = connectToRedis();
 
-app.put(
-  "/api/admin/category",
-  upload.single("category_image"),
-  async function (req, res) {
-    const { category_name, category_id } = req.body;
 
-    try {
-      const binaryData = req.file?.buffer;
-      if (category_id) {
-        if (!binaryData) {
-          await pool.query(
-            "update category set category_name=$1 where category_id=$2",
-            [category_name, category_id]
-          );
-        } else {
-          await pool.query(
-            "update category set category_name=$1, category_picture=$2 where category_id=$3",
-            [category_name, binaryData, category_id]
-          );
-        }
-        res.status(200).json({});
-      } else {
-        const result = await pool.query(
-          "INSERT INTO category (category_name, category_picture) values ($1, $2) returning *",
-          [category_name, binaryData]
-        );
-        res.status(200).json(result.rows[0]);
-      }
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-);
-
-app.delete("/api/admin/delete_category/:id", async function (req, res) {
-  try {
-    const param = req.params.id;
-    await pool.query("delete from category where category_id=$1", [param]);
-    res.status(200).json({});
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 app.get("/api/categories", async function (req, res) {
   try {
@@ -168,97 +99,6 @@ app.get("/api/item/image/:id", async function (req, res) {
   }
 });
 
-app.delete("/api/admin/delete_item/:id", async function (req, res) {
-  try {
-    const param = req.params.id;
-    await pool.query("delete from item where item_id=$1", [param]);
-    res.status(200).json({});
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.put(
-  "/api/admin/item",
-  upload.single("item_image"),
-  async function (req, res) {
-    const {
-      item_id,
-      article,
-      item_name,
-      length,
-      width,
-      height,
-      quantity,
-      price,
-      description,
-      show,
-      category_id,
-    } = req.body;
-
-    try {
-      const binaryData = req.file?.buffer;
-      if (item_id) {
-        if (!binaryData) {
-          await pool.query(
-            "update item set article=$1, item_name=$2, length=$3, width=$4, height=$5, quantity=$6, price=$7, description=$8, show=$9 where item_id=$10",
-            [
-              parseInt(article),
-              item_name,
-              parseFloat(length),
-              parseFloat(width),
-              parseFloat(height),
-              parseInt(quantity),
-              parseFloat(price),
-              description,
-              show == "on",
-              item_id,
-            ]
-          );
-        } else {
-          await pool.query(
-            "update item set article=$1, item_name=$2, length=$3, width=$4, height=$5, quantity=$6, price=$7, description=$8, show=$9, item_picture=$10 where item_id=$11",
-            [
-              parseInt(article),
-              item_name,
-              parseFloat(length),
-              parseFloat(width),
-              parseFloat(height),
-              parseInt(quantity),
-              parseInt(price),
-              description,
-              show == "on",
-              binaryData,
-              item_id,
-            ]
-          );
-        }
-        res.status(200).json({});
-      } else {
-        console.log(JSON.stringify(req.body));
-        const result = await pool.query(
-          "INSERT INTO item (item_name,article,length,width,height,item_picture,price,description,show,category_id,quantity) values ($1, $2, $3,$4,$5,$6,$7,$8,$9,$10,$11) returning *",
-          [
-            item_name,
-            parseInt(article),
-            parseFloat(length),
-            parseFloat(width),
-            parseFloat(height),
-            binaryData,
-            parseInt(price),
-            description,
-            show == "on",
-            category_id,
-            parseInt(quantity),
-          ]
-        );
-        res.status(200).json(result.rows[0]);
-      }
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  }
-);
 
 app.get("/api/item/:id", async function (req, res) {
   try {
@@ -314,7 +154,7 @@ app.put("/api/registrate", upload.none(), async function (req, res) {
       const cookie = crypto.randomBytes(64).toString("base64");
       const currentUser = result.rows[0];
       res.status(200).cookie("sessionId", cookie).json(currentUser);
-      await connectToRedis;
+      await redisConnection;
       await client.set(cookie, JSON.stringify(currentUser));
     }
   } catch (err) {
@@ -341,7 +181,7 @@ app.post("/api/login", upload.none(), async function (req, res) {
     const cookie = crypto.randomBytes(64).toString("base64");
     const currentUser = findLogin.rows[0];
     res.status(200).cookie("sessionId", cookie).json(currentUser);
-    await connectToRedis;
+    await redisConnection;
     await client.set(cookie, JSON.stringify(currentUser));
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -350,7 +190,7 @@ app.post("/api/login", upload.none(), async function (req, res) {
 
 app.post("/api/logout", upload.none(), async function (req, res) {
   try {
-    await connectToRedis;
+    await redisConnection;
     const sessionId = req.cookies.sessionId;
     await client.del(sessionId);
     res.status(200).clearCookie("sessionId").json({});
