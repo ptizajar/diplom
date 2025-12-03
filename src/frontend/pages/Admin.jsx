@@ -6,6 +6,7 @@ import { showDialog } from "../components/Dialog";
 import { AddCategoryForm } from "../components/AddCategoryForm";
 import { backend } from "../api-globals";
 import "../css/categoryCard.css"
+import { forAdminOnly } from "../components/ForAdminOnly";
 
 function Admin() {
   const [categories, setCategories] = useState([]);
@@ -45,4 +46,4 @@ function Admin() {
 
 }
 
-export default Admin;
+export default forAdminOnly(Admin);

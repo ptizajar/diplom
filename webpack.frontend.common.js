@@ -8,6 +8,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/frontend/index.html",
+    
     }),
      new CopyWebpackPlugin({
           patterns: [
@@ -19,6 +20,7 @@ module.exports = {
     filename: "front.js",
     path: path.resolve(__dirname, "dist/static"),
     clean: true,
+    publicPath : '/'
   },
   module: {
     rules: [

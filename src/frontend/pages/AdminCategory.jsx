@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import { showDialog } from "../components/Dialog";
 import "../css/itemCard.css"
+import { forAdminOnly } from "../components/ForAdminOnly";
 
 function AdminCategory() {
   const { category_id } = useParams();
@@ -49,4 +50,4 @@ function AdminCategory() {
   );
 }
 
-export default AdminCategory;
+export default forAdminOnly(AdminCategory);
