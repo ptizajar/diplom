@@ -12,11 +12,9 @@ import path from "path";
 const multer = require("multer");
 const upload = multer();
 
-
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 async function sessionParser(req, res, next) {
   const sessionId = req.cookies.sessionId;
@@ -30,11 +28,7 @@ async function sessionParser(req, res, next) {
 }
 
 app.use(sessionParser);
-app.use('/api/admin', adminRouter);
-
-
-
-
+app.use("/api/admin", adminRouter);
 
 app.get("/api/categories", async function (req, res) {
   try {
@@ -101,7 +95,6 @@ app.get("/api/item/image/:id", async function (req, res) {
   }
 });
 
-
 app.get("/api/item/:id", async function (req, res) {
   try {
     const param = req.params.id;
@@ -135,6 +128,10 @@ function hashPasswordMD5(password) {
   const hash = crypto.createHash("md5").update(password).digest("hex");
   return hash;
 }
+
+app.get("/api/refresh-session", async function (req, res) {
+  return res.status(200).json({ user: req.user });
+});
 
 app.put("/api/registrate", upload.none(), async function (req, res) {
   const { login, user_name, phone, password } = req.body;
@@ -203,8 +200,8 @@ app.post("/api/logout", upload.none(), async function (req, res) {
 
 app.use(express.static("static"));
 
-app.get('/*splat',(req,res)=>{
-  res.sendFile(path.resolve("./static","index.html"));
+app.get("/*splat", (req, res) => {
+  res.sendFile(path.resolve("./static", "index.html"));
 });
 
 app.listen(3001);
