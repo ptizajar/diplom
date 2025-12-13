@@ -9,25 +9,12 @@ import { useValidation } from "../validation/useValidation";
 export function AddCategoryForm({ onCloseClick, param }) {
     const [categoryName, setCategoryName] = useState(param?.name || "");
     // const [validationError, setValidationError] = useState("");
-    const [error, setError] = useState({}); 
+   
     const [isSubmitting, setIsSubmitting] = useState(false);//проверять находится ли форма в процессе отправки на сервер
-    const { errors, checkField, checkForm, clearErrors } = useValidation('category');
+    const { errors, checkField, checkForm } = useValidation('category');
     
 
-    // Проверка перед отправкой
-     const validateBeforeSubmit = () => {
-        // Синхронная проверка
-        const fieldErrors = validateField('category', 'category_name', categoryName);
-        
-        // НЕМЕДЛЕННО обновляем errors
-        if (fieldErrors.length > 0) {
-            setError({ category_name: fieldErrors });
-            return false;
-        }
-        
-        setError({}); // Очищаем
-        return true;
-    };
+    
     const handleInputChange = (e) => {
         const value = e.target.value;
         setCategoryName(value);
