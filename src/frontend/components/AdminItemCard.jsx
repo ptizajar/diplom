@@ -17,7 +17,7 @@ function AdminItemCard({ item_id, name, price, onClose }) {
     <div>
       <ItemCard item_id={item_id} name={name} price={price} />
       <div className="admin-button-holder">
-        <button className="admin-item-button" onClick={() => showDialog(AddItemForm, { item_id, onClose })}>Редактировать</button>
+        <button className="admin-item-button" onClick={() => showDialog(AddItemForm, { item_id }, onClose)}>Редактировать</button>
         <button className="admin-item-button" onClick={deleteItem} >Удалить</button>
       </div>
 

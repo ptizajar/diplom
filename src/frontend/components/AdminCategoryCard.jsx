@@ -18,7 +18,7 @@ function AdminCategoryCard({ category_id, name, url, onClose }) {
     <div>
       <CategoryCard category_id={category_id} name={name} url={url} />
       <div className="admin-button-holder">     
-        <button className="admin-item-button" onClick={() => showDialog(AddCategoryForm, { name, category_id, onClose })}>Редактировать</button>
+        <button className="admin-item-button" onClick={() => showDialog(AddCategoryForm, { name, category_id}, onClose )}>Редактировать</button>
         <button className="admin-item-button" onClick={deleteCategory}>Удалить</button>
         </div>
 
