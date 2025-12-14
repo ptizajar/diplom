@@ -13,6 +13,7 @@ function AdminCategory() {
 
   const [categoryName, setCategoryName] = useState(null);
   const [items, setItems] = useState([]);
+ 
 
   async function loadCategory() {
     const result = await fetch(`${backend}/api/category/${category_id}`);
@@ -27,7 +28,9 @@ function AdminCategory() {
   }
   useEffect(() => { loadCategory() }, []);
   useEffect(() => { loadItems() }, []);
-
+ function needRefresh() {
+    loadItems();
+  }
 
   return (
     <div>

@@ -20,8 +20,8 @@ export const validationRules = {
     },
   },
 
-  product: {
-    product_article: {
+  item: {
+    item_article: {
       min: 3,
       max: 50,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\-_]+$/, 
@@ -29,7 +29,7 @@ export const validationRules = {
         "Только буквы, цифры, дефисы и подчеркивания (пробелы не допускаются)",
     },
 
-    product_name: {
+    item_name: {
       min: 2,
       max: 200,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\s\-\.,;:!?"'()]+$/,
@@ -40,7 +40,7 @@ export const validationRules = {
       ],
     },
 
-    product_description: {
+    item_description: {
       max: 2000,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\s\-\.,;:!?"'()\n\r]*$/,
       patternError: "Недопустимые символы",

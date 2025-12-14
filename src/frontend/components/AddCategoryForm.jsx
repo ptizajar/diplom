@@ -8,8 +8,6 @@ import { useValidation } from "../validation/useValidation";
 
 export function AddCategoryForm({ onCloseClick, param }) {
     const [categoryName, setCategoryName] = useState(param?.name || "");
-    // const [validationError, setValidationError] = useState("");
-   
     const [isSubmitting, setIsSubmitting] = useState(false);//проверять находится ли форма в процессе отправки на сервер
     const { errors, checkField, checkForm } = useValidation('category');
     
@@ -24,6 +22,8 @@ export function AddCategoryForm({ onCloseClick, param }) {
     async function save(e) {
 
         e.preventDefault();
+        const form = e.target; // ← форма, на которой сработал submit
+        const formData = new FormData(form);
          const isValid = checkForm({ category_name: categoryName });
         
         if (!isValid) {
@@ -34,7 +34,7 @@ export function AddCategoryForm({ onCloseClick, param }) {
         try {
             const response = await fetch(`${backend}/api/admin/category`, {
                 method: 'PUT',
-                body: new FormData(addCategoryForm)
+                body: formData
             });
 
             const result = await response.json();
@@ -61,7 +61,7 @@ export function AddCategoryForm({ onCloseClick, param }) {
                 onChange={handleInputChange}
                 onBlur={(e) => checkField('category_name', e.target.value)}
                 disabled={isSubmitting} />
-             {errors.category_name && errors.category_name.length > 0 && (
+             {errors.category_name?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                     {errors.category_name[0]}
                 </div>

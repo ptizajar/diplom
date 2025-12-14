@@ -93,7 +93,7 @@ adminRouter.put(
           await pool.query(
             "update item set article=$1, item_name=$2, length=$3, width=$4, height=$5, quantity=$6, price=$7, description=$8, show=$9 where item_id=$10",
             [
-              parseInt(article),
+              article,
               item_name,
               parseFloat(length),
               parseFloat(width),
