@@ -20,13 +20,10 @@ function Admin() {
     load();
   }, [])
 
-  // function needRefresh() {
-  //   load();
-  // }
   return (
     <div>
       <p>Администрирование</p>
-      <button onClick={() => showDialog(AddCategoryForm, undefined, needRefresh)}>Добавить категорию</button>
+      <button onClick={() => showDialog(AddCategoryForm, undefined, load)}>Добавить категорию</button>
       <Link to="/bids">Заявки</Link>
       <div className="card-holder">
         {categories.map((category) => (

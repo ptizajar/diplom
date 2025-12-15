@@ -4,10 +4,10 @@ import "../api-globals"
 import { backend } from "../api-globals";
 import { useValidation } from "../validation/useValidation";
 
-export function AddItemForm({ onCloseClick, param }) {
-    const [itemName, setItemName] = useState(param?.name || "");
+export function AddItemForm({ onCloseClick, param }) {//получает из Dialog
     const [isSubmitting, setIsSubmitting] = useState(false);//проверять находится ли форма в процессе отправки на сервер
-    const { errors, checkField, checkForm } = useValidation('item');
+    const [error, setError] = useState("");
+    const { errors, checkField, checkForm, clearErrors } = useValidation('item');
     const [item, setItem] = useState(null);
 
     const handleFieldChange = (e, fieldType) => {
@@ -28,39 +28,37 @@ export function AddItemForm({ onCloseClick, param }) {
 
     async function save(e) {
         e.preventDefault();
-        const form = e.target; // ← форма, на которой сработал submit
-        const formData = new FormData(form);
+        const formData = new FormData(e.target);
 
-        // Извлекаем данные для валидации
         const validationData = {
             item_article: formData.get('article') || '',
             item_name: formData.get('item_name') || '',
             item_description: formData.get('description') || ''
         };
 
-        // Проверяем форму с типом 'item'
         const isValid = checkForm(validationData);
 
         if (!isValid) {
-            console.log('Ошибки валидации:', errors);
             return;
         }
 
         setIsSubmitting(true);
-        try {
-            const response = await fetch(`${backend}/api/admin/item`, {
-                method: 'PUT',
-                body: formData
-            });
 
-            const result = await response.json();
-            onCloseClick();
+        const response = await fetch(`${backend}/api/admin/item`, {
+            method: 'PUT',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            setError(err.error);
+            setIsSubmitting(false)
+            return;
         }
-        catch {
-            console.error("Ошибка сохранения:", error);
-        } finally {
-            setIsSubmitting(false);
-        }
+
+        await response.json();
+        clearErrors();
+        onCloseClick();
     }
 
     const style = param ? { backgroundImage: `url('${backend}/api/item/image/${item?.item_id}')` } : {};
@@ -178,7 +176,10 @@ export function AddItemForm({ onCloseClick, param }) {
                 </button>
                 <button
                     className='form-button'
-                    onClick={onCloseClick}
+                    onClick={() => {
+                        clearErrors();
+                        onCloseClick()
+                    }}
                     disabled={isSubmitting}
                 >
                     Отмена

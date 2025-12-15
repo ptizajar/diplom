@@ -1,52 +1,49 @@
-import React from "react"
 import "../css/form.css"
 import "../api-globals"
 import { backend } from "../api-globals";
 import { useState } from "react";
 import { useValidation } from "../validation/useValidation";
+import React from "react";
 
 
-export function AddCategoryForm({ onCloseClick, param }) {
-    const [categoryName, setCategoryName] = useState(param?.name || "");
+export function AddCategoryForm({ onCloseClick, param }) {//получает из Dialog
     const [isSubmitting, setIsSubmitting] = useState(false);//проверять находится ли форма в процессе отправки на сервер
-    const { errors, checkField, checkForm } = useValidation('category');
-    
+    const [error, setError] = useState("");
+    const { errors, checkField, checkForm, clearErrors } = useValidation('category');
 
-    
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setCategoryName(value);
-        // Проверяем поле в реальном времени
-        checkField('category_name', value);
+    const handleFieldChange = (e) => {
+        checkField('category', e.target.value);
     };
-    async function save(e) {
 
+    async function save(e) {//on submit
         e.preventDefault();
-        const form = e.target; // ← форма, на которой сработал submit
-        const formData = new FormData(form);
-         const isValid = checkForm({ category_name: categoryName });
-        
-        if (!isValid) {
-            return; // Останавливаем если есть ошибки
-        }
-        
-        setIsSubmitting(true);
-        try {
-            const response = await fetch(`${backend}/api/admin/category`, {
-                method: 'PUT',
-                body: formData
-            });
+        const formData = new FormData(e.target);
+        const categoryName = formData.get('category_name') || '';
+        const isValid = checkForm({ category_name: categoryName });
 
-            const result = await response.json();
-            console.log(result);
-            onCloseClick();
+        if (!isValid) {
+            return; 
         }
-        catch {
-            console.error("Ошибка сохранения:", error);
-        } finally {
-            setIsSubmitting(false);
+
+        setIsSubmitting(true);
+
+        const response = await fetch(`${backend}/api/admin/category`, {
+            method: 'PUT',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            setError(err.error);
+            setIsSubmitting(false)
+            return;
         }
+
+        await response.json();
+        clearErrors();
+        onCloseClick();
     }
+
     const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.category_id}')` } : {};
     return (
         <form className="form" onSubmit={save} id="addCategoryForm" method="POST" encType="multipart/form-data">
@@ -58,10 +55,10 @@ export function AddCategoryForm({ onCloseClick, param }) {
                 name="category_name"
                 required
                 defaultValue={param?.name}
-                onChange={handleInputChange}
-                onBlur={(e) => checkField('category_name', e.target.value)}
+                onChange={handleFieldChange}
+                onBlur={(e) => checkField('category_name', e.target.value)}//потеря фокуса
                 disabled={isSubmitting} />
-             {errors.category_name?.length > 0 && (
+            {errors.category_name?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                     {errors.category_name[0]}
                 </div>
@@ -86,7 +83,10 @@ export function AddCategoryForm({ onCloseClick, param }) {
                 </button>
                 <button
                     className='form-button'
-                    onClick={onCloseClick}
+                    onClick={() => {
+                        clearErrors();
+                        onCloseClick()
+                    }}
                     disabled={isSubmitting}
                 >
                     Отмена
