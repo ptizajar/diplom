@@ -4,7 +4,16 @@ import "../css/dialog.css"
 import { Provider } from 'react-redux';
 import { store } from '../store';
 
-export function showDialog(Content, param, onClose) {
+
+function Dialog({ Content, onCloseClick, param }) {//получает из showDialog и передаёт в форму
+	return (
+		<div className='dialog-content' >
+			{Content({ onCloseClick, param })} 
+		</div>
+	)
+}
+
+export function showDialog(Content, param, onClose) {//пропсы приходяд из страницы/компонента
 	const domNode = document.createElement('div');
 	domNode.classList.add("dialog");
 	document.body.appendChild(domNode);
@@ -21,16 +30,7 @@ export function showDialog(Content, param, onClose) {
 }
 
 
-function Dialog({ Content, onCloseClick, param }) {
 
-	return (
-
-		<div className='dialog-content' >
-			{Content({ onCloseClick, param })}
-		</div>
-
-	)
-}
 
 
 
