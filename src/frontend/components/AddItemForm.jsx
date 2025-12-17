@@ -48,7 +48,12 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             method: 'PUT',
             body: formData
         });
-
+        if (response.status === 409) {
+            const err = await response.json();
+            setError(err.error);
+            setIsSubmitting(false)
+            return;
+        }
         if (!response.ok) {
             const err = await response.json();
             setError(err.error);
@@ -79,6 +84,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             {errors.item_article?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                     {errors.item_article[0]}
+
                 </div>
             )}
             <input
@@ -91,9 +97,11 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 onChange={(e) => handleFieldChange(e, 'item_name')}
                 onBlur={(e) => handleFieldChange(e, 'item_name')}
                 disabled={isSubmitting} />
+            {error && <div>{error}</div>}
             {errors.item_name?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                     {errors.item_name[0]}
+
                 </div>
             )}
             <input

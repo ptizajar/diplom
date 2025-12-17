@@ -22,7 +22,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
         const isValid = checkForm({ category_name: categoryName });
 
         if (!isValid) {
-            return; 
+            return;
         }
 
         setIsSubmitting(true);
@@ -31,7 +31,12 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
             method: 'PUT',
             body: formData
         });
-
+        if (response.status === 409) {
+            const err = await response.json();
+            setError(err.error);
+            setIsSubmitting(false)
+            return;
+        }
         if (!response.ok) {
             const err = await response.json();
             setError(err.error);
@@ -58,6 +63,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                 onChange={handleFieldChange}
                 onBlur={(e) => checkField('category_name', e.target.value)}//потеря фокуса
                 disabled={isSubmitting} />
+            {error && <div>{error}</div>}
             {errors.category_name?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                     {errors.category_name[0]}
