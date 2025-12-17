@@ -2,14 +2,14 @@ const express = require("express");
 const multer = require("multer");
 const upload = multer();
 export const adminRouter = express.Router();
-import { pool} from "./connections";
+import { pool } from "./connections";
 
-function isAdmin(req,res,next){
-    if(!req.user?.is_admin){
-        res.status(401).json({})
-        return;
-    }
-    next();
+function isAdmin(req, res, next) {
+  if (!req.user?.is_admin) {
+    res.status(401).json({});
+    return;
+  }
+  next();
 }
 
 adminRouter.use(isAdmin);
@@ -20,6 +20,35 @@ adminRouter.put(
     const { category_name, category_id } = req.body;
 
     try {
+      if (category_id) {
+        // При редактировании
+        const checkResult = await pool.query(
+          "SELECT COUNT(*) as count FROM category WHERE LOWER(TRIM(category_name)) = LOWER(TRIM($1)) AND category_id != $2",
+          [category_name, category_id]
+        );
+
+        const duplicateCount = parseInt(checkResult.rows[0]?.count || 0);
+
+        if (duplicateCount > 0) {
+          return res.status(409).json({
+            error: "Категория с таким названием уже существует",
+          });
+        }
+      } else {
+        // При создании
+        const checkResult = await pool.query(
+          "SELECT COUNT(*) as count FROM category WHERE LOWER(TRIM(category_name)) = LOWER(TRIM($1))",
+          [category_name]
+        );
+
+        const duplicateCount = parseInt(checkResult.rows[0]?.count || 0);
+
+        if (duplicateCount > 0) {
+          return res.status(409).json({
+            error: "Категория с таким названием уже существует",
+          });
+        }
+      }
       const binaryData = req.file?.buffer;
       if (category_id) {
         if (!binaryData) {
@@ -57,7 +86,6 @@ adminRouter.delete("/delete_category/:id", async function (req, res) {
   }
 });
 
-
 adminRouter.delete("/delete_item/:id", async function (req, res) {
   try {
     const param = req.params.id;
@@ -87,6 +115,66 @@ adminRouter.put(
     } = req.body;
 
     try {
+      if (item_id) {
+        // При редактировании: проверяем уникальность названия
+        const checkNameResult = await pool.query(
+          "SELECT COUNT(*) as count FROM item WHERE LOWER(TRIM(item_name)) = LOWER(TRIM($1)) AND item_id != $2",
+          [item_name, item_id]
+        );
+
+        const duplicateNameCount = parseInt(
+          checkNameResult.rows[0]?.count || 0
+        );
+
+        if (duplicateNameCount > 0) {
+          return res.status(409).json({
+            error: "Товар с таким названием уже существует",
+          });
+        } // При редактировании: проверяем уникальность артикула
+        const checkArticleResult = await pool.query(
+          "SELECT COUNT(*) as count FROM item WHERE article = $1 AND item_id != $2",
+          [article, item_id]
+        );
+
+        const duplicateArticleCount = parseInt(
+          checkArticleResult.rows[0]?.count || 0
+        );
+
+        if (duplicateArticleCount > 0) {
+          return res.status(409).json({
+            error: "Товар с таким артикулом уже существует",
+          });
+        }
+      } else {
+        // При создании: проверяем уникальность названия
+        const checkResult = await pool.query(
+          "SELECT COUNT(*) as count FROM item WHERE LOWER(TRIM(item_name)) = LOWER(TRIM($1))",
+          [item_name]
+        );
+
+        const duplicateCount = parseInt(checkResult.rows[0]?.count || 0);
+
+        if (duplicateCount > 0) {
+          return res.status(409).json({
+            error: "Товар с таким названием уже существует",
+          });
+        }
+        // При создании: проверяем уникальность артикула
+        const checkArticleResult = await pool.query(
+          "SELECT COUNT(*) as count FROM item WHERE article = $1",
+          [article]
+        );
+
+        const duplicateArticleCount = parseInt(
+          checkArticleResult.rows[0]?.count || 0
+        );
+
+        if (duplicateArticleCount > 0) {
+          return res.status(409).json({
+            error: "Товар с таким артикулом уже существует",
+          });
+        }
+      }
       const binaryData = req.file?.buffer;
       if (item_id) {
         if (!binaryData) {
@@ -149,5 +237,3 @@ adminRouter.put(
     }
   }
 );
-
-
