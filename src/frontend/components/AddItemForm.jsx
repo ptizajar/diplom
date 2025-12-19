@@ -15,8 +15,15 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
     };
 
     async function loadItem() {
-        const result = await fetch(`${backend}/api/item/${param.item_id}`);
-        const data = await result.json();
+        const response = await fetch(`${backend}/api/item/${param.item_id}`);
+        if (!response.ok) {
+            const err = await response.json();
+            setError(err.error);
+            setIsSubmitting(false)
+            return;
+        }
+        const data = await response.json();
+        setError("");
         setItem(data)
     }
 
@@ -28,6 +35,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
 
     async function save(e) {
         e.preventDefault();
+        setError("");
         const formData = new FormData(e.target);
 
         const validationData = {
@@ -62,6 +70,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
         }
 
         await response.json();
+        
         clearErrors();
         onCloseClick();
     }
@@ -71,6 +80,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
     return (
         <form className="form" onSubmit={save} id="addItemForm" method="POST" encType="multipart/form-data">
             {param.item_id ? "Редактировать товар" : "Добавить товар"}
+            {error}
             <input
                 type="text"
                 className="form-field"
@@ -194,5 +204,5 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 </button>
             </div>
         </form>
-    )
+    );
 }

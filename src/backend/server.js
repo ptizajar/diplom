@@ -188,14 +188,15 @@ app.post("/api/login", upload.none(), async function (req, res) {
 });
 
 app.post("/api/logout", upload.none(), async function (req, res) {
-  try {
-    await redisConnection;
-    const sessionId = req.cookies.sessionId;
-    await client.del(sessionId);
-    res.status(200).clearCookie("sessionId").json({});
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  // try {
+  //   await redisConnection;
+  //   const sessionId = req.cookies.sessionId;
+  //   await client.del(sessionId);
+  //   res.status(200).clearCookie("sessionId").json({});
+  // } catch (err) {
+  //   res.status(500).json({ error: err.message });
+  // }
+  res.status(500).json({error: "Ошибка выхода"})
 });
 
 app.use(express.static("static"));
