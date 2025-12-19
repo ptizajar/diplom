@@ -5,16 +5,10 @@ function CategoryCard({ category_id, name, url }) {
   return (
     <div >
       <Link to={`/${url}/${category_id}`}>
-        {/* <div className="category-card" style={{backgroundImage: `url(${backend}/api/category/image/${category_id})`}}> */}
         <div className="category-card"> 
           <img  className="category-image" src={`${backend}/api/category/image/${category_id}`} alt="бассейн"  />
           <div className="category-name"> {name}</div>
         </div>
-
-        {/* </div> */}
-
-        {/* <p>{name}</p> */}
-
       </Link>
     </div>
   );

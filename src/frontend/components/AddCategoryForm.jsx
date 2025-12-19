@@ -17,6 +17,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
 
     async function save(e) {//on submit
         e.preventDefault();
+        setError("");
         const formData = new FormData(e.target);
         const categoryName = formData.get('category_name') || '';
         const isValid = checkForm({ category_name: categoryName });
@@ -26,7 +27,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
         }
 
         setIsSubmitting(true);
-
+       
         const response = await fetch(`${backend}/api/admin/category`, {
             method: 'PUT',
             body: formData
@@ -45,6 +46,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
         }
 
         await response.json();
+        
         clearErrors();
         onCloseClick();
     }
