@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import "../api-globals"
 import { backend } from "../api-globals";
 import { useValidation } from "../validation/useValidation";
+import "../css/toast.css"
 
 export function AddItemForm({ onCloseClick, param }) {//получает из Dialog
     const [isSubmitting, setIsSubmitting] = useState(false);//проверять находится ли форма в процессе отправки на сервер
@@ -78,9 +79,9 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
     const style = param ? { backgroundImage: `url('${backend}/api/item/image/${item?.item_id}')` } : {};
 
     return (
+        <>
         <form className="form" onSubmit={save} id="addItemForm" method="POST" encType="multipart/form-data">
             {param.item_id ? "Редактировать товар" : "Добавить товар"}
-            {error}
             <input
                 type="text"
                 className="form-field"
@@ -107,7 +108,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 onChange={(e) => handleFieldChange(e, 'item_name')}
                 onBlur={(e) => handleFieldChange(e, 'item_name')}
                 disabled={isSubmitting} />
-            {error && <div>{error}</div>}
             {errors.item_name?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                     {errors.item_name[0]}
@@ -204,5 +204,15 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 </button>
             </div>
         </form>
+         {error && (
+                <div className="toast-notification">
+                    <div className="toast-content">
+                        <span className="toast-message">{error}</span>
+                        <button onClick={() => setError("")} className="toast-close">×</button>
+                    </div>
+                    {/* Прогресс-бар для автоскрытия */}
+                    <div className="toast-progress"></div>
+                </div>
+            )}</>
     );
 }

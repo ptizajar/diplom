@@ -5,6 +5,7 @@ import { AddCategoryForm } from "./AddCategoryForm";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
 import "../css/categoryCard.css"
+import "../css/toast.css"
 
 function AdminCategoryCard({ category_id, name, url, onClose }) {
   const [error, setError] = useState("");
@@ -19,19 +20,29 @@ function AdminCategoryCard({ category_id, name, url, onClose }) {
       setError(err.error);
       return;
     }
-    
+
     onClose();
 
   }
   return (
-    <div>
-      {error}
-      <CategoryCard category_id={category_id} name={name} url={url} />
-      <div className="admin-button-holder">
-        <button className="admin-item-button" onClick={() => showDialog(AddCategoryForm, { name, category_id }, onClose)}>Редактировать</button>
-        <button className="admin-item-button" onClick={deleteCategory}>Удалить</button>
+    <>
+      <div>
+        <CategoryCard category_id={category_id} name={name} url={url} />
+        <div className="admin-button-holder">
+          <button className="admin-item-button" onClick={() => showDialog(AddCategoryForm, { name, category_id }, onClose)}>Редактировать</button>
+          <button className="admin-item-button" onClick={deleteCategory}>Удалить</button>
+        </div>
       </div>
-    </div>
+      {error && (
+        <div className="toast-notification">
+          <div className="toast-content">
+            <span className="toast-message">{error}</span>
+            <button onClick={() => setError("")} className="toast-close">×</button>
+          </div>
+          {/* Прогресс-бар для автоскрытия */}
+          <div className="toast-progress"></div>
+        </div>
+      )}</>
   );
 }
 
