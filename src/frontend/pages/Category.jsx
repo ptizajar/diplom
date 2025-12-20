@@ -4,22 +4,33 @@ import ItemCard from "../components/ItemCard";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/itemCard.css"
+import "../css/toast.css"
 
 
 function Category() {
   const { category_id } = useParams();
-
+  const [error, setError] = useState("");
   const [categoryName, setCategoryName] = useState(null);
   const [items, setItems] = useState([]);
 
   async function loadCategory() {
-    const result = await fetch(`${backend}/api/category/${category_id}`);
-    const data = await result.json();
+    const res = await fetch(`${backend}/api/category/${category_id}`);
+    if (!res.ok) {
+      const err = await response.json();
+      setError(err.error);
+      return;
+    }
+    const data = await res.json();
     setCategoryName(data.category_name);
   }
 
   async function loadItems() {
     const res = await fetch(`${backend}/api/category/${category_id}/items`);
+     if (!res.ok) {
+      const err = await response.json();
+      setError(err.error);
+      return;
+    }
     const data = await res.json();
     setItems(data);
   }
@@ -28,7 +39,7 @@ function Category() {
 
 
   return (
-    <div>
+    <>
       <p>{categoryName}</p>
       <div className="card-holder" >
         {items.map((item) => (
@@ -42,7 +53,17 @@ function Category() {
 
         ))}
       </div>
-    </div>
+      {error && (
+        <div className="toast-notification">
+          <div className="toast-content">
+            <span className="toast-message">{error}</span>
+            <button onClick={() => setError("")} className="toast-close">×</button>
+          </div>
+          {/* Прогресс-бар для автоскрытия */}
+          <div className="toast-progress"></div>
+        </div>
+      )}
+    </>
   );
 }
 

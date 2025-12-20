@@ -14,11 +14,11 @@ function isAdmin(req, res, next) {
 
 adminRouter.use(isAdmin);
 adminRouter.put(
+  
   "/category",
   upload.single("category_image"),
   async function (req, res) {
     const { category_name, category_id } = req.body;
-
     try {
       if (category_id) {
         // При редактировании
@@ -100,6 +100,7 @@ adminRouter.put(
   "/item",
   upload.single("item_image"),
   async function (req, res) {
+    
     const {
       item_id,
       article,
