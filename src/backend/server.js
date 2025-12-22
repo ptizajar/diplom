@@ -76,10 +76,11 @@ app.get("/api/category/:id/items", async function (req, res) {
       [param]
     );
     if (req.user.user_id) {
-      const liked = (await pool.query(
-        "select item_id from favourites where user_id=$1",
-        [req.user.user_id]
-      )).rows.map((row)=>row.item_id);//возвращает массив объектов, берём только числа
+      const liked = (
+        await pool.query("select item_id from favourites where user_id=$1", [
+          req.user.user_id,
+        ])
+      ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
       console.log(liked.rows);
       for (const row of result.rows) {
         row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
@@ -124,6 +125,17 @@ app.get("/api/showed_items", async function (req, res) {
       "select item_id,item_name,article,length,width,height,price,description,quantity from item where show=$1 ",
       [true]
     );
+     if (req.user.user_id) {
+      const liked = (
+        await pool.query("select item_id from favourites where user_id=$1", [
+          req.user.user_id,
+        ])
+      ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
+      console.log(liked.rows);
+      for (const row of result.rows) {
+        row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
+      }
+    }
     res.status(200).json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -217,14 +229,14 @@ app.post("/api/favourites", upload.none(), async function (req, res) {
       "select * from favourites where item_id=$1 and user_id=$2",
       [item_id, req.user.user_id]
     );
-    if (!findItem.rowCount && liked==='true') {
+    if (!findItem.rowCount && liked === "true") {
       //если товара нет а его надо лайкнуть
       await pool.query(
         "insert into favourites(item_id,user_id) values ($1,$2)",
         [item_id, req.user.user_id]
       );
     }
-    if (findItem.rowCount && liked==='false') {
+    if (findItem.rowCount && liked === "false") {
       //если товар есть, а его надо дизлайкнуть
       await pool.query(
         "delete from favourites where item_id=$1 and user_id=$2",
@@ -234,6 +246,36 @@ app.post("/api/favourites", upload.none(), async function (req, res) {
     }
     res.status(200).json({});
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/liked_items", async function (req, res) {
+  try {
+    const userId = req.user.user_id;
+    const result = await pool.query(
+      `SELECT 
+        i.item_id,
+        i.item_name,
+        i.article,
+        i.length,
+        i.width,
+        i.height,
+        i.price,
+        i.description,
+        i.quantity,
+        i.show,
+        i.category_id,
+        true as liked
+       FROM favourites f
+       JOIN item i ON f.item_id = i.item_id
+       WHERE f.user_id = $1`,
+      [userId]
+    );
+
+    res.status(200).json({ favourites: result.rows });
+  } catch (err) {
+    console.error("Ошибка получения избранного:", err);
     res.status(500).json({ error: err.message });
   }
 });

@@ -53,6 +53,7 @@ function AdminCategory() {
             item_id={item.item_id}
             name={item.item_name}
             price={item.price}
+            liked={item.liked}
             onClose={loadItems}
           ></AdminItemCard>
 

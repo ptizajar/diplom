@@ -32,7 +32,6 @@ function Catalog() {
             key={category.category_id}
             category_id={category.category_id}
             name={category.category_name}
-            url={"category"}
           ></CategoryCard>
         ))}
       </div>
