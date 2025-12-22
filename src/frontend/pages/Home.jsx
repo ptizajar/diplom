@@ -35,7 +35,7 @@ function Home() {
                 item_id={item.item_id}
                 name={item.item_name}
                 price={item.price}
-                url={"category"}
+                liked={item.liked}
               ></ItemCard>
             )
         )}

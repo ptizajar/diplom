@@ -7,7 +7,7 @@ import { backend } from "../api-globals";
 import "../css/categoryCard.css"
 import "../css/toast.css"
 
-function AdminCategoryCard({ category_id, name, url, onClose }) {
+function AdminCategoryCard({ category_id, name, onClose }) {
   const [error, setError] = useState("");
 
   async function deleteCategory() {
@@ -27,7 +27,7 @@ function AdminCategoryCard({ category_id, name, url, onClose }) {
   return (
     <>
       <div>
-        <CategoryCard category_id={category_id} name={name} url={url} />
+        <CategoryCard category_id={category_id} name={name} url="admin_category" />
         <div className="admin-button-holder">
           <button className="admin-item-button" onClick={() => showDialog(AddCategoryForm, { name, category_id }, onClose)}>Редактировать</button>
           <button className="admin-item-button" onClick={deleteCategory}>Удалить</button>
