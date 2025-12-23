@@ -16,14 +16,14 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
     };
 
     async function loadItem() {
-        const response = await fetch(`${backend}/api/item/${param.item_id}`);
-        if (!response.ok) {
-            const err = await response.json();
+        const res = await fetch(`${backend}/api/item/${param.item_id}`);
+        if (!res.ok) {
+            const err = await res.json();
             setError(err.error);
             setIsSubmitting(false)
             return;
         }
-        const data = await response.json();
+        const data = await res.json();
         setError("");
         setItem(data)
     }
@@ -53,18 +53,18 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
 
         setIsSubmitting(true);
 
-        const response = await fetch(`${backend}/api/admin/item`, {
+        const res = await fetch(`${backend}/api/admin/item`, {
             method: 'PUT',
             body: formData
         });
-        if (response.status === 409) {
-            const err = await response.json();
+        if (res.status === 409) {
+            const err = await res.json();
             setError(err.error);
             setIsSubmitting(false)
             return;
         }
-        if (!response.ok) {
-            const err = await response.json();
+        if (!res.ok) {
+            const err = await res.json();
             setError(err.error);
             setIsSubmitting(false)
             return;

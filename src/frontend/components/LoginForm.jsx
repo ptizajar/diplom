@@ -18,17 +18,17 @@ export function LoginForm({ onCloseClick }) {
     async function save(e) {
         e.preventDefault();
 
-        const response = await fetch(`${backend}/api/login`, {
+        const res = await fetch(`${backend}/api/login`, {
             method: 'POST',
             body: new FormData(loginForm)
 
         });
-        if (!response.ok) {
-            const err = await response.json();
+        if (!res.ok) {
+            const err = await res.json();
             setError(err.error);
             return;
         }
-        const result = await response.json();
+        const result = await res.json();
 
 
 
@@ -42,7 +42,6 @@ export function LoginForm({ onCloseClick }) {
         <>
             <form className="form" onSubmit={save} id="loginForm" method="POST" encType="multipart/form-data">
                 <p>Войти</p>
-                {error}
                 <input type="text" className="form-field" placeholder="Логин" name="login" required />
                 <input type="password" className="form-field" placeholder="Пароль" name="password" required />
                 <p>или</p>

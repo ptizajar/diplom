@@ -1,19 +1,19 @@
 import React from "react";
 import { useState } from "react";
-import ItemCard from "../components/ItemCard";
+import {ItemCard} from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
 import "../css/home.css"
 import "../css/itemCard.css"
 import "../css/toast.css"
 
-function Home() {
+export function Home() {
   const [items, setItems] = useState([]);
   const [error,setError] = useState("");
   async function loadItems() {
     const res = await fetch(`${backend}/api/showed_items`, {credentials: "same-origin"});
      if (!res.ok) {
-      const err = await response.json();
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -54,4 +54,4 @@ function Home() {
   );
 }
 
-export default Home;
+

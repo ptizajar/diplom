@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AddItemForm } from "../components/AddItemForm";
-import AdminItemCard from "../components/AdminItemCard";
+import {AdminItemCard} from "../components/AdminItemCard";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import { showDialog } from "../components/Dialog";
@@ -30,7 +30,7 @@ function AdminCategory() {
   async function loadItems() {
     const res = await fetch(`${backend}/api/category/${category_id}/items`);
     if (!res.ok) {
-      const err = await response.json();
+      const err = await res.json();
       setError(err.error);
       return;
     }

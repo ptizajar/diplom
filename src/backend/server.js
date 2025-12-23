@@ -125,7 +125,7 @@ app.get("/api/showed_items", async function (req, res) {
       "select item_id,item_name,article,length,width,height,price,description,quantity from item where show=$1 ",
       [true]
     );
-     if (req.user.user_id) {
+     if (req.user?.user_id) {
       const liked = (
         await pool.query("select item_id from favourites where user_id=$1", [
           req.user.user_id,
@@ -252,7 +252,7 @@ app.post("/api/favourites", upload.none(), async function (req, res) {
 
 app.get("/api/liked_items", async function (req, res) {
   try {
-    const userId = req.user.user_id;
+    const userId = req.user?.user_id;
     const result = await pool.query(
       `SELECT 
         i.item_id,

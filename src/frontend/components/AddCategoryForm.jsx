@@ -29,24 +29,24 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
 
         setIsSubmitting(true);
 
-        const response = await fetch(`${backend}/api/admin/category`, {
+        const res = await fetch(`${backend}/api/admin/category`, {
             method: 'PUT',
             body: formData
         });
-        if (response.status === 409) {
-            const err = await response.json();
+        if (res.status === 409) {
+            const err = await res.json();
             setError(err.error);
             setIsSubmitting(false)
             return;
         }
-        if (!response.ok) {
-            const err = await response.json();
+        if (!res.ok) {
+            const err = await res.json();
             setError(err.error);
             setIsSubmitting(false)
             return;
         }
 
-        await response.json();
+        await res.json();
 
         clearErrors();
         onCloseClick();

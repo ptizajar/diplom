@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
-function CategoryCard({ category_id, name}) {
+export function CategoryCard({ category_id, name}) {
   return (
     <div >
       <Link to={`/category/${category_id}`}>
@@ -14,4 +14,4 @@ function CategoryCard({ category_id, name}) {
   );
 }
 
-export default CategoryCard;
+

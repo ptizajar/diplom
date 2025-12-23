@@ -9,7 +9,7 @@ import { backend } from "../api-globals";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store";
 
-function Header() {
+export function Header() {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -17,12 +17,12 @@ function Header() {
     e.preventDefault();
     setError("");
 
-    const response = await fetch(`${backend}/api/logout`, {
+    const res = await fetch(`${backend}/api/logout`, {
       method: 'POST'
 
     });
-    if (!response.ok) {
-      const err = await response.json();
+    if (!res.ok) {
+      const err = await res.json();
       setError(err.error);
       setTimeout(() => setError(""), 5000);
       return;
@@ -81,4 +81,3 @@ function Header() {
   );
 }
 
-export default Header;

@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import CategoryCard from "./CategoryCard";
+import {CategoryCard} from "./CategoryCard";
 import { AddCategoryForm } from "./AddCategoryForm";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
 import "../css/categoryCard.css"
 import "../css/toast.css"
 
-function AdminCategoryCard({ category_id, name, onClose }) {
+export function AdminCategoryCard({ category_id, name, onClose }) {
   const [error, setError] = useState("");
 
   async function deleteCategory() {
     setError("");
-    const response = await fetch(`${backend}/api/admin/delete_category/${category_id}`, {
+    const res = await fetch(`${backend}/api/admin/delete_category/${category_id}`, {
       method: 'delete'
     });
-    if (!response.ok) {
-      const err = await response.json();
+    if (!res.ok) {
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -46,4 +46,3 @@ function AdminCategoryCard({ category_id, name, onClose }) {
   );
 }
 
-export default AdminCategoryCard;
