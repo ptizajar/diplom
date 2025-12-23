@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home";
-import Politics from "./pages/Politics";
-import Catalog from "./pages/Catalog";
-import Category from "./pages/Category";
-import Favourites from "./pages/Favourites";
-import NotFound from "./pages/NotFound";
+import {Home} from "./pages/Home";
+import {Politics} from "./pages/Politics";
+import {Catalog} from "./pages/Catalog";
+import {Category} from "./pages/Category";
+import {Favourites} from "./pages/Favourites";
+import {NotFound} from "./pages/NotFound";
 import Layout from "./components/Layout";
 import Admin from "./pages/Admin";
 import AdminCategory from "./pages/AdminCategory";
-import { forAdminOnly } from "./components/ForAdminOnly";
-
 import Bids from "./pages/Bids";
-import Item from "./pages/Item";
+import {ItemPage} from "./pages/ItemPage";
 import { store } from "./store";
 import { Provider, useDispatch } from "react-redux";
 import { setUser } from "./store";
@@ -29,7 +27,7 @@ const router = createBrowserRouter([
       { path: "politics", element: <Politics /> },
       { path: "catalog", element: <Catalog /> },
       { path: "category/:category_id", element: <Category /> },
-      { path: "item/:item_id", element: <Item /> },
+      { path: "item/:item_id", element: <ItemPage /> },
       { path: "admin", element:  <Admin /> },
       { path: "admin_category/:category_id", element: <AdminCategory /> },
       { path: "bids", element: <Bids /> },

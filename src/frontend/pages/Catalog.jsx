@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "../css/toast.css"
-import CategoryCard from "../components/CategoryCard";
+import {CategoryCard} from "../components/CategoryCard";
 import { backend } from "../api-globals";
 import "../css/categoryCard.css"
 
-function Catalog() {
+export function Catalog() {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   async function load() {
     const res = await fetch(`${backend}/api/categories`);
     if (!res.ok) {
-      const err = await response.json();
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -51,4 +51,4 @@ function Catalog() {
 
 }
 
-export default Catalog;
+

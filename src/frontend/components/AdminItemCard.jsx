@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import ItemCard from "./ItemCard";
+import {ItemCard} from "./ItemCard";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
 import { AddItemForm } from "./AddItemForm";
 import "../css/itemCard.css"
 import "../css/toast.css"
-function AdminItemCard({ item_id, name, price, onClose, liked }) {
+export function AdminItemCard({ item_id, name, price, onClose, liked }) {
   const [error, setError] = useState("");
 
   async function deleteItem() {
     setError("");
-    await fetch(`${backend}/api/admin/delete_item/${item_id}`, {
+    const res = await fetch(`${backend}/api/admin/delete_item/${item_id}`, {
       method: 'delete'
     });
-    if (!response.ok) {
-      const err = await response.json();
+    if (!res.ok) {
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -46,4 +46,4 @@ function AdminItemCard({ item_id, name, price, onClose, liked }) {
   );
 }
 
-export default AdminItemCard;
+

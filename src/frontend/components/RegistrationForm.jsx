@@ -55,26 +55,24 @@ export function RegistrationForm({ onCloseClick }) {
         setIsSubmitting(true);
 
 
-        const response = await fetch(`${backend}/api/registrate`, {
+        const res = await fetch(`${backend}/api/registrate`, {
             method: 'PUT',
             body: new FormData(registrationForm)
 
         });
-        if (!response.ok) {
-            const err = await response.json();
+        if (!res.ok) {
+            const err = await res.json();
             setError(err.error);
             setIsSubmitting(false)
             return;
         }
-        const result = await response.json();
+        const result = await res.json();
 
         dispatch(setUser(result));
-        console.log(result);
         clearErrors();
         onCloseClick();
 
     }
-
 
     function switchForm(newform) {
         onCloseClick();

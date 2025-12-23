@@ -4,25 +4,27 @@ import { backend } from "../api-globals";
 import "../css/home.css"
 import { useSelector } from "react-redux";
 import "../css/itemCard.css"
-function ItemCard({ item_id, name, price, liked }) {
+import { showDialog } from "./Dialog";
+import {EnterForFavourites} from "./EnterForFavourites";
+export function ItemCard({ item_id, name, price, liked }) {
   const [error, setError] = useState("");
   const [currentLiked, setCurrentLiked] = useState(liked);
   const currentUser = useSelector((state) => state.user.currentUser);
   async function like(e) {
     e.preventDefault();
     if (!currentUser) {
-      alert("Login to add favourites");
+      showDialog(EnterForFavourites)
       return;
     }
     const formData = new FormData();
     formData.append("item_id", item_id);
     formData.append("liked", !currentLiked);
-    const response = await fetch(`${backend}/api/favourites`, {
+    const res = await fetch(`${backend}/api/favourites`, {
       method: 'POST',
       body: formData
     })
-    if (!response.ok) {
-      const err = await response.json();
+    if (!res.ok) {
+      const err = await res.json();
       setError(err.error);
       setTimeout(() => setError(""), 5000);
       return;
@@ -53,4 +55,4 @@ function ItemCard({ item_id, name, price, liked }) {
   );
 }
 
-export default ItemCard;
+

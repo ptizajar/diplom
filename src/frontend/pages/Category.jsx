@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ItemCard from "../components/ItemCard";
+import {ItemCard} from "../components/ItemCard";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/itemCard.css"
 import "../css/toast.css"
 
 
-function Category() {
+export function Category() {
   const { category_id } = useParams();
   const [error, setError] = useState("");
   const [categoryName, setCategoryName] = useState(null);
@@ -16,7 +16,7 @@ function Category() {
   async function loadCategory() {
     const res = await fetch(`${backend}/api/category/${category_id}`);
     if (!res.ok) {
-      const err = await response.json();
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -26,8 +26,8 @@ function Category() {
 
   async function loadItems() {
     const res = await fetch(`${backend}/api/category/${category_id}/items`);
-     if (!res.ok) {
-      const err = await response.json();
+    if (!res.ok) {
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -68,4 +68,4 @@ function Category() {
   );
 }
 
-export default Category;
+

@@ -4,14 +4,14 @@ import { useEffect } from "react";
 import { backend } from "../api-globals";
 import "../css/toast.css"
 
-function ItemPage() {
+export function ItemPage() {
   const { item_id } = useParams();
   const [item, setItem] = useState();
   const [error, setError] = useState("");
   async function load() {
     const res = await fetch(`${backend}/api/item/${item_id}`);
     if (!res.ok) {
-      const err = await response.json();
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -58,4 +58,4 @@ function ItemPage() {
   );
 }
 
-export default ItemPage;
+

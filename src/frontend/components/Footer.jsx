@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-function Footer() {
+export function Footer() {
   return (
     <div>
       Footer
@@ -11,4 +11,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+

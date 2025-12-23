@@ -1,18 +1,18 @@
 import React from "react";
 import { useState } from "react";
-import ItemCard from "../components/ItemCard";
+import {ItemCard} from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
 import "../css/itemCard.css"
 import "../css/toast.css"
 
-function Favourites() {
+export function Favourites() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState("");
   async function loadItems() {
     const res = await fetch(`${backend}/api/liked_items`);
     if (!res.ok) {
-      const err = await response.json();
+      const err = await res.json();
       setError(err.error);
       return;
     }
@@ -57,4 +57,4 @@ function Favourites() {
   );
 }
 
-export default Favourites;
+
