@@ -178,20 +178,30 @@ app.put("/api/registrate", upload.none(), async function (req, res) {
     res.status(500).json({ error: err.message });
   }
 });
-
+const tries = new Map();//key-login,value-array of tries by time
 app.post("/api/login", upload.none(), async function (req, res) {
   const { login, password } = req.body;
+  const currentTries = tries.get(login) || [];
+  if(currentTries.length===3){
+    const timeGone = Date.now() - currentTries[2];//время которое прошло с первой попытки из трёх
+    if(timeGone<5*60*1000){
+      res.status(429).json({error: "Слишком много попыток"});
+      return;
+    }
+  }
   try {
     const findLogin = await pool.query("select * from users where login=$1", [
       login,
     ]);
     if (findLogin.rowCount === 0) {
+      tries.set(login, [Date.now(),...(tries.get(login) || []).slice(0,2)]);//добавляем в начало дату, копируя в хвост что было до этого(первые два элемента) или пустой массив если ничего не было
       res.status(401).json({ error: "Неверный логин или пароль" });
       return;
     }
     const savedPassword = findLogin.rows[0].password;
     const givenPassword = hashPasswordMD5(password);
     if (savedPassword !== givenPassword) {
+      tries.set(login, [Date.now(),...(tries.get(login) || []).slice(0,2)]);
       res.status(401).json({ error: "Неверный логин или пароль" });
       return;
     }
@@ -200,6 +210,7 @@ app.post("/api/login", upload.none(), async function (req, res) {
     res.status(200).cookie("sessionId", cookie).json(currentUser);
     await redisConnection;
     await client.set(cookie, JSON.stringify(currentUser));
+    tries.delete(login);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
