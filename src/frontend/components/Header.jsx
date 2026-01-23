@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import "../reset.css";
 import "../css/header.css";
 import "../css/toast.css";
@@ -11,6 +11,7 @@ import { setUser } from "../store";
 
 export function Header() {
   const [error, setError] = useState("");
+   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   async function logout(e) {
@@ -27,6 +28,7 @@ export function Header() {
       setTimeout(() => setError(""), 5000);
       return;
     }
+    navigate('/');
     dispatch(setUser(null))
   }
   return (

@@ -70,7 +70,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             return;
         }
 
-        await response.json();
+        await res.json();
         
         clearErrors();
         onCloseClick();

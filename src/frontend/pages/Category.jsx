@@ -50,6 +50,7 @@ export function Category() {
             name={item.item_name}
             price={item.price}
             liked={item.liked}
+            removed={item.removed}
           ></ItemCard>
 
         ))}

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import "../css/itemCard.css"
 import { showDialog } from "./Dialog";
 import {EnterForFavourites} from "./EnterForFavourites";
-export function ItemCard({ item_id, name, price, liked }) {
+export function ItemCard({ item_id, name, price, liked, removed }) {
   const [error, setError] = useState("");
   const [currentLiked, setCurrentLiked] = useState(liked);
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -31,16 +31,18 @@ export function ItemCard({ item_id, name, price, liked }) {
     }
     setCurrentLiked(!currentLiked);
   }
+  const style = removed? {filter: "grayscale(100%)"}:{};
   return (
     <>
       <Link className="item-card" to={`/item/${item_id}`}>
         <div className="item-image-holder" >
-          <img className="item-image" src={`${backend}/api/item/image/${item_id}`} alt="товар" />
+          <img className="item-image" src={`${backend}/api/item/image/${item_id}` } style={style} alt="товар" />
           <button className="heart-icon" onClick={like}><img src={currentLiked ? "/public/liked.svg" : "/public/favourites.svg"} alt="в избранное" /></button>
         </div>
         <p className="item-name">{name}</p>
         <p className="item-price">{price} ₽</p>
       </Link>
+   
       {error && (
         <div className="toast-notification">
           <div className="toast-content">
