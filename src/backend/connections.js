@@ -11,7 +11,7 @@ client.on("error", (err) => console.log("Redis client error", err));
 export const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "intex_db",
+  database: "maksmebel",
 });
 
 async function connectToRedis() {

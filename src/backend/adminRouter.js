@@ -79,6 +79,12 @@ adminRouter.put(
 adminRouter.delete("/delete_category/:id", async function (req, res) {
   try {
     const param = req.params.id;
+    const isEmpty = await pool.query("select count(*) from category where category_id=$1",[param]);
+    if(isEmpty){
+      return res.status(409).json({
+            error: "Категория не пуста",
+          });
+    }
     await pool.query("delete from category where category_id=$1", [param]);
     res.status(200).json({});
   } catch (err) {
@@ -216,7 +222,7 @@ adminRouter.put(
       } else {
         console.log(JSON.stringify(req.body));
         const result = await pool.query(
-          "INSERT INTO item (item_name,article,length,width,height,item_picture,price,description,show,category_id,quantity) values ($1, $2, $3,$4,$5,$6,$7,$8,$9,$10,$11) returning *",
+          "INSERT INTO item (item_name,article,length,width,height,item_picture,price,description,show,category_id,quantity,removed) values ($1, $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning *",
           [
             item_name,
             parseInt(article),
@@ -229,6 +235,7 @@ adminRouter.put(
             show == "on",
             category_id,
             parseInt(quantity),
+            false
           ]
         );
         res.status(200).json(result.rows[0]);
@@ -238,3 +245,37 @@ adminRouter.put(
     }
   }
 );
+
+adminRouter.post("/remove_item/:id", async function (req, res) {
+  try {
+    const param = req.params.id;
+    await pool.query("update item set removed=not removed where item_id=$1", [param]);
+    res.status(200).json({});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+adminRouter.get("/category/:id/items", async function (req,res) {
+ try {
+    const param = req.params.id;
+    const result = await pool.query(
+      "select item_id, item_name, price, removed from item where category_id=$1",
+      [param]
+    );
+    if (req.user?.user_id) {
+      const liked = (
+        await pool.query("select item_id from favourites where user_id=$1", [
+          req.user.user_id,
+        ])
+      ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
+      console.log(liked.rows);
+      for (const row of result.rows) {
+        row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
+      }
+    }
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+})

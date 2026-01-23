@@ -72,10 +72,10 @@ app.get("/api/category/:id/items", async function (req, res) {
   try {
     const param = req.params.id;
     const result = await pool.query(
-      "select item_id, item_name, price from item where category_id=$1 ",
-      [param]
+      "select item_id, item_name, price from item where category_id=$1 and removed=$2",
+      [param,false]
     );
-    if (req.user.user_id) {
+    if (req.user?.user_id) {
       const liked = (
         await pool.query("select item_id from favourites where user_id=$1", [
           req.user.user_id,
