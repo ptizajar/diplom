@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { backend } from "../api-globals";
 import "../css/toast.css"
+import { OrderForm } from "../components/OrderForm";
+import { showDialog } from "../components/Dialog";
 
 export function ItemPage() {
   const { item_id } = useParams();
@@ -44,6 +46,7 @@ export function ItemPage() {
       Описание: {item?.description}
       <br />
       <div style={{ backgroundImage: `url('${backend}/api/item/image/${item_id}')`, width: "300px", height: "300px", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}></div>
+      <button style={{width: '100px', height: '20px'}} onClick={() => showDialog(OrderForm)}>Заказать</button>
       {error && (
         <div className="toast-notification">
           <div className="toast-content">
