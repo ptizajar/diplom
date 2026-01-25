@@ -10,6 +10,7 @@ export function ItemCard({ item_id, name, price, liked, removed }) {
   const [error, setError] = useState("");
   const [currentLiked, setCurrentLiked] = useState(liked);
   const currentUser = useSelector((state) => state.user.currentUser);
+   
   async function like(e) {
     e.preventDefault();
     if (!currentUser) {
@@ -42,7 +43,7 @@ export function ItemCard({ item_id, name, price, liked, removed }) {
         <p className="item-name">{name}</p>
         <p className="item-price">{price} ₽</p>
       </Link>
-   
+
       {error && (
         <div className="toast-notification">
           <div className="toast-content">
@@ -53,6 +54,7 @@ export function ItemCard({ item_id, name, price, liked, removed }) {
           <div className="toast-progress"></div>
         </div>
       )}
+
     </>
   );
 }
