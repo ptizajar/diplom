@@ -179,7 +179,7 @@ app.get("/api/refresh-session", async function (req, res) {
 //   }
 // });
 
-app.put("/api/registrate", upload.none(), async function (req, res) {
+app.post("/api/registrate", upload.none(), async function (req, res) {
   const { login, user_name, phone, password, password2 } = req.body;
   const errors = [];
 

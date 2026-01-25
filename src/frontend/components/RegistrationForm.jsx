@@ -56,7 +56,7 @@ export function RegistrationForm({ onCloseClick }) {
 
 
         const res = await fetch(`${backend}/api/registrate`, {
-            method: 'PUT',
+            method: 'POST',
             body: new FormData(registrationForm)
 
         });
