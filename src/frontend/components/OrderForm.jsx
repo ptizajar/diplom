@@ -143,6 +143,7 @@ export function OrderForm({ onCloseClick }) {
                         className="form-field"
                         placeholder="Имя"
                         name="user_name"
+                        defaultValue={currentUser.user_name}
                         required
                         onChange={handleFieldChange}
                         onBlur={(e) => checkField('user_name', e.target.value)}
@@ -163,6 +164,7 @@ export function OrderForm({ onCloseClick }) {
                         className="form-field"
                         placeholder="Номер телефона"
                         name="phone"
+                        defaultValue={currentUser.phone}
                         required
                         onChange={handleFieldChange}
                         onBlur={(e) => checkField('phone', e.target.value)}
