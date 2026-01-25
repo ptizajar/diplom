@@ -151,14 +151,82 @@ app.get("/api/refresh-session", async function (req, res) {
   return res.status(200).json({ user: req.user });
 });
 
+// app.put("/api/registrate", upload.none(), async function (req, res) {
+//   const { login, user_name, phone, password } = req.body;
+
+//   try {
+//     const findLogin = await pool.query("select * from users where login=$1", [
+//       login,
+//     ]);
+//     console.log(findLogin.rowCount);
+//     if (findLogin.rowCount > 0) {
+//       res
+//         .status(400)
+//         .json({ error: "Пользователь с таким логином уже существует" });
+//     } else {
+//       const result = await pool.query(
+//         "INSERT INTO users (login, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5) returning *",
+//         [login, hashPasswordMD5(password), user_name, phone, false]
+//       );
+//       const cookie = crypto.randomBytes(64).toString("base64");
+//       const currentUser = result.rows[0];
+//       res.status(200).cookie("sessionId", cookie).json(currentUser);
+//       await redisConnection;
+//       await client.set(cookie, JSON.stringify(currentUser));
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
 app.put("/api/registrate", upload.none(), async function (req, res) {
-  const { login, user_name, phone, password } = req.body;
+  const { login, user_name, phone, password, password2 } = req.body;
+  const errors = [];
 
   try {
+    // --- ВАЛИДАЦИЯ ПОЛЕЙ ---
+    // Логин
+    !login && errors.push("Логин обязателен");
+    login?.length < 3 && errors.push("Логин должен быть не менее 3 символов");
+    login?.length > 50 && errors.push("Логин должен быть не более 50 символов");
+    login && !/^[a-zA-Z0-9_.@]+$/.test(login) && errors.push("Логин может содержать только латиницу, цифры, символы _ @ .");
+    login && /\s/.test(login) && errors.push("Логин не должен содержать пробелы");
+
+    // Имя
+    !user_name && errors.push("Имя обязательно");
+    user_name?.trim().length < 2 && errors.push("Имя должно быть не менее 2 символов");
+    user_name?.trim().length > 50 && errors.push("Имя должно быть не более 50 символов");
+    user_name && !/^[а-яА-ЯёЁ\s\-]+$/.test(user_name.trim()) && errors.push("Имя может содержать только кириллицу, пробелы и дефисы");
+
+    // Телефон
+    !phone && errors.push("Телефон обязателен");
+    phone && !/^(\+7|8)/.test(phone) && errors.push("Номер должен начинаться с +7 или 8");
+    const digitsOnly = phone?.replace(/\D/g, '');
+    digitsOnly?.length !== 11 && errors.push("Номер должен содержать 11 цифр");
+    digitsOnly && !/^[78]/.test(digitsOnly) && errors.push("Первая цифра номера должна быть 7 или 8");
+
+    // Пароль
+    !password && errors.push("Пароль обязателен");
+    password?.length < 6 && errors.push("Пароль должен быть не менее 6 символов");
+    password?.length > 50 && errors.push("Пароль должен быть не более 50 символов");
+    password && /\s/.test(password) && errors.push("Пароль не должен содержать пробелы");
+    password && !/[A-Z]/.test(password) && errors.push("Пароль должен содержать хотя бы одну заглавную букву");
+    password && !/[0-9]/.test(password) && errors.push("Пароль должен содержать хотя бы одну цифру");
+    password && !/[\W_]/.test(password) && errors.push("Пароль должен содержать хотя бы один специальный символ");
+    password && /[а-яА-ЯёЁ]/.test(password) && errors.push("Пароль должен содержать только латиницу");
+
+    // Пароли совпадают
+    password !== password2 && errors.push("Пароли не совпадают");
+
+    // Если есть ошибки валидации - сразу возвращаем
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors.join('. ') });
+    }
+
+    // --- ВАША ПРОВЕРКА УНИКАЛЬНОСТИ (без изменений) ---
     const findLogin = await pool.query("select * from users where login=$1", [
       login,
     ]);
-    console.log(findLogin.rowCount);
     if (findLogin.rowCount > 0) {
       res
         .status(400)
@@ -166,7 +234,7 @@ app.put("/api/registrate", upload.none(), async function (req, res) {
     } else {
       const result = await pool.query(
         "INSERT INTO users (login, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5) returning *",
-        [login, hashPasswordMD5(password), user_name, phone, false]
+        [login, hashPasswordMD5(password), user_name, phone.trim(), false]
       );
       const cookie = crypto.randomBytes(64).toString("base64");
       const currentUser = result.rows[0];
