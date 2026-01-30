@@ -28,7 +28,7 @@ function AdminCategory() {
   }
 
   async function loadItems() {
-    const res = await fetch(`${backend}/api/admin/category/${category_id}/items`);
+    const res = await fetch(`${backend}/api/admin/category/${category_id}/all_items`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
