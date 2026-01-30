@@ -81,7 +81,6 @@ app.get("/api/category/:id/items", async function (req, res) {
           req.user.user_id,
         ])
       ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
-      console.log(liked.rows);
       for (const row of result.rows) {
         row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
       }

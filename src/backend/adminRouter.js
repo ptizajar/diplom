@@ -14,7 +14,6 @@ function isAdmin(req, res, next) {
 
 adminRouter.use(isAdmin);
 adminRouter.put(
-  
   "/category",
   upload.single("category_image"),
   async function (req, res) {
@@ -79,11 +78,14 @@ adminRouter.put(
 adminRouter.delete("/delete_category/:id", async function (req, res) {
   try {
     const param = req.params.id;
-    const isEmpty = await pool.query("select count(*) from category where category_id=$1",[param]);
-    if(isEmpty){
+    const isEmpty = await pool.query(
+      "select count(*) from category where category_id=$1",
+      [param]
+    );
+    if (isEmpty) {
       return res.status(409).json({
-            error: "Категория не пуста",
-          });
+        error: "Категория не пуста",
+      });
     }
     await pool.query("delete from category where category_id=$1", [param]);
     res.status(200).json({});
@@ -106,7 +108,6 @@ adminRouter.put(
   "/item",
   upload.single("item_image"),
   async function (req, res) {
-    
     const {
       item_id,
       article,
@@ -235,7 +236,7 @@ adminRouter.put(
             show == "on",
             category_id,
             parseInt(quantity),
-            false
+            false,
           ]
         );
         res.status(200).json(result.rows[0]);
@@ -249,15 +250,17 @@ adminRouter.put(
 adminRouter.post("/remove_item/:id", async function (req, res) {
   try {
     const param = req.params.id;
-    await pool.query("update item set removed=not removed where item_id=$1", [param]);
+    await pool.query("update item set removed=not removed where item_id=$1", [
+      param,
+    ]);
     res.status(200).json({});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-adminRouter.get("/category/:id/items", async function (req,res) {
- try {
+adminRouter.get("/category/:id/all_items", async function (req, res) {
+  try {
     const param = req.params.id;
     const result = await pool.query(
       "select item_id, item_name, price, removed from item where category_id=$1",
@@ -278,4 +281,19 @@ adminRouter.get("/category/:id/items", async function (req,res) {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-})
+});
+
+adminRouter.get("/bids", async function (req, res) {
+  try {
+    const result = await pool.query(
+      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone 
+      FROM orders o 
+      LEFT JOIN users u ON o.user_id = u.user_id 
+      LEFT JOIN item i ON o.item_id = i.item_id 
+      ORDER BY o.date ASC `
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
