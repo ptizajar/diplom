@@ -9,7 +9,7 @@ import { showDialog } from "./Dialog";
 import { EnterForFavourites } from "./EnterForFavourites";
 import { useSelector } from "react-redux";
 
-export function OrderForm({ onCloseClick }) {
+export function OrderForm({ onCloseClick, param }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
      const currentUser = useSelector((state) => state.user.currentUser);
@@ -112,21 +112,21 @@ export function OrderForm({ onCloseClick }) {
             return;
         }
 
-        // setIsSubmitting(true);
+        setIsSubmitting(true);
 
-        // const res = await fetch(`${backend}/api/order`, {
-        //     method: 'POST',
-        //     body: formData
-        // });
+        const res = await fetch(`${backend}/api/order/${param.item_id}`, {
+            method: 'POST',
+            body: formData
+        });
 
-        // if (!res.ok) {
-        //     const err = await res.json();
-        //     setError(err.error);
-        //     setIsSubmitting(false);
-        //     return;
-        // }
+        if (!res.ok) {
+            const err = await res.json();
+            setError(err.error);
+            setIsSubmitting(false);
+            return;
+        }
 
-        // await res.json();
+        await res.json();
         clearErrors();
         onCloseClick();
     }

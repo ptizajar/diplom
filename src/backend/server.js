@@ -359,10 +359,34 @@ app.get("/api/liked_items", async function (req, res) {
   }
 });
 
+app.post("/api/order/:id",upload.none(), async function (req, res) {
+
+  const { preferred_datetime, user_name, phone } = req.body;
+
+  try {
+    await pool.query("SET TIME ZONE 'Europe/Moscow'");
+    const param = req.params.id;
+    const userId = req.user?.user_id;
+    const { rows } = await pool.query(
+      "select price from item where item_id=$1",[param]
+    );
+    const price = rows[0]?.price;
+    const result = await pool.query(
+      "insert into orders (user_id,item_id,date,recall_date,price,status, user_name, phone) values ($1,$2,NOW(),$3,$4,$5,$6,$7) returning *",
+      [userId,param,preferred_datetime,price,'Оформлен',user_name,phone]
+    );
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.use(express.static("static"));
 
 app.get("/*splat", (req, res) => {
   res.sendFile(path.resolve("./static", "index.html"));
 });
+
+
 
 app.listen(3001);

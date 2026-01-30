@@ -46,7 +46,7 @@ export function ItemPage() {
       Описание: {item?.description}
       <br />
       <div style={{ backgroundImage: `url('${backend}/api/item/image/${item_id}')`, width: "300px", height: "300px", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}></div>
-      <button style={{width: '100px', height: '20px'}} onClick={() => showDialog(OrderForm)}>Заказать</button>
+      <button style={{width: '100px', height: '20px'}} onClick={() => showDialog(OrderForm,{item_id})}>Заказать</button>
       {error && (
         <div className="toast-notification">
           <div className="toast-content">
