@@ -130,7 +130,6 @@ app.get("/api/showed_items", async function (req, res) {
           req.user.user_id,
         ])
       ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
-      console.log(liked.rows);
       for (const row of result.rows) {
         row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
       }
@@ -157,7 +156,6 @@ app.get("/api/refresh-session", async function (req, res) {
 //     const findLogin = await pool.query("select * from users where login=$1", [
 //       login,
 //     ]);
-//     console.log(findLogin.rowCount);
 //     if (findLogin.rowCount > 0) {
 //       res
 //         .status(400)
@@ -222,7 +220,7 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
       return res.status(400).json({ error: errors.join('. ') });
     }
 
-    // --- ВАША ПРОВЕРКА УНИКАЛЬНОСТИ (без изменений) ---
+    // ПРОВЕРКА УНИКАЛЬНОСТИ 
     const findLogin = await pool.query("select * from users where login=$1", [
       login,
     ]);
@@ -375,6 +373,24 @@ app.post("/api/order/:id",upload.none(), async function (req, res) {
       [userId,param,preferred_datetime,price,'Оформлен',user_name,phone]
     );
     res.status(200).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/user_bids", async function (req, res) {
+  const userId = req.user?.user_id;
+  try {
+    const result = await pool.query(
+      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone 
+      FROM orders o 
+      LEFT JOIN users u ON o.user_id = u.user_id 
+      LEFT JOIN item i ON o.item_id = i.item_id 
+      WHERE o.user_id =$1
+      ORDER BY o.date ASC `,
+      [userId]
+    );
+    res.status(200).json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
