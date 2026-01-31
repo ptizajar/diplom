@@ -221,7 +221,6 @@ adminRouter.put(
         }
         res.status(200).json({});
       } else {
-        console.log(JSON.stringify(req.body));
         const result = await pool.query(
           "INSERT INTO item (item_name,article,length,width,height,item_picture,price,description,show,category_id,quantity,removed) values ($1, $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning *",
           [
@@ -272,7 +271,6 @@ adminRouter.get("/category/:id/all_items", async function (req, res) {
           req.user.user_id,
         ])
       ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
-      console.log(liked.rows);
       for (const row of result.rows) {
         row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
       }

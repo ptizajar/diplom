@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { backend } from "../api-globals";
 import "../css/itemCard.css"
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 export function OrderCard({ order_id, login, user_name, item_id, article, price, recall, phone }) {
+    const currentUser = useSelector((state) => state.user.currentUser);
     // async function changeStatus(e) {
     //     e.preventDefault();
 
@@ -23,8 +25,8 @@ export function OrderCard({ order_id, login, user_name, item_id, article, price,
     return (
         <>
             <div className="item-card" >
-                <span>Логин</span>
-                <p className="item-name">{login}</p>
+                {currentUser?.is_admin && <><span>Логин</span>
+                    <p className="item-name">{login}</p></>}
                 <span>Имя</span>
                 <p className="item-name">{user_name}</p>
                 <span>Номер телефона</span>

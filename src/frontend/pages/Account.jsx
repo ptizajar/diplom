@@ -1,4 +1,3 @@
-import { forAdminOnly } from "../components/ForAdminOnly";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
@@ -6,12 +5,12 @@ import "../css/itemCard.css"
 import "../css/toast.css"
 import { OrderCard } from "../components/OrderCard";
 
-function Bids() {
+export function Account() {
   const [bids, setBids] = useState([]);
   const [error, setError] = useState("");
 
   async function load() {
-    const res = await fetch(`${backend}/api/admin/bids`);
+    const res = await fetch(`${backend}/api/user_bids`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -36,8 +35,7 @@ function Bids() {
   };
   return (
     <>
-      <p>Заявки</p>
-      <Link to="/bids">Заявки</Link>
+      <p>Account</p>
       <div className="card-holder">
         {bids.map((bid) => (
           <OrderCard
@@ -73,4 +71,4 @@ function Bids() {
 }
 
 
-export default forAdminOnly(Bids);
+

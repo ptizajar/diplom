@@ -54,6 +54,12 @@ export function Header() {
             </li>
           </Link>}
           {currentUser && <Link onClick={logout}>Logout</Link>}
+           {currentUser && !currentUser.is_admin && <Link to={"/account"} className="menu-link">
+            <li className="menu-item">
+              <img src="/public/login.svg" className="menu-icon"></img>
+              Аккаунт
+            </li>
+          </Link>}
           <Link to={"/favourites"} className="menu-link">
             <li className="menu-item">
               <img src="/public/favourites.svg" className="menu-icon"></img>

@@ -14,6 +14,7 @@ import {ItemPage} from "./pages/ItemPage";
 import { store } from "./store";
 import { Provider, useDispatch } from "react-redux";
 import { setUser } from "./store";
+import { Account } from "./pages/Account";
 
 
 
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: "admin", element:  <Admin /> },
       { path: "admin_category/:category_id", element: <AdminCategory /> },
       { path: "bids", element: <Bids /> },
+      { path: "account", element: <Account /> },
       { path: "*", element: <NotFound /> },
     ],
   },

@@ -8,7 +8,6 @@ import "../css/itemCard.css"
 import "../css/toast.css"
 export function AdminItemCard({ item_id, name, price, onClose, liked, removed }) {
   const [error, setError] = useState("");
-console.log(removed);
   async function deleteItem() {
     setError("");
     const res = await fetch(`${backend}/api/admin/delete_item/${item_id}`, {

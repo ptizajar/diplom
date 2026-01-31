@@ -5,7 +5,6 @@ export function forAdminOnly(WrappedComponent) {//Оборачивает ком�
     
   return function NewComponent(props) {
    const currentUser = useSelector((state) => state.user.currentUser);
-   console.log(currentUser);
    if(currentUser?.is_admin) return <WrappedComponent {...props} />;
    return <NotFound></NotFound>
   };
