@@ -10,6 +10,19 @@ function Bids() {
   const [bids, setBids] = useState([]);
   const [error, setError] = useState("");
 
+ async function filterOrders(status) {
+    const res = await fetch(`${backend}/api/admin/filterOrders?status=${status}`, {
+      method: 'GET',
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      setError(err.error);
+      return;
+    }
+    const data = await res.json();
+    setBids(data);
+  }
+  
   async function load() {
     const res = await fetch(`${backend}/api/admin/bids`);
     if (!res.ok) {
@@ -22,7 +35,7 @@ function Bids() {
   }
 
   useEffect(() => {
-    load();
+     filterOrders('Оформлен');
   }, [])
 
   const formatDate = (dateString) => {
@@ -34,9 +47,25 @@ function Bids() {
       minute: '2-digit'
     });
   };
+
+  function created() {
+    filterOrders('Оформлен')
+  }
+  function confirmed() {
+    filterOrders('Подтвержден')
+  }
+  function canceled() {
+    filterOrders('Отменен')
+  }
+
+ 
   return (
     <>
       <p>Заявки</p>
+      <button onClick={created}>Оформленные</button>
+      <button onClick={confirmed}>Подтвержденные</button>
+      <button onClick={canceled}>Отмененные</button>
+      <button onClick={load}>Все</button>
       <div className="card-holder">
         {bids.map((bid) => (
           <OrderCard
@@ -49,7 +78,8 @@ function Bids() {
             price={bid.price}
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}
-            onClose={load}
+            status={bid.status}
+            onStatusChange={load}
 
           ></OrderCard>
         ))}

@@ -1,35 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { backend } from "../api-globals";
 import "../css/itemCard.css"
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-export function OrderCard({ order_id, login, user_name, item_id, article, price, recall, phone }) {
+export function OrderCard({ order_id, login, user_name, item_id, article, price, recall, phone, status, onStatusChange }) {
     const currentUser = useSelector((state) => state.user.currentUser);
     const [error, setError] = useState("");
-    function confirmed(e){
+    const [currentStatus, setCurrentStatus] = useState(status);
+    function confirmed(e) {
         e.preventDefault();
-        changeStatus("Подтверждено");
+        changeStatus("Подтвержден");
     }
-    function canceled(e){
+    function canceled(e) {
         e.preventDefault();
-        changeStatus("Отменено");
+        changeStatus("Отменен");
     }
 
-    async function changeStatus(status) {
+    async function changeStatus(newStatus) {
         const formData = new FormData();
-            formData.append("status", status);
-            formData.append("id", order_id);
-            const res = await fetch(`${backend}/api/admin/changeStatus`, {
-              method: 'PUT',
-              body: formData
-            })
-            if (!res.ok) {
-              const err = await res.json();
-              setError(err.error);
-              setTimeout(() => setError(""), 5000);
-              return;
-            }   
+        formData.append("status", newStatus);
+        formData.append("id", order_id);
+        const res = await fetch(`${backend}/api/admin/changeStatus`, {
+            method: 'PUT',
+            body: formData
+        })
+        if (!res.ok) {
+            const err = await res.json();
+            setError(err.error);
+            setTimeout(() => setError(""), 5000);
+            return;
+        }
+        setCurrentStatus(newStatus);
+        onStatusChange();
     }
+
 
     return (
         <>
@@ -46,11 +50,17 @@ export function OrderCard({ order_id, login, user_name, item_id, article, price,
                 <p className="item-name">{price}</p>
                 <span>Когда перезвонить</span>
                 <p className="item-name">{recall}</p>
-                <button onClick={confirmed}>Подтверждено</button>
-                <button onClick={canceled}>Отменено</button>
+                <span>Статус</span>
+                <p className="item-name">{status}</p>
+                {status === 'Оформлен' &&
+                    <>
+                        <button onClick={confirmed}>Подтверждено</button>
+                        <button onClick={canceled}>Отменено</button>
+                    </>}
+                {status === 'Подтвержден' && <button onClick={canceled}>Отменено</button>}
             </div>
 
-            {/* {error && (
+            {error && (
                 <div className="toast-notification">
                     <div className="toast-content">
                         <span className="toast-message">{error}</span>
@@ -58,7 +68,7 @@ export function OrderCard({ order_id, login, user_name, item_id, article, price,
                     </div>
                     <div className="toast-progress"></div>
                 </div>
-            )} */}
+            )}
 
         </>
     );

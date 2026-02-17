@@ -284,7 +284,7 @@ adminRouter.get("/category/:id/all_items",upload.none(), async function (req, re
 adminRouter.get("/bids", async function (req, res) {
   try {
     const result = await pool.query(
-      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone 
+      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
@@ -298,14 +298,32 @@ adminRouter.get("/bids", async function (req, res) {
 
 adminRouter.put("/changeStatus", upload.none(),async function (req, res) {
   try {
-    const status = req.params.status;
-    const o_id = req.params.id;
+    const status = req.body.status;
+    const o_id = req.body.id;
     console.log(status,o_id);
     await pool.query("update orders set status=$1 where order_id=$2", [
       status,
       o_id,
     ]);
     res.status(200).json({});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+adminRouter.get("/filterOrders", async function (req, res) {
+  try {
+    const status = req.query.status;
+    const result = await pool.query(
+      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
+      FROM orders o 
+      LEFT JOIN users u ON o.user_id = u.user_id 
+      LEFT JOIN item i ON o.item_id = i.item_id 
+      where o.status = $1
+      ORDER BY o.date ASC `,[status]
+    );
+    res.status(200).json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
