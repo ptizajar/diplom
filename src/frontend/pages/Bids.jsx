@@ -37,7 +37,6 @@ function Bids() {
   return (
     <>
       <p>Заявки</p>
-      <Link to="/bids">Заявки</Link>
       <div className="card-holder">
         {bids.map((bid) => (
           <OrderCard
