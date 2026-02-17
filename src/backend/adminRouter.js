@@ -23,7 +23,7 @@ adminRouter.put(
         // При редактировании
         const checkResult = await pool.query(
           "SELECT COUNT(*) as count FROM category WHERE LOWER(TRIM(category_name)) = LOWER(TRIM($1)) AND category_id != $2",
-          [category_name, category_id]
+          [category_name, category_id],
         );
 
         const duplicateCount = parseInt(checkResult.rows[0]?.count || 0);
@@ -37,7 +37,7 @@ adminRouter.put(
         // При создании
         const checkResult = await pool.query(
           "SELECT COUNT(*) as count FROM category WHERE LOWER(TRIM(category_name)) = LOWER(TRIM($1))",
-          [category_name]
+          [category_name],
         );
 
         const duplicateCount = parseInt(checkResult.rows[0]?.count || 0);
@@ -53,34 +53,34 @@ adminRouter.put(
         if (!binaryData) {
           await pool.query(
             "update category set category_name=$1 where category_id=$2",
-            [category_name, category_id]
+            [category_name, category_id],
           );
         } else {
           await pool.query(
             "update category set category_name=$1, category_picture=$2 where category_id=$3",
-            [category_name, binaryData, category_id]
+            [category_name, binaryData, category_id],
           );
         }
         res.status(200).json({});
       } else {
         const result = await pool.query(
           "INSERT INTO category (category_name, category_picture) values ($1, $2) returning *",
-          [category_name, binaryData]
+          [category_name, binaryData],
         );
         res.status(200).json(result.rows[0]);
       }
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  }
+  },
 );
 
-adminRouter.delete("/delete_category/:id", async function (req, res) {
+adminRouter.delete("/delete_category/:id",upload.none(), async function (req, res) {
   try {
     const param = req.params.id;
     const isEmpty = await pool.query(
       "select count(*) from category where category_id=$1",
-      [param]
+      [param],
     );
     if (isEmpty) {
       return res.status(409).json({
@@ -94,7 +94,7 @@ adminRouter.delete("/delete_category/:id", async function (req, res) {
   }
 });
 
-adminRouter.delete("/delete_item/:id", async function (req, res) {
+adminRouter.delete("/delete_item/:id",upload.none(), async function (req, res) {
   try {
     const param = req.params.id;
     await pool.query("delete from item where item_id=$1", [param]);
@@ -127,11 +127,11 @@ adminRouter.put(
         // При редактировании: проверяем уникальность названия
         const checkNameResult = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE LOWER(TRIM(item_name)) = LOWER(TRIM($1)) AND item_id != $2",
-          [item_name, item_id]
+          [item_name, item_id],
         );
 
         const duplicateNameCount = parseInt(
-          checkNameResult.rows[0]?.count || 0
+          checkNameResult.rows[0]?.count || 0,
         );
 
         if (duplicateNameCount > 0) {
@@ -141,11 +141,11 @@ adminRouter.put(
         } // При редактировании: проверяем уникальность артикула
         const checkArticleResult = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE article = $1 AND item_id != $2",
-          [article, item_id]
+          [article, item_id],
         );
 
         const duplicateArticleCount = parseInt(
-          checkArticleResult.rows[0]?.count || 0
+          checkArticleResult.rows[0]?.count || 0,
         );
 
         if (duplicateArticleCount > 0) {
@@ -157,7 +157,7 @@ adminRouter.put(
         // При создании: проверяем уникальность названия
         const checkResult = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE LOWER(TRIM(item_name)) = LOWER(TRIM($1))",
-          [item_name]
+          [item_name],
         );
 
         const duplicateCount = parseInt(checkResult.rows[0]?.count || 0);
@@ -170,11 +170,11 @@ adminRouter.put(
         // При создании: проверяем уникальность артикула
         const checkArticleResult = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE article = $1",
-          [article]
+          [article],
         );
 
         const duplicateArticleCount = parseInt(
-          checkArticleResult.rows[0]?.count || 0
+          checkArticleResult.rows[0]?.count || 0,
         );
 
         if (duplicateArticleCount > 0) {
@@ -199,7 +199,7 @@ adminRouter.put(
               description,
               show == "on",
               item_id,
-            ]
+            ],
           );
         } else {
           await pool.query(
@@ -216,7 +216,7 @@ adminRouter.put(
               show == "on",
               binaryData,
               item_id,
-            ]
+            ],
           );
         }
         res.status(200).json({});
@@ -236,14 +236,14 @@ adminRouter.put(
             category_id,
             parseInt(quantity),
             false,
-          ]
+          ],
         );
         res.status(200).json(result.rows[0]);
       }
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  }
+  },
 );
 
 adminRouter.post("/remove_item/:id", async function (req, res) {
@@ -258,12 +258,12 @@ adminRouter.post("/remove_item/:id", async function (req, res) {
   }
 });
 
-adminRouter.get("/category/:id/all_items", async function (req, res) {
+adminRouter.get("/category/:id/all_items",upload.none(), async function (req, res) {
   try {
     const param = req.params.id;
     const result = await pool.query(
       "select item_id, item_name, price, removed from item where category_id=$1",
-      [param]
+      [param],
     );
     if (req.user?.user_id) {
       const liked = (
@@ -288,9 +288,24 @@ adminRouter.get("/bids", async function (req, res) {
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
-      ORDER BY o.date ASC `
+      ORDER BY o.date ASC `,
     );
     res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+adminRouter.put("/changeStatus", upload.none(),async function (req, res) {
+  try {
+    const status = req.params.status;
+    const o_id = req.params.id;
+    console.log(status,o_id);
+    await pool.query("update orders set status=$1 where order_id=$2", [
+      status,
+      o_id,
+    ]);
+    res.status(200).json({});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

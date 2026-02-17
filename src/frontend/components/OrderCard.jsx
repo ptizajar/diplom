@@ -5,23 +5,32 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 export function OrderCard({ order_id, login, user_name, item_id, article, price, recall, phone }) {
     const currentUser = useSelector((state) => state.user.currentUser);
-    // async function changeStatus(e) {
-    //     e.preventDefault();
+    const [error, setError] = useState("");
+    function confirmed(e){
+        e.preventDefault();
+        changeStatus("Подтверждено");
+    }
+    function canceled(e){
+        e.preventDefault();
+        changeStatus("Отменено");
+    }
 
-    //     const formData = new FormData();
-    //     formData.append("item_id", item_id);
-    //     formData.append("liked", !currentLiked);
-    //     const res = await fetch(`${backend}/api/status/${order_id}`, {
-    //         method: 'PUT',
-    //         body: formData
-    //     })
-    //     if (!res.ok) {
-    //         const err = await res.json();
-    //         setError(err.error);
-    //         setTimeout(() => setError(""), 5000);
-    //         return;
-    //     }
-    // }
+    async function changeStatus(status) {
+        const formData = new FormData();
+            formData.append("status", status);
+            formData.append("id", order_id);
+            const res = await fetch(`${backend}/api/admin/changeStatus`, {
+              method: 'PUT',
+              body: formData
+            })
+            if (!res.ok) {
+              const err = await res.json();
+              setError(err.error);
+              setTimeout(() => setError(""), 5000);
+              return;
+            }   
+    }
+
     return (
         <>
             <div className="item-card" >
@@ -37,6 +46,8 @@ export function OrderCard({ order_id, login, user_name, item_id, article, price,
                 <p className="item-name">{price}</p>
                 <span>Когда перезвонить</span>
                 <p className="item-name">{recall}</p>
+                <button onClick={confirmed}>Подтверждено</button>
+                <button onClick={canceled}>Отменено</button>
             </div>
 
             {/* {error && (

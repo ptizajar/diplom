@@ -31,7 +31,6 @@ function Admin() {
     <>
       <p>Администрирование</p>
       <button onClick={() => showDialog(AddCategoryForm, undefined, load)}>Добавить категорию</button>
-      <Link to="/bids">Заявки</Link>
       <div className="card-holder">
         {categories.map((category) => (
           <AdminCategoryCard

@@ -72,6 +72,12 @@ export function Header() {
               Управление
             </li>
           </Link>}
+           {currentUser?.is_admin && <Link to={"/bids"} className="menu-link">
+            <li className="menu-item">
+              <img src="/public/admin.svg" className="menu-icon"></img>
+              Заявки
+            </li>
+          </Link>}
         </ul>
       </nav>
       {error && (
