@@ -52,12 +52,12 @@ export function OrderCard({ order_id, login, user_name, item_id, article, price,
                 <p className="item-name">{recall}</p>
                 <span>Статус</span>
                 <p className="item-name">{status}</p>
-                {status === 'Оформлен' &&
+                {currentUser?.is_admin && status === 'Оформлен' &&
                     <>
                         <button onClick={confirmed}>Подтверждено</button>
                         <button onClick={canceled}>Отменено</button>
                     </>}
-                {status === 'Подтвержден' && <button onClick={canceled}>Отменено</button>}
+                {currentUser?.is_admin && status === 'Подтвержден' && <button onClick={canceled}>Отменено</button>}
             </div>
 
             {error && (

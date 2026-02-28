@@ -10,7 +10,7 @@ export function Account() {
   const [error, setError] = useState("");
 
   async function load() {
-    const res = await fetch(`${backend}/api/user_bids`);
+    const res = await fetch(`${backend}/api/bids`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -41,13 +41,13 @@ export function Account() {
           <OrderCard
             key={bid.order_id}
             order_id={bid.order_id}
-            login={bid.login}
             user_name={bid.user_name}
             item_id={bid.item_id}
-            article={bid.article}
+            article={bid.item_name}
             price={bid.price}
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}
+            status={bid.status}
             onClose={load}
 
           ></OrderCard>
