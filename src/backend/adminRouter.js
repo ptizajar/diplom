@@ -75,34 +75,51 @@ adminRouter.put(
   },
 );
 
-adminRouter.delete("/delete_category/:id",upload.none(), async function (req, res) {
-  try {
-    const param = req.params.id;
-    const isEmpty = await pool.query(
-      "select count(*) from category where category_id=$1",
-      [param],
-    );
-    if (isEmpty) {
-      return res.status(409).json({
-        error: "Категория не пуста",
-      });
+adminRouter.delete(
+  "/delete_category/:id",
+  upload.none(),
+  async function (req, res) {
+    try {
+      const param = req.params.id;
+      const isEmpty = await pool.query(
+        "select count(*) from category where category_id=$1",
+        [param],
+      );
+      if (isEmpty) {
+        return res.status(409).json({
+          error: "Категория не пуста",
+        });
+      }
+      await pool.query("delete from category where category_id=$1", [param]);
+      res.status(200).json({});
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
-    await pool.query("delete from category where category_id=$1", [param]);
-    res.status(200).json({});
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+  },
+);
 
-adminRouter.delete("/delete_item/:id",upload.none(), async function (req, res) {
-  try {
-    const param = req.params.id;
-    await pool.query("delete from item where item_id=$1", [param]);
-    res.status(200).json({});
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+adminRouter.delete(
+  "/delete_item/:id",
+  upload.none(),
+  async function (req, res) {
+    try {
+      const param = req.params.id;
+      const ordersCount = await pool.query(
+        "select count(*) from orders where item_id=$1 and status!=$2",
+        [param, "Отменен"],
+      );
+      if (ordersCount.rows[0].count > 0) {
+        return res
+          .status(409)
+          .json({ error: "На этот товар есть неотменённые заказы" });
+      }
+      await pool.query("delete from item where item_id=$1", [param]);
+      res.status(200).json({});
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+);
 
 adminRouter.put(
   "/item",
@@ -258,49 +275,53 @@ adminRouter.post("/remove_item/:id", async function (req, res) {
   }
 });
 
-adminRouter.get("/category/:id/all_items",upload.none(), async function (req, res) {
-  try {
-    const param = req.params.id;
-    const result = await pool.query(
-      "select item_id, item_name, price, removed from item where category_id=$1",
-      [param],
-    );
-    if (req.user?.user_id) {
-      const liked = (
-        await pool.query("select item_id from favourites where user_id=$1", [
-          req.user.user_id,
-        ])
-      ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
-      for (const row of result.rows) {
-        row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
+adminRouter.get(
+  "/category/:id/all_items",
+  upload.none(),
+  async function (req, res) {
+    try {
+      const param = req.params.id;
+      const result = await pool.query(
+        "select item_id, item_name, price, removed from item where category_id=$1 ORDER BY removed ASC",
+        [param],
+      );
+      if (req.user?.user_id) {
+        const liked = (
+          await pool.query("select item_id from favourites where user_id=$1", [
+            req.user.user_id,
+          ])
+        ).rows.map((row) => row.item_id); //возвращает массив объектов, берём только числа
+        for (const row of result.rows) {
+          row.liked = liked.includes(row.item_id); //Каждой строке-товару добавляется значение наличия в избранном или нет
+        }
       }
+      res.status(200).json(result.rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
-    res.status(200).json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+  },
+);
 
-adminRouter.get("/bids", async function (req, res) {
-  try {
-    const result = await pool.query(
-      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
-      FROM orders o 
-      LEFT JOIN users u ON o.user_id = u.user_id 
-      LEFT JOIN item i ON o.item_id = i.item_id 
-      ORDER BY o.date ASC `,
-    );
-    res.status(200).json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// adminRouter.get("/bids", async function (req, res) {
+//   try {
+//     const result = await pool.query(
+//       `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
+//       FROM orders o 
+//       LEFT JOIN users u ON o.user_id = u.user_id 
+//       LEFT JOIN item i ON o.item_id = i.item_id 
+//       ORDER BY o.date ASC `,
+//     );
+//     res.status(200).json(result.rows);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
-adminRouter.put("/changeStatus", upload.none(),async function (req, res) {
+adminRouter.put("/changeStatus", upload.none(), async function (req, res) {
   try {
     const status = req.body.status;
     const o_id = req.body.id;
-    console.log(status,o_id);
+    console.log(status, o_id);
     await pool.query("update orders set status=$1 where order_id=$2", [
       status,
       o_id,
@@ -311,7 +332,6 @@ adminRouter.put("/changeStatus", upload.none(),async function (req, res) {
   }
 });
 
-
 adminRouter.get("/filterOrders", async function (req, res) {
   try {
     const status = req.query.status;
@@ -321,7 +341,8 @@ adminRouter.get("/filterOrders", async function (req, res) {
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
       where o.status = $1
-      ORDER BY o.date ASC `,[status]
+      ORDER BY o.date ASC `,
+      [status],
     );
     res.status(200).json(result.rows);
   } catch (err) {

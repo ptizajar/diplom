@@ -24,7 +24,7 @@ function Bids() {
   }
   
   async function load() {
-    const res = await fetch(`${backend}/api/admin/bids`);
+    const res = await fetch(`${backend}/api/bids`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -74,7 +74,7 @@ function Bids() {
             login={bid.login}
             user_name={bid.user_name}
             item_id={bid.item_id}
-            article={bid.article}
+            article={bid.item_name}
             price={bid.price}
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}

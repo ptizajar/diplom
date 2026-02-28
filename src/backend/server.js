@@ -378,11 +378,11 @@ app.post("/api/order/:id",upload.none(), async function (req, res) {
   }
 });
 
-app.get("/api/user_bids", async function (req, res) {
+app.get("/api/bids", async function (req, res) {
   const userId = req.user?.user_id;
   try {
     const result = await pool.query(
-      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone 
+      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.item_name, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
