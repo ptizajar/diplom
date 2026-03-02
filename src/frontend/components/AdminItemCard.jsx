@@ -41,6 +41,7 @@ export function AdminItemCard({ item_id, name, price, onClose, liked, removed })
           <button className="admin-item-button" onClick={() => showDialog(AddItemForm, { item_id }, onClose)}>Редактировать</button>
           <button className="admin-item-button" onClick={removeItem} >{removed? 'Открыть': 'Скрыть'}</button>
           <button className="admin-item-button" onClick={deleteItem} >Удалить</button>
+         <Link to={`/price_history/${item_id}`}><button className="admin-item-button" >История цен</button></Link> 
         </div>
 
       </div>
