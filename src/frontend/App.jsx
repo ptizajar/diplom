@@ -15,6 +15,7 @@ import { store } from "./store";
 import { Provider, useDispatch } from "react-redux";
 import { setUser } from "./store";
 import { Account } from "./pages/Account";
+import { PriceHistory } from "./pages/PriceHistory";
 
 
 
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: "item/:item_id", element: <ItemPage /> },
       { path: "admin", element:  <Admin /> },
       { path: "admin_category/:category_id", element: <AdminCategory /> },
+      { path: "price_history/:item_id", element: <PriceHistory /> },
       { path: "bids", element: <Bids /> },
       { path: "account", element: <Account /> },
       { path: "*", element: <NotFound /> },

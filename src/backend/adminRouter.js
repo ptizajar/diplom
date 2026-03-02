@@ -266,7 +266,7 @@ adminRouter.put(
             false,
           ],
         );
-        // Сохраняем первую цену в историю 
+        // Сохраняем первую цену в историю
         const newItemId = result.rows[0].item_id;
         await pool.query(
           "INSERT INTO price_history (item_id, price) VALUES ($1, $2)",
@@ -359,6 +359,23 @@ adminRouter.get("/filterOrders", async function (req, res) {
       where o.status = $1
       ORDER BY o.date ASC `,
       [status],
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+adminRouter.get("/price_history/:item_id", async function (req, res) {
+  try {
+    const param = req.params.item_id;
+    const result = await pool.query(
+      `select i.item_name, p.price, p.changed_at AT TIME ZONE 'Europe/Moscow' as moscow_time 
+      from price_history p 
+      left join item i on p.item_id =  i.item_id 
+      where p.item_id=$1 
+      order by p.changed_at`,
+      [param],
     );
     res.status(200).json(result.rows);
   } catch (err) {
