@@ -23,16 +23,16 @@ function Bids() {
     setBids(data);
   }
   
-  async function load() {
-    const res = await fetch(`${backend}/api/bids`);
-    if (!res.ok) {
-      const err = await res.json();
-      setError(err.error);
-      return;
-    }
-    const data = await res.json();
-    setBids(data);
-  }
+  // async function load() {
+  //   const res = await fetch(`${backend}/api/bids`);
+  //   if (!res.ok) {
+  //     const err = await res.json();
+  //     setError(err.error);
+  //     return;
+  //   }
+  //   const data = await res.json();
+  //   setBids(data);
+  // }
 
   useEffect(() => {
      filterOrders('Оформлен');
@@ -57,6 +57,9 @@ function Bids() {
   function canceled() {
     filterOrders('Отменен')
   }
+  function all(){
+    filterOrders('Все')
+  }
 
  
   return (
@@ -65,7 +68,8 @@ function Bids() {
       <button onClick={created}>Оформленные</button>
       <button onClick={confirmed}>Подтвержденные</button>
       <button onClick={canceled}>Отмененные</button>
-      <button onClick={load}>Все</button>
+      <button onClick={all}>Все</button>
+      {bids.length===0 && <div>Заказов нет</div>}
       <div className="card-holder">
         {bids.map((bid) => (
           <OrderCard
@@ -79,7 +83,7 @@ function Bids() {
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}
             status={bid.status}
-            onStatusChange={load}
+            onStatusChange={created}
 
           ></OrderCard>
         ))}
