@@ -4,13 +4,18 @@ import { backend } from "../api-globals";
 import "../css/itemCard.css"
 import "../css/toast.css"
 import { OrderCard } from "../components/OrderCard";
+import { showDialog } from "../components/Dialog";
+import { EditUserForm } from "../components/EditUserForm";
 
 export function Account() {
   const [bids, setBids] = useState([]);
+  const [userData, setUserData] = useState({});
   const [error, setError] = useState("");
 
-  async function load() {
-    const res = await fetch(`${backend}/api/bids`);
+  async function loadBids() {
+    const res = await fetch(`${backend}/api/bids`, {
+      method: 'GET'
+    });
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -20,8 +25,22 @@ export function Account() {
     setBids(data);
   }
 
+  async function loadData() {
+    const res = await fetch(`${backend}/api/user_data`, {
+      method: 'GET'
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      setError(err.error);
+      return;
+    }
+    const data = await res.json();
+    setUserData(data);
+  }
+
   useEffect(() => {
-    load();
+    loadBids();
+    loadData();
   }, [])
 
   const formatDate = (dateString) => {
@@ -36,6 +55,9 @@ export function Account() {
   return (
     <>
       <p>Account</p>
+      <div>{userData.user_name} </div>
+      <div>{userData.phone} </div>
+      <button onClick={() => showDialog(EditUserForm, undefined, loadData)}>Редактировать</button>
       <div className="card-holder">
         {bids.map((bid) => (
           <OrderCard
@@ -48,8 +70,7 @@ export function Account() {
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}
             status={bid.status}
-            onClose={load}
-
+            onClose={loadBids}
           ></OrderCard>
         ))}
       </div>

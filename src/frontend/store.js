@@ -10,6 +10,13 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.currentUser = action.payload;
     },
+    updateUser: (state, action) => {
+      // Обновляем только переданные поля, остальные оставляем как есть
+      state.currentUser = {
+        ...state.currentUser,
+        ...action.payload
+      };
+    },
   },
 });
 
@@ -19,4 +26,4 @@ export const store = configureStore({
   },
 });
 
-export const {setUser} = userSlice.actions;
+export const { setUser, updateUser } = userSlice.actions;

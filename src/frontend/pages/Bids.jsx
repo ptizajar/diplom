@@ -84,7 +84,6 @@ function Bids() {
             phone={bid.phone}
             status={bid.status}
             onStatusChange={created}
-
           ></OrderCard>
         ))}
       </div>
