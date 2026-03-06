@@ -11,9 +11,9 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
     const { errors, checkField, checkForm, clearErrors } = useValidation('item');
     const [item, setItem] = useState(null);
 
-    const handleFieldChange = (e, fieldType) => {
-        checkField(fieldType, e.target.value);
-    };
+    // const handleFieldChange = (e, fieldType) => {
+    //     checkField(fieldType, e.target.value);
+    // };
 
     async function loadItem() {
         const res = await fetch(`${backend}/api/item/${param.item_id}`);
@@ -57,12 +57,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             method: 'PUT',
             body: formData
         });
-        if (res.status === 409) {
-            const err = await res.json();
-            setError(err.error);
-            setIsSubmitting(false)
-            return;
-        }
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
@@ -80,7 +74,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
 
     return (
         <>
-        <form className="form" onSubmit={save} id="addItemForm" method="POST" encType="multipart/form-data">
+        <form className="form" onSubmit={save} id="addItemForm" method="PUT" encType="multipart/form-data">
             {param.item_id ? "Редактировать товар" : "Добавить товар"}
             <input
                 type="text"
@@ -89,8 +83,8 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 name="article"
                 required
                 defaultValue={item?.article}
-                onChange={(e) => handleFieldChange(e, 'item_article')}
-                onBlur={(e) => handleFieldChange(e, 'item_article')}
+                onChange={(e) => checkField('item_article', e.target.value)}
+                onBlur={(e) => checkField('item_article', e.target.value)}
                 disabled={isSubmitting} />
             {errors.item_article?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
@@ -105,8 +99,8 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 name="item_name"
                 required
                 defaultValue={item?.item_name}
-                onChange={(e) => handleFieldChange(e, 'item_name')}
-                onBlur={(e) => handleFieldChange(e, 'item_name')}
+                onChange={(e) => checkField('item_name', e.target.value)}
+                onBlur={(e) => checkField('item_name', e.target.value)}
                 disabled={isSubmitting} />
             {errors.item_name?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
@@ -165,8 +159,8 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 placeholder="Описание"
                 name="description"
                 defaultValue={item?.description}
-                onChange={(e) => handleFieldChange(e, 'item_description')}
-                onBlur={(e) => handleFieldChange(e, 'item_description')}
+                onChange={(e) => checkField('item_description', e.target.value)}
+                onBlur={(e) => checkField('item_description', e.target.value)}
                 disabled={isSubmitting} />
             {errors.item_description?.length > 0 && (
                 <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>

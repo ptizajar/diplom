@@ -5,33 +5,37 @@ import { useState } from "react";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "../store";
 
 
-export function AddCategoryForm({ onCloseClick, param }) {//получает из Dialog
+export function EditUserForm({ onCloseClick }) {//получает из Dialog
     const [isSubmitting, setIsSubmitting] = useState(false);//проверять находится ли форма в процессе отправки на сервер
     const [error, setError] = useState("");
-    const { errors, checkField, checkForm, clearErrors } = useValidation('category');
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const { errors, checkField, checkForm, clearErrors } = useValidation('registration');
+    const dispatch = useDispatch();
 
-    // const handleFieldChange = (e) => {
-    //     checkField('category', e.target.value);
-    // };
-
+    if (!currentUser) {
+        return <div>Загрузка...</div>;
+    }
     async function save(e) {//on submit
         e.preventDefault();
         setError("");
         const formData = new FormData(e.target);
-        const categoryName = formData.get('category_name') || '';
-        const isValid = checkForm({ category_name: categoryName });
-
+        const formObject = {
+            user_name: formData.get('user_name'),
+            phone: formData.get('phone')
+        };
+        const isValid = checkForm(formObject);
         if (!isValid) {
             return;
         }
-
         setIsSubmitting(true);
-
-        const res = await fetch(`${backend}/api/admin/category`, {
+        const res = await fetch(`${backend}/api/edit_user`, {
             method: 'PUT',
-            body: formData
+            body: formData,
+            credentials: 'include' // Важно для cookies
         });
         if (!res.ok) {
             const err = await res.json();
@@ -39,42 +43,48 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
             setIsSubmitting(false)
             return;
         }
-
-        await res.json();
-
+        const updatedUser = await res.json();
+        console.log('Updated user:', updatedUser);
+        dispatch(updateUser(updatedUser));
         clearErrors();
         onCloseClick();
     }
 
-    const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.category_id}')` } : {};
     return (
         <>
-            <form className="form" onSubmit={save} id="addCategoryForm" method="PUT" encType="multipart/form-data">
-                {param ? "Редактировать категорию" : "Добавить категорию"}
+            <form className="form" onSubmit={save} id="editUserForm" method="PUT"  encType="multipart/form-data">
+                Редактировать
                 <input
                     type="text"
                     className="form-field"
-                    placeholder="Название"
-                    name="category_name"
+                    placeholder="Имя"
+                    name="user_name"
                     required
-                    defaultValue={param?.name}
-                    onChange={(e) => checkField('category_name', e.target.value)}
-                    onBlur={(e) => checkField('category_name', e.target.value)}//потеря фокуса
+                    defaultValue={currentUser.user_name}
+                    onChange={(e) => checkField('name', e.target.value)}
+                    onBlur={(e) => checkField('name', e.target.value)}//потеря фокуса
                     disabled={isSubmitting} />
-                {errors.category_name?.length > 0 && (
+                {errors.user_name?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
-                        {errors.category_name[0]}
+                        {errors.user_name[0]}
                     </div>
                 )}
-                <div className="form-image" style={style}>
-                    <input
-                        type="file"
-                        placeholder="Загрузите изображение"
-                        name="category_image"
-                        accept="image/png, image/jpeg"
-                        required={!param} />
-                </div>
-                <input type="hidden" name="category_id" value={param?.category_id} />
+
+                <input
+                    type="text"
+                    className="form-field"
+                    placeholder="Телефон"
+                    name="phone"
+                    required
+                    defaultValue={currentUser.phone}
+                    onChange={(e) => checkField('phone', e.target.value)}
+                    onBlur={(e) => checkField('phone', e.target.value)}//потеря фокуса
+                    disabled={isSubmitting} />
+                {errors.phone?.length > 0 && (
+                    <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+                        {errors.phone[0]}
+                    </div>
+                )}
 
                 <div className='button-holder'>
                     <button
@@ -106,6 +116,6 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                     <div className="toast-progress"></div>
                 </div>
             )}
-            </>
+        </>
     )
 }

@@ -42,9 +42,9 @@ export function OrderForm({ onCloseClick, param }) {
         return maxDate.toISOString().slice(0, 16);
     };
 
-    const handleFieldChange = (e) => {
-        checkField('registration', e.target.value);
-    };
+    // const handleFieldChange = (e) => {
+    //     checkField('registration', e.target.value);
+    // };
 
     async function save(e) {
         e.preventDefault();
@@ -145,7 +145,7 @@ export function OrderForm({ onCloseClick, param }) {
                         name="user_name"
                         defaultValue={currentUser.user_name}
                         required
-                        onChange={handleFieldChange}
+                        onChange={(e) => checkField('user_name', e.target.value)}
                         onBlur={(e) => checkField('user_name', e.target.value)}
                         disabled={isSubmitting} />
                     {errors.user_name?.length > 0 && (
@@ -166,7 +166,7 @@ export function OrderForm({ onCloseClick, param }) {
                         name="phone"
                         defaultValue={currentUser.phone}
                         required
-                        onChange={handleFieldChange}
+                        onChange={(e) => checkField('phone', e.target.value)}
                         onBlur={(e) => checkField('phone', e.target.value)}
                         disabled={isSubmitting} />
                     {errors.phone?.length > 0 && (

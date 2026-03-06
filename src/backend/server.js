@@ -33,7 +33,7 @@ app.use("/api/admin", adminRouter);
 app.get("/api/categories", async function (req, res) {
   try {
     const result = await pool.query(
-      "SELECT category_name, category_id from category order by category_name desc"
+      "SELECT category_name, category_id from category order by category_name desc",
     );
     res.status(200).json(result.rows);
   } catch (err) {
@@ -46,7 +46,7 @@ app.get("/api/category/image/:id", async function (req, res) {
     const param = req.params.id;
     const result = await pool.query(
       "select category_picture from category where category_id= $1",
-      [param]
+      [param],
     );
     res.status(200).contentType("image/jpeg");
     res.send(result.rows[0].category_picture);
@@ -60,7 +60,7 @@ app.get("/api/category/:id", async function (req, res) {
     const param = req.params.id;
     const result = await pool.query(
       "select category_name from category where category_id=$1",
-      [param]
+      [param],
     );
     res.status(200).json(result.rows[0]);
   } catch (err) {
@@ -73,7 +73,7 @@ app.get("/api/category/:id/items", async function (req, res) {
     const param = req.params.id;
     const result = await pool.query(
       "select item_id, item_name, price from item where category_id=$1 and removed=$2",
-      [param,false]
+      [param, false],
     );
     if (req.user?.user_id) {
       const liked = (
@@ -96,7 +96,7 @@ app.get("/api/item/image/:id", async function (req, res) {
     const param = req.params.id;
     const result = await pool.query(
       "select item_picture from item where item_id= $1",
-      [param]
+      [param],
     );
     res.status(200).contentType("image/jpeg");
     res.send(result.rows[0].item_picture);
@@ -110,7 +110,7 @@ app.get("/api/item/:id", async function (req, res) {
     const param = req.params.id;
     const result = await pool.query(
       "select item_id,item_name,article,length,width,height,item_picture,price,description,quantity from item where item_id=$1 ",
-      [param]
+      [param],
     );
     res.status(200).json(result.rows[0]);
   } catch (err) {
@@ -122,9 +122,9 @@ app.get("/api/showed_items", async function (req, res) {
   try {
     const result = await pool.query(
       "select item_id,item_name,article,length,width,height,price,description,quantity from item where show=$1 ",
-      [true]
+      [true],
     );
-     if (req.user?.user_id) {
+    if (req.user?.user_id) {
       const liked = (
         await pool.query("select item_id from favourites where user_id=$1", [
           req.user.user_id,
@@ -186,41 +186,67 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
     !login && errors.push("Логин обязателен");
     login?.length < 3 && errors.push("Логин должен быть не менее 3 символов");
     login?.length > 50 && errors.push("Логин должен быть не более 50 символов");
-    login && !/^[a-zA-Z0-9_.@]+$/.test(login) && errors.push("Логин может содержать только латиницу, цифры, символы _ @ .");
-    login && /\s/.test(login) && errors.push("Логин не должен содержать пробелы");
+    login &&
+      !/^[a-zA-Z0-9_.@]+$/.test(login) &&
+      errors.push(
+        "Логин может содержать только латиницу, цифры, символы _ @ .",
+      );
+    login &&
+      /\s/.test(login) &&
+      errors.push("Логин не должен содержать пробелы");
 
     // Имя
     !user_name && errors.push("Имя обязательно");
-    user_name?.trim().length < 2 && errors.push("Имя должно быть не менее 2 символов");
-    user_name?.trim().length > 50 && errors.push("Имя должно быть не более 50 символов");
-    user_name && !/^[а-яА-ЯёЁ\s\-]+$/.test(user_name.trim()) && errors.push("Имя может содержать только кириллицу, пробелы и дефисы");
+    user_name?.trim().length < 2 &&
+      errors.push("Имя должно быть не менее 2 символов");
+    user_name?.trim().length > 50 &&
+      errors.push("Имя должно быть не более 50 символов");
+    user_name &&
+      !/^[а-яА-ЯёЁ\s\-]+$/.test(user_name.trim()) &&
+      errors.push("Имя может содержать только кириллицу, пробелы и дефисы");
 
     // Телефон
     !phone && errors.push("Телефон обязателен");
-    phone && !/^(\+7|8)/.test(phone) && errors.push("Номер должен начинаться с +7 или 8");
-    const digitsOnly = phone?.replace(/\D/g, '');
+    phone &&
+      !/^(\+7|8)/.test(phone) &&
+      errors.push("Номер должен начинаться с +7 или 8");
+    const digitsOnly = phone?.replace(/\D/g, "");
     digitsOnly?.length !== 11 && errors.push("Номер должен содержать 11 цифр");
-    digitsOnly && !/^[78]/.test(digitsOnly) && errors.push("Первая цифра номера должна быть 7 или 8");
+    digitsOnly &&
+      !/^[78]/.test(digitsOnly) &&
+      errors.push("Первая цифра номера должна быть 7 или 8");
 
     // Пароль
     !password && errors.push("Пароль обязателен");
-    password?.length < 6 && errors.push("Пароль должен быть не менее 6 символов");
-    password?.length > 50 && errors.push("Пароль должен быть не более 50 символов");
-    password && /\s/.test(password) && errors.push("Пароль не должен содержать пробелы");
-    password && !/[A-Z]/.test(password) && errors.push("Пароль должен содержать хотя бы одну заглавную букву");
-    password && !/[0-9]/.test(password) && errors.push("Пароль должен содержать хотя бы одну цифру");
-    password && !/[\W_]/.test(password) && errors.push("Пароль должен содержать хотя бы один специальный символ");
-    password && /[а-яА-ЯёЁ]/.test(password) && errors.push("Пароль должен содержать только латиницу");
+    password?.length < 6 &&
+      errors.push("Пароль должен быть не менее 6 символов");
+    password?.length > 50 &&
+      errors.push("Пароль должен быть не более 50 символов");
+    password &&
+      /\s/.test(password) &&
+      errors.push("Пароль не должен содержать пробелы");
+    password &&
+      !/[A-Z]/.test(password) &&
+      errors.push("Пароль должен содержать хотя бы одну заглавную букву");
+    password &&
+      !/[0-9]/.test(password) &&
+      errors.push("Пароль должен содержать хотя бы одну цифру");
+    password &&
+      !/[\W_]/.test(password) &&
+      errors.push("Пароль должен содержать хотя бы один специальный символ");
+    password &&
+      /[а-яА-ЯёЁ]/.test(password) &&
+      errors.push("Пароль должен содержать только латиницу");
 
     // Пароли совпадают
     password !== password2 && errors.push("Пароли не совпадают");
 
     // Если есть ошибки валидации - сразу возвращаем
     if (errors.length > 0) {
-      return res.status(400).json({ error: errors.join('. ') });
+      return res.status(400).json({ error: errors.join(". ") });
     }
 
-    // ПРОВЕРКА УНИКАЛЬНОСТИ 
+    // ПРОВЕРКА УНИКАЛЬНОСТИ
     const findLogin = await pool.query("select * from users where login=$1", [
       login,
     ]);
@@ -230,27 +256,29 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
         .json({ error: "Пользователь с таким логином уже существует" });
     } else {
       const result = await pool.query(
-        "INSERT INTO users (login, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5) returning *",
-        [login, hashPasswordMD5(password), user_name, phone.trim(), false]
+        "INSERT INTO users (login, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5)  RETURNING user_id, login, user_name, phone, is_admin",
+        [login, hashPasswordMD5(password), user_name, phone.trim(), false],
       );
       const cookie = crypto.randomBytes(64).toString("base64");
       const currentUser = result.rows[0];
-      res.status(200).cookie("sessionId", cookie).json(currentUser);
+      
       await redisConnection;
       await client.set(cookie, JSON.stringify(currentUser));
+      res.status(200).cookie("sessionId", cookie).json(currentUser);
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-const tries = new Map();//key-login,value-array of tries by time
+
+const tries = new Map(); //key-login,value-array of tries by time
 app.post("/api/login", upload.none(), async function (req, res) {
   const { login, password } = req.body;
   const currentTries = tries.get(login) || [];
-  if(currentTries.length===3){
-    const timeGone = Date.now() - currentTries[2];//время которое прошло с первой попытки из трёх
-    if(timeGone<5*60*1000){
-      res.status(429).json({error: "Слишком много попыток"});
+  if (currentTries.length === 3) {
+    const timeGone = Date.now() - currentTries[2]; //время которое прошло с первой попытки из трёх
+    if (timeGone < 5 * 60 * 1000) {
+      res.status(429).json({ error: "Слишком много попыток" });
       return;
     }
   }
@@ -259,14 +287,14 @@ app.post("/api/login", upload.none(), async function (req, res) {
       login,
     ]);
     if (findLogin.rowCount === 0) {
-      tries.set(login, [Date.now(),...(tries.get(login) || []).slice(0,2)]);//добавляем в начало дату, копируя в хвост что было до этого(первые два элемента) или пустой массив если ничего не было
+      tries.set(login, [Date.now(), ...(tries.get(login) || []).slice(0, 2)]); //добавляем в начало дату, копируя в хвост что было до этого(первые два элемента) или пустой массив если ничего не было
       res.status(401).json({ error: "Неверный логин или пароль" });
       return;
     }
     const savedPassword = findLogin.rows[0].password;
     const givenPassword = hashPasswordMD5(password);
     if (savedPassword !== givenPassword) {
-      tries.set(login, [Date.now(),...(tries.get(login) || []).slice(0,2)]);
+      tries.set(login, [Date.now(), ...(tries.get(login) || []).slice(0, 2)]);
       res.status(401).json({ error: "Неверный логин или пароль" });
       return;
     }
@@ -303,20 +331,20 @@ app.post("/api/favourites", upload.none(), async function (req, res) {
     const { item_id, liked } = req.body;
     const findItem = await pool.query(
       "select * from favourites where item_id=$1 and user_id=$2",
-      [item_id, req.user.user_id]
+      [item_id, req.user.user_id],
     );
     if (!findItem.rowCount && liked === "true") {
       //если товара нет а его надо лайкнуть
       await pool.query(
         "insert into favourites(item_id,user_id) values ($1,$2)",
-        [item_id, req.user.user_id]
+        [item_id, req.user.user_id],
       );
     }
     if (findItem.rowCount && liked === "false") {
       //если товар есть, а его надо дизлайкнуть
       await pool.query(
         "delete from favourites where item_id=$1 and user_id=$2",
-        [item_id, req.user.user_id]
+        [item_id, req.user.user_id],
       );
       //другие случаи не обрабатываются потому что при них не нужно ничего делать
     }
@@ -346,7 +374,7 @@ app.get("/api/liked_items", async function (req, res) {
        FROM favourites f
        JOIN item i ON f.item_id = i.item_id
        WHERE f.user_id = $1`,
-      [userId]
+      [userId],
     );
 
     res.status(200).json({ favourites: result.rows });
@@ -378,7 +406,6 @@ app.get("/api/liked_items", async function (req, res) {
 //   }
 // });
 
-
 app.post("/api/order/:id", upload.none(), async function (req, res) {
   const { preferred_datetime, user_name, phone } = req.body;
   const param = req.params.id;
@@ -390,42 +417,57 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
     // Имя
     !user_name && errors.push("Имя обязательно");
     user_name?.length < 2 && errors.push("Имя должно быть не менее 2 символов");
-    user_name?.length > 50 && errors.push("Имя должно быть не более 50 символов");
-    user_name && !/^[а-яА-ЯёЁ\s\-]+$/.test(user_name) && errors.push("Только кириллица, пробелы и дефисы");
-    user_name && (user_name.startsWith("-") || user_name.startsWith(" ")) && errors.push("Имя не должно начинаться с пробела или дефиса");
-    user_name && (user_name.endsWith("-") || user_name.endsWith(" ")) && errors.push("Имя не должно заканчиваться пробелом или дефисом");
-    user_name && /\s\s+/.test(user_name) && errors.push("Имя не должно содержать несколько пробелов подряд");
+    user_name?.length > 50 &&
+      errors.push("Имя должно быть не более 50 символов");
+    user_name &&
+      !/^[а-яА-ЯёЁ\s\-]+$/.test(user_name) &&
+      errors.push("Только кириллица, пробелы и дефисы");
+    user_name &&
+      (user_name.startsWith("-") || user_name.startsWith(" ")) &&
+      errors.push("Имя не должно начинаться с пробела или дефиса");
+    user_name &&
+      (user_name.endsWith("-") || user_name.endsWith(" ")) &&
+      errors.push("Имя не должно заканчиваться пробелом или дефисом");
+    user_name &&
+      /\s\s+/.test(user_name) &&
+      errors.push("Имя не должно содержать несколько пробелов подряд");
 
     // Телефон
     !phone && errors.push("Телефон обязателен");
-    phone && !/^[+\s\-\(\)0-9]+$/.test(phone) && errors.push("Номер может содержать только цифры, пробелы, скобки, дефисы и знак +");
-    phone && !/^(\+7|8)/.test(phone) && errors.push("Номер должен начинаться с +7 или 8");
-    const digitsOnly = phone?.replace(/\D/g, '');
+    phone &&
+      !/^[+\s\-\(\)0-9]+$/.test(phone) &&
+      errors.push(
+        "Номер может содержать только цифры, пробелы, скобки, дефисы и знак +",
+      );
+    phone &&
+      !/^(\+7|8)/.test(phone) &&
+      errors.push("Номер должен начинаться с +7 или 8");
+    const digitsOnly = phone?.replace(/\D/g, "");
     digitsOnly?.length !== 11 && errors.push("Номер должен содержать 11 цифр");
 
     // Время
     !preferred_datetime && errors.push("Дата и время обязательны");
-    
+
     if (preferred_datetime) {
       const selectedDate = new Date(preferred_datetime);
       const now = new Date();
-      
+
       // Проверка на корректную дату
       isNaN(selectedDate.getTime()) && errors.push("Некорректный формат даты");
-      
+
       if (!isNaN(selectedDate.getTime())) {
         // Текущее время + 30 минут
         const minDateTime = new Date(now.getTime() + 30 * 60000);
         // Текущая дата + две недели
         const maxDateTime = new Date(now.getTime() + 14 * 24 * 60 * 60000);
-        
+
         // Часы и минуты выбранного времени
         const selectedHours = selectedDate.getHours();
         const selectedMinutes = selectedDate.getMinutes();
-        
+
         // Проверка на сегодняшнюю дату
         const isToday = selectedDate.toDateString() === now.toDateString();
-        
+
         // Если выбрана сегодняшняя дата
         if (isToday) {
           // Проверяем, не поздно ли уже (после 16:30)
@@ -433,25 +475,37 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
           const currentMinutes = now.getMinutes();
           const currentTotalMinutes = currentHours * 60 + currentMinutes;
           const thresholdTotalMinutes = 16 * 60 + 30; // 16:30
-          
+
           // Если сейчас больше или равно 16:30
           if (currentTotalMinutes >= thresholdTotalMinutes) {
-            errors.push("Сегодня уже нельзя оформить заказ, выберите завтрашний день");
+            errors.push(
+              "Сегодня уже нельзя оформить заказ, выберите завтрашний день",
+            );
           } else {
             // Если ещё можно выбрать сегодня, проверяем стандартные ограничения
-            selectedDate < minDateTime && errors.push("Время должно быть не менее чем через 30 минут от текущего момента");
+            selectedDate < minDateTime &&
+              errors.push(
+                "Время должно быть не менее чем через 30 минут от текущего момента",
+              );
           }
         } else {
           // Для других дней просто проверяем минимум (но не сегодня)
-          selectedDate < minDateTime && errors.push("Время должно быть не менее чем через 30 минут от текущего момента");
+          selectedDate < minDateTime &&
+            errors.push(
+              "Время должно быть не менее чем через 30 минут от текущего момента",
+            );
         }
-        
+
         // Общие проверки для любой даты
-        selectedDate > maxDateTime && errors.push("Дата не должна превышать две недели от текущей");
-        (selectedHours < 10 || selectedHours >= 17) && errors.push("Время должно быть с 10:00 до 17:00");
-        
+        selectedDate > maxDateTime &&
+          errors.push("Дата не должна превышать две недели от текущей");
+        (selectedHours < 10 || selectedHours >= 17) &&
+          errors.push("Время должно быть с 10:00 до 17:00");
+
         // Дополнительная проверка: если время 17:00 и позже - ошибка
-        selectedHours === 17 && selectedMinutes > 0 && errors.push("Время должно быть до 17:00");
+        selectedHours === 17 &&
+          selectedMinutes > 0 &&
+          errors.push("Время должно быть до 17:00");
       }
     }
 
@@ -465,7 +519,7 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
 
     const { rows } = await pool.query(
       "SELECT price FROM item WHERE item_id = $1",
-      [param]
+      [param],
     );
 
     !rows[0] && errors.push("Товар не найден");
@@ -479,11 +533,10 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
     const result = await pool.query(
       `INSERT INTO orders (user_id, item_id, date, recall_date, price, status, user_name, phone) 
        VALUES ($1, $2, NOW(), $3, $4, $5, $6, $7) RETURNING *`,
-      [userId, param, preferred_datetime, price, 'Оформлен', user_name, phone]
+      [userId, param, preferred_datetime, price, "Оформлен", user_name, phone],
     );
 
     res.status(200).json(result.rows[0]);
-
   } catch (err) {
     console.error("Database error:", err);
     res.status(500).json({ error: err.message });
@@ -500,9 +553,51 @@ app.get("/api/bids", async function (req, res) {
       LEFT JOIN item i ON o.item_id = i.item_id 
       WHERE o.user_id =$1
       ORDER BY o.date ASC `,
-      [userId]
+      [userId],
     );
     res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/user_data", async function (req, res) {
+  try {
+    const userId = req.user?.user_id;
+    const result = await pool.query(
+      "select user_name, phone from users where user_id = $1",
+      [userId],
+    );
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.put("/api/edit_user", upload.none(), async function (req, res) {
+  try {
+    console.log(req.body);
+    const userId = req.user?.user_id;
+    const newName = req.body.user_name;
+    const newPhone = req.body.phone;
+
+    if (!userId) {
+      return res.status(401).json({ error: "Не авторизован" });
+    }
+
+    const result = await pool.query(
+      "UPDATE users SET user_name=$1, phone=$2 WHERE user_id=$3 returning user_id, login, user_name, phone, is_admin",
+      [newName, newPhone, userId],
+    );
+
+    const updatedUser = result.rows[0];
+    const sessionCookie = req.cookies?.sessionId;
+    if (sessionCookie) {
+      await redisConnection;
+      await client.set(sessionCookie, JSON.stringify(updatedUser));
+    }
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -513,7 +608,5 @@ app.use(express.static("static"));
 app.get("/*splat", (req, res) => {
   res.sendFile(path.resolve("./static", "index.html"));
 });
-
-
 
 app.listen(3001);
