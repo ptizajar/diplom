@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-//import { categories } from "../../../data/data";
+import {useNavigate } from "react-router-dom";
 import {AdminCategoryCard} from "../components/AdminCategoryCard";
 import { showDialog } from "../components/Dialog";
 import { AddCategoryForm } from "../components/AddCategoryForm";
@@ -8,10 +7,15 @@ import { backend } from "../api-globals";
 import "../css/categoryCard.css"
 import { forAdminOnly } from "../components/ForAdminOnly";
 import "../css/toast.css"
+import { setUser } from "../store";
+import { useDispatch } from "react-redux";
 
 function Admin() {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   async function load() {
     const res = await fetch(`${backend}/api/categories`);
     if (!res.ok) {
@@ -22,7 +26,23 @@ function Admin() {
     const data = await res.json();
     setCategories(data);
   }
+async function logout(e) {
+    e.preventDefault();
+    setError("");
 
+    const res = await fetch(`${backend}/api/logout`, {
+      method: 'POST'
+
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      setError(err.error);
+      setTimeout(() => setError(""), 5000);
+      return;
+    }
+    navigate('/');
+    dispatch(setUser(null))
+  }
   useEffect(() => {
     load();
   }, [])
@@ -30,6 +50,7 @@ function Admin() {
   return (
     <>
       <p>Администрирование</p>
+      <button onClick={logout}>Logout</button>
       <button onClick={() => showDialog(AddCategoryForm, undefined, load)}>Добавить категорию</button>
       <div className="card-holder">
         {categories.map((category) => (

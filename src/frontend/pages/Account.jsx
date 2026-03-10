@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/itemCard.css"
 import "../css/toast.css"
 import { OrderCard } from "../components/OrderCard";
 import { showDialog } from "../components/Dialog";
 import { EditUserForm } from "../components/EditUserForm";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../store";
 
 export function Account() {
   const [bids, setBids] = useState([]);
   const [userData, setUserData] = useState({});
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   async function loadBids() {
     const res = await fetch(`${backend}/api/bids`, {
@@ -37,7 +42,23 @@ export function Account() {
     const data = await res.json();
     setUserData(data);
   }
+  async function logout(e) {
+    e.preventDefault();
+    setError("");
 
+    const res = await fetch(`${backend}/api/logout`, {
+      method: 'POST'
+
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      setError(err.error);
+      setTimeout(() => setError(""), 5000);
+      return;
+    }
+    navigate('/');
+    dispatch(setUser(null))
+  }
   useEffect(() => {
     loadBids();
     loadData();
@@ -55,6 +76,7 @@ export function Account() {
   return (
     <>
       <p>Account</p>
+      {currentUser && <button onClick={logout}>Logout</button>}
       <div>{userData.user_name} </div>
       <div>{userData.phone} </div>
       <button onClick={() => showDialog(EditUserForm, undefined, loadData)}>Редактировать</button>

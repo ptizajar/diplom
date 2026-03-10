@@ -1,36 +1,16 @@
-import React, { useContext, useState } from "react";
-import { Link , useNavigate} from "react-router-dom";
+import React, {  useState } from "react";
+import { Link } from "react-router-dom";
 import "../reset.css";
 import "../css/header.css";
 import "../css/toast.css";
 import { LoginForm } from "./LoginForm";
 import { showDialog } from "./Dialog";
-import { backend } from "../api-globals";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../store";
+import { useSelector } from "react-redux";
 
 export function Header() {
   const [error, setError] = useState("");
-   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
-  async function logout(e) {
-    e.preventDefault();
-    setError("");
 
-    const res = await fetch(`${backend}/api/logout`, {
-      method: 'POST'
-
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      setError(err.error);
-      setTimeout(() => setError(""), 5000);
-      return;
-    }
-    navigate('/');
-    dispatch(setUser(null))
-  }
   return (
     <>
       <nav className="header">
@@ -53,7 +33,7 @@ export function Header() {
               Войти
             </li>
           </Link>}
-          {currentUser && <Link onClick={logout}>Logout</Link>}
+          
            {currentUser && !currentUser.is_admin && <Link to={"/account"} className="menu-link">
             <li className="menu-item">
               <img src="/public/login.svg" className="menu-icon"></img>
