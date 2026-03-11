@@ -24,7 +24,7 @@ export function showDialog(Content, param, onClose) {//пропсы приход
 			<Dialog
 				Content={Content}
 				param={param}
-				onCloseClick={() => { document.body.classList.remove("no-scroll"); root.unmount(); domNode.remove(); onClose?.() }}
+				onCloseClick={(action) => { document.body.classList.remove("no-scroll"); root.unmount(); domNode.remove(); onClose?.(action) }}
 			/>
 		</Provider>);
 }

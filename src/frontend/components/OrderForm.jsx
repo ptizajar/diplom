@@ -4,15 +4,16 @@ import { backend } from "../api-globals";
 import { useState } from "react";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
-import React from "react";
 import { showDialog } from "./Dialog";
-import { EnterForFavourites } from "./EnterForFavourites";
 import { useSelector } from "react-redux";
+import React from "react";
+import { SessionExpired } from "./SessionExpired";
+
 
 export function OrderForm({ onCloseClick, param }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
-     const currentUser = useSelector((state) => state.user.currentUser);
+    const currentUser = useSelector((state) => state.user.currentUser);
     const { errors, checkField, checkForm, clearErrors } = useValidation('registration');
 
     // Функция для расчета минимальной даты
@@ -54,11 +55,11 @@ export function OrderForm({ onCloseClick, param }) {
             setError('Войдите, чтобы оставить заявку на заказ');
             return;
         }
-        if(currentUser.is_admin){
+        if (currentUser.is_admin) {
             setError('Администраторам нельзя оформлять заказы');
             return;
         }
-        
+
         const formData = new FormData(e.target);
         const userName = formData.get('user_name') || '';
         const userPhone = formData.get('phone') || '';
@@ -118,7 +119,11 @@ export function OrderForm({ onCloseClick, param }) {
             method: 'POST',
             body: formData
         });
-
+        if (res.status === 401) {
+            showDialog(SessionExpired, undefined, onCloseClick);
+            onCloseClick();
+            return;
+        }
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
@@ -143,7 +148,7 @@ export function OrderForm({ onCloseClick, param }) {
                         className="form-field"
                         placeholder="Имя"
                         name="user_name"
-                        defaultValue={currentUser.user_name}
+                        defaultValue={currentUser?.user_name}
                         required
                         onChange={(e) => checkField('user_name', e.target.value)}
                         onBlur={(e) => checkField('user_name', e.target.value)}
@@ -164,7 +169,7 @@ export function OrderForm({ onCloseClick, param }) {
                         className="form-field"
                         placeholder="Номер телефона"
                         name="phone"
-                        defaultValue={currentUser.phone}
+                        defaultValue={currentUser?.phone}
                         required
                         onChange={(e) => checkField('phone', e.target.value)}
                         onBlur={(e) => checkField('phone', e.target.value)}
