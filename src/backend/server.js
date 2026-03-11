@@ -18,15 +18,43 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 async function sessionParser(req, res, next) {
   const sessionId = req.cookies.sessionId;
+  // Если нет sessionId в куки, просто пропускаем (пользователь не авторизован)
   if (!sessionId) {
     next();
     return;
   }
-  const currentUser = JSON.parse(await client.get(sessionId));
-  req.user = currentUser;
-  next();
-}
+  try {
+    const userData = await client.get(sessionId);
+    // Если данные не найдены - сессия истекла (Redis автоматически удалил)
+    if (!userData) {
+      console.log("Сессия истекла, очищаем куки");
+      res.clearCookie("sessionId");
+      return res.status(401).json({
+        error: "Сессия истекла",
+        code: "SESSION_EXPIRED",
+      });
+    }
+    // Сессия активна - парсим данные пользователя
+    req.user = JSON.parse(userData);
 
+    // продлеваем сессию при активности
+    const ttl = await client.ttl(sessionId);
+    const testTTL = 10;
+    const maxTTL = 24 * 60 * 60; // 24 часа
+
+    if (ttl < testTTL / 2) {
+      await client.expire(sessionId, testTTL);
+      console.log("Сессия продлена");
+    }
+
+    next();
+  } catch (err) {
+    console.error("Ошибка при проверке сессии:", err);
+    // В случае ошибки - очищаем куки для безопасности
+    res.clearCookie("sessionId");
+    next(err);
+  }
+}
 app.use(sessionParser);
 app.use("/api/admin", adminRouter);
 
@@ -179,7 +207,6 @@ app.get("/api/refresh-session", async function (req, res) {
 app.post("/api/registrate", upload.none(), async function (req, res) {
   const { login, user_name, phone, password, password2 } = req.body;
   const errors = [];
-
   try {
     // --- ВАЛИДАЦИЯ ПОЛЕЙ ---
     // Логин
@@ -261,10 +288,16 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
       );
       const cookie = crypto.randomBytes(64).toString("base64");
       const currentUser = result.rows[0];
-      
+
       await redisConnection;
-      await client.set(cookie, JSON.stringify(currentUser));
-      res.status(200).cookie("sessionId", cookie).json(currentUser);
+      const sessionTTL = 24 * 60 * 60; // 24 часа в секундах
+      await client.setEx(cookie, sessionTTL, JSON.stringify(currentUser));
+      res
+        .status(200)
+        .cookie("sessionId", cookie, {
+          maxAge: sessionTTL * 1000, // Конвертируем в миллисекунды
+        })
+        .json(currentUser);
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -300,9 +333,17 @@ app.post("/api/login", upload.none(), async function (req, res) {
     }
     const cookie = crypto.randomBytes(64).toString("base64");
     const currentUser = findLogin.rows[0];
-    res.status(200).cookie("sessionId", cookie).json(currentUser);
+    const sessionTTL = 24 * 60 * 60; // 24 часа в секундах
+    const testSessionTTl = 10;
     await redisConnection;
-    await client.set(cookie, JSON.stringify(currentUser));
+    await client.setEx(cookie, testSessionTTl, JSON.stringify(currentUser));
+    res
+      .status(200)
+      .cookie("sessionId", cookie, {
+        maxAge: testSessionTTl * 1000, // Конвертируем в миллисекунды
+      })
+      .json(currentUser);
+
     tries.delete(login);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -323,9 +364,7 @@ app.post("/api/logout", upload.none(), async function (req, res) {
 app.post("/api/favourites", upload.none(), async function (req, res) {
   try {
     if (!req.user) {
-      res
-        .status(401)
-        .json({ error: "Войдите чтобы добавлять товары в избранное" });
+      res.status(401).json({ error: "Не авторизован" });
       return;
     }
     const { item_id, liked } = req.body;
@@ -356,6 +395,11 @@ app.post("/api/favourites", upload.none(), async function (req, res) {
 
 app.get("/api/liked_items", async function (req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        error: "Не авторизован",
+      });
+    }
     const userId = req.user?.user_id;
     const result = await pool.query(
       `SELECT 
@@ -409,6 +453,11 @@ app.get("/api/liked_items", async function (req, res) {
 app.post("/api/order/:id", upload.none(), async function (req, res) {
   const { preferred_datetime, user_name, phone } = req.body;
   const param = req.params.id;
+  if (!req.user) {
+    return res.status(401).json({
+      error: "Не авторизован",
+    });
+  }
   const userId = req.user?.user_id;
   const errors = [];
 
@@ -544,6 +593,11 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
 });
 
 app.get("/api/bids", async function (req, res) {
+   if (!req.user) {
+    return res.status(401).json({
+      error: "Не авторизован",
+    });
+  }
   const userId = req.user?.user_id;
   try {
     const result = await pool.query(
@@ -563,6 +617,11 @@ app.get("/api/bids", async function (req, res) {
 
 app.get("/api/user_data", async function (req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        error: "Не авторизован",
+      });
+    }
     const userId = req.user?.user_id;
     const result = await pool.query(
       "select user_name, phone from users where user_id = $1",
@@ -574,17 +633,16 @@ app.get("/api/user_data", async function (req, res) {
   }
 });
 
-
 app.put("/api/edit_user", upload.none(), async function (req, res) {
   try {
-    console.log(req.body);
+    if (!req.user) {
+      return res.status(401).json({
+        error: "Не авторизован",
+      });
+    }
     const userId = req.user?.user_id;
     const newName = req.body.user_name;
     const newPhone = req.body.phone;
-
-    if (!userId) {
-      return res.status(401).json({ error: "Не авторизован" });
-    }
 
     const result = await pool.query(
       "UPDATE users SET user_name=$1, phone=$2 WHERE user_id=$3 returning user_id, login, user_name, phone, is_admin",

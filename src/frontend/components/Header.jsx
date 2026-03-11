@@ -27,7 +27,7 @@ export function Header() {
               Каталог
             </li>
           </Link>
-          {!currentUser && <Link onClick={() => showDialog(LoginForm)} className="menu-link">
+          {!currentUser && <Link onClick={(e) => {e.preventDefault(); showDialog(LoginForm);}} className="menu-link">
             <li className="menu-item">
               <img src="/public/login.svg" className="menu-icon"></img>
               Войти

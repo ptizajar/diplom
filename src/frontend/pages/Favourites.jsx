@@ -1,16 +1,27 @@
 import React from "react";
 import { useState } from "react";
-import {ItemCard} from "../components/ItemCard";
+import { ItemCard } from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
 import "../css/itemCard.css"
 import "../css/toast.css"
+import { useSelector } from "react-redux";
+import { showDialog } from "../components/Dialog";
+import { SessionExpired } from "../components/SessionExpired";
 
 export function Favourites() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState("");
+  const currentUser = useSelector((state) => state.user.currentUser);
   async function loadItems() {
+    if (!currentUser) {
+      return;
+    }
     const res = await fetch(`${backend}/api/liked_items`);
+    if (res.status === 401) {
+      showDialog(SessionExpired);
+      return;
+    }
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -19,30 +30,33 @@ export function Favourites() {
     const data = await res.json();
     setItems(data.favourites);
   }
-  useEffect(() => { loadItems() }, []);
+  useEffect(() => { loadItems() }, [currentUser]);
 
   return (
     <>
       <p>Избранное</p>
-   
-      {!items.length ? (
+
+      {!currentUser && <div>Залогиньтесь</div>}
+
+      {!items.length && currentUser &&
         <div style={{ textAlign: 'center', padding: '50px' }}>
           <h3>В избранном ничего нет</h3>
           <p>Добавляйте товары в избранное, нажимая на ❤️</p>
-        </div>
-      ) : (
-        <div className="card-holder">
-          {items.map(item => (
-            <ItemCard
-              key={item.item_id}
-              item_id={item.item_id}
-              name={item.item_name}
-              price={item.price}
-              liked={item.liked}
-            />
-          ))}
-        </div>
-      )}
+        </div>}
+
+      {items.length > 0 && <div className="card-holder">
+        {items.map(item => (
+          <ItemCard
+            key={item.item_id}
+            item_id={item.item_id}
+            name={item.item_name}
+            price={item.price}
+            liked={item.liked}
+          />
+        ))}
+      </div>}
+
+
       {error && (
         <div className="toast-notification">
           <div className="toast-content">

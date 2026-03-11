@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/itemCard.css"
 import "../css/toast.css"
@@ -8,6 +8,8 @@ import { showDialog } from "../components/Dialog";
 import { EditUserForm } from "../components/EditUserForm";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store";
+import { SessionExpired } from "../components/SessionExpired";
+
 
 export function Account() {
   const [bids, setBids] = useState([]);
@@ -16,11 +18,22 @@ export function Account() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
+  const error401 = useRef(false);
 
   async function loadBids() {
+    if (!currentUser) {
+      return;
+    }
     const res = await fetch(`${backend}/api/bids`, {
       method: 'GET'
     });
+    if (res.status === 401 && !error401.current) {
+      error401.current = true;
+      showDialog(SessionExpired, undefined, () => {
+        error401.current = false; dispatch(setUser(null)); navigate('/')
+      });
+      return;
+    }
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -31,9 +44,19 @@ export function Account() {
   }
 
   async function loadData() {
+    if (!currentUser) {
+      return;
+    }
     const res = await fetch(`${backend}/api/user_data`, {
       method: 'GET'
     });
+    if (res.status === 401 && !error401.current) {
+      error401.current = true;
+      showDialog(SessionExpired, undefined, () => {
+        error401.current = false; dispatch(setUser(null)); navigate('/')
+      });
+      return;
+    }
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -50,18 +73,37 @@ export function Account() {
       method: 'POST'
 
     });
+    if (res.status === 401) {
+      showDialog(SessionExpired);
+      return;
+    }
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
-      setTimeout(() => setError(""), 5000);
       return;
     }
     navigate('/');
     dispatch(setUser(null))
   }
+
+  function loadOrNavigate(action) {
+    if (action === 'navigate') {
+      dispatch(setUser(null));
+      navigate('/')
+    } else {
+      loadData();
+    }
+
+  }
   useEffect(() => {
+    if (!currentUser) {
+      navigate('/');
+    }
     loadBids();
     loadData();
+    return () => {
+      error401.current = false;
+    };
   }, [])
 
   const formatDate = (dateString) => {
@@ -79,7 +121,7 @@ export function Account() {
       {currentUser && <button onClick={logout}>Logout</button>}
       <div>{userData.user_name} </div>
       <div>{userData.phone} </div>
-      <button onClick={() => showDialog(EditUserForm, undefined, loadData)}>Редактировать</button>
+      <button onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
       <div className="card-holder">
         {bids.map((bid) => (
           <OrderCard

@@ -7,6 +7,9 @@ import "../css/toast.css"
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store";
+import { showDialog } from "./Dialog";
+import { SessionExpired } from "./SessionExpired";
+import { useNavigate } from "react-router-dom";
 
 
 export function EditUserForm({ onCloseClick }) {//получает из Dialog
@@ -16,9 +19,6 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
     const { errors, checkField, checkForm, clearErrors } = useValidation('registration');
     const dispatch = useDispatch();
 
-    if (!currentUser) {
-        return <div>Загрузка...</div>;
-    }
     async function save(e) {//on submit
         e.preventDefault();
         setError("");
@@ -37,6 +37,11 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
             body: formData,
             credentials: 'include' // Важно для cookies
         });
+        if (res.status === 401) {
+            showDialog(SessionExpired, undefined, onCloseClick);
+            onCloseClick();
+            return;
+        }
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
@@ -52,7 +57,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
 
     return (
         <>
-            <form className="form" onSubmit={save} id="editUserForm" method="PUT"  encType="multipart/form-data">
+            <form className="form" onSubmit={save} id="editUserForm" method="PUT" encType="multipart/form-data">
                 Редактировать
                 <input
                     type="text"
@@ -60,7 +65,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                     placeholder="Имя"
                     name="user_name"
                     required
-                    defaultValue={currentUser.user_name}
+                    defaultValue={currentUser?.user_name}
                     onChange={(e) => checkField('name', e.target.value)}
                     onBlur={(e) => checkField('name', e.target.value)}//потеря фокуса
                     disabled={isSubmitting} />
@@ -76,7 +81,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                     placeholder="Телефон"
                     name="phone"
                     required
-                    defaultValue={currentUser.phone}
+                    defaultValue={currentUser?.phone}
                     onChange={(e) => checkField('phone', e.target.value)}
                     onBlur={(e) => checkField('phone', e.target.value)}//потеря фокуса
                     disabled={isSubmitting} />
