@@ -22,7 +22,7 @@ export function Favourites() {
       showDialog(SessionExpired);
       return;
     }
-    if (!res.ok) {
+    if (!res.ok && res.status !== 401) {
       const err = await res.json();
       setError(err.error);
       return;

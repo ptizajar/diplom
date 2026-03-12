@@ -27,7 +27,6 @@ async function sessionParser(req, res, next) {
     const userData = await client.get(sessionId);
     // Если данные не найдены - сессия истекла (Redis автоматически удалил)
     if (!userData) {
-      console.log("Сессия истекла, очищаем куки");
       res.clearCookie("sessionId");
       return res.status(401).json({
         error: "Сессия истекла",
@@ -42,8 +41,8 @@ async function sessionParser(req, res, next) {
     const testTTL = 10;
     const maxTTL = 24 * 60 * 60; // 24 часа
 
-    if (ttl < testTTL / 2) {
-      await client.expire(sessionId, testTTL);
+    if (ttl < maxTTL / 2) {
+      await client.expire(sessionId, maxTTL);
       console.log("Сессия продлена");
     }
 
@@ -336,11 +335,11 @@ app.post("/api/login", upload.none(), async function (req, res) {
     const sessionTTL = 24 * 60 * 60; // 24 часа в секундах
     const testSessionTTl = 10;
     await redisConnection;
-    await client.setEx(cookie, testSessionTTl, JSON.stringify(currentUser));
+    await client.setEx(cookie, sessionTTL, JSON.stringify(currentUser));
     res
       .status(200)
       .cookie("sessionId", cookie, {
-        maxAge: testSessionTTl * 1000, // Конвертируем в миллисекунды
+        maxAge: sessionTTl * 1000, // Конвертируем в миллисекунды
       })
       .json(currentUser);
 
@@ -423,7 +422,6 @@ app.get("/api/liked_items", async function (req, res) {
 
     res.status(200).json({ favourites: result.rows });
   } catch (err) {
-    console.error("Ошибка получения избранного:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -587,7 +585,6 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
 
     res.status(200).json(result.rows[0]);
   } catch (err) {
-    console.error("Database error:", err);
     res.status(500).json({ error: err.message });
   }
 });

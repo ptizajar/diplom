@@ -42,7 +42,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
             onCloseClick();
             return;
         }
-        if (!res.ok) {
+        if (!res.ok && res.status !== 401) {
             const err = await res.json();
             setError(err.error);
             setIsSubmitting(false)

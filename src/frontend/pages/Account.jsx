@@ -34,7 +34,7 @@ export function Account() {
       });
       return;
     }
-    if (!res.ok) {
+    if (!res.ok && res.status !== 401) {
       const err = await res.json();
       setError(err.error);
       return;
@@ -57,7 +57,7 @@ export function Account() {
       });
       return;
     }
-    if (!res.ok) {
+    if (!res.ok && res.status !== 401) {
       const err = await res.json();
       setError(err.error);
       return;
@@ -71,12 +71,8 @@ export function Account() {
 
     const res = await fetch(`${backend}/api/logout`, {
       method: 'POST'
-
     });
-    if (res.status === 401) {
-      showDialog(SessionExpired);
-      return;
-    }
+
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);

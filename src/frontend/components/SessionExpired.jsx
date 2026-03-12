@@ -19,7 +19,7 @@ export function SessionExpired({ onCloseClick }) {
                 <p>Сессия истекла</p>
                 <div className='button-holder'>
                     <button className="form-button" onClick={() => switchForm(LoginForm)}>Войти</button>
-                    <button className='form-button' onClick={()=>{onCloseClick('navigate')}}>Закрыть</button>
+                    <button className='form-button' onClick={() => { onCloseClick('navigate') }}>Закрыть</button>
                 </div>
             </form>
         </>

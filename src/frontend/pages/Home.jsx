@@ -24,7 +24,7 @@ export function Home() {
   return (
     <>
       <p>Главная</p>
-      <div className="banner"><p> МАКС-МЕБЕЛЬ - лучшее решение для вашего офиса</p></div>
+      <p style={{fontSize:"24px"}}> МАКС-МЕБЕЛЬ - лучшее решение для вашего офиса</p>
       <h1 className="title">Хиты продаж</h1>
       <div className="card-holder">
         {items.map(
