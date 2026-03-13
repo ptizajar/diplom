@@ -87,18 +87,18 @@ export const validationRules = {
   },
 
   registration: {
-    login: {
-      min: 3,
-      max: 50,
-      pattern: /^[a-zA-Z0-9_.@]+$/,
-      patternError: "Только латиница, цифры, символы _ @ .",
-      custom: [
-        (value) => {
-          if (/\s/.test(value)) return "Нельзя использовать пробелы";
-          return null;
-        },
-      ],
-    },
+    // login: {
+    //   min: 3,
+    //   max: 50,
+    //   pattern: /^[a-zA-Z0-9_.@]+$/,
+    //   patternError: "Только латиница, цифры, символы _ @ .",
+    //   custom: [
+    //     (value) => {
+    //       if (/\s/.test(value)) return "Нельзя использовать пробелы";
+    //       return null;
+    //     },
+    //   ],
+    // },
 
     user_name: {
       min: 2,
@@ -145,6 +145,26 @@ export const validationRules = {
         },
       ],
     },
+
+    email: {
+    min: 5,
+    max: 100,
+    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    patternError: "Введите корректный email адрес",
+    custom: [
+      (value) => {
+        if (value.includes("..")) return "Email не может содержать две точки подряд";
+        return null;
+      },
+      (value) => {
+        const localPart = value.split('@')[0];
+        if (localPart && (localPart.startsWith('.') || localPart.endsWith('.'))) {
+          return "Локальная часть email не может начинаться или заканчиваться точкой";
+        }
+        return null;
+      }
+    ]
+  },
 
     password: {
       min: 6,

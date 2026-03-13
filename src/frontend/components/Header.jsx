@@ -10,7 +10,15 @@ import { useSelector } from "react-redux";
 export function Header() {
   const [error, setError] = useState("");
   const currentUser = useSelector((state) => state.user.currentUser);
+ function loadOrNavigate(action) {
+    if (action === 'navigate') {
+      dispatch(setUser(null));
+      navigate('/')
+    } else {
+      loadData();
+    }
 
+  }
   return (
     <>
       <nav className="header">
@@ -27,7 +35,7 @@ export function Header() {
               Каталог
             </li>
           </Link>
-          {!currentUser && <Link onClick={(e) => {e.preventDefault(); showDialog(LoginForm);}} className="menu-link">
+          {!currentUser && <Link onClick={(e) => {e.preventDefault(); showDialog(LoginForm, undefined, loadOrNavigate);}} className="menu-link">
             <li className="menu-item">
               <img src="/public/login.svg" className="menu-icon"></img>
               Войти

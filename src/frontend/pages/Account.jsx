@@ -117,6 +117,7 @@ export function Account() {
       {currentUser && <button onClick={logout}>Logout</button>}
       <div>{userData.user_name} </div>
       <div>{userData.phone} </div>
+      <div>{userData.email}</div>
       <button onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
       <div className="card-holder">
         {bids.map((bid) => (

@@ -25,7 +25,8 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
         const formData = new FormData(e.target);
         const formObject = {
             user_name: formData.get('user_name'),
-            phone: formData.get('phone')
+            phone: formData.get('phone'),
+            email: formData.get('email')
         };
         const isValid = checkForm(formObject);
         if (!isValid) {
@@ -74,7 +75,21 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                         {errors.user_name[0]}
                     </div>
                 )}
-
+                <input
+                    type="text"
+                    className="form-field"
+                    placeholder="Email"
+                    name="email"
+                    required
+                    defaultValue={currentUser?.email}
+                    onChange={(e) => checkField('email', e.target.value)}
+                    onBlur={(e) => checkField('email', e.target.value)}//потеря фокуса
+                    disabled={isSubmitting} />
+                {errors.email?.length > 0 && (
+                    <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+                        {errors.email[0]}
+                    </div>
+                )}
                 <input
                     type="text"
                     className="form-field"

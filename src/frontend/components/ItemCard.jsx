@@ -7,7 +7,6 @@ import "../css/itemCard.css"
 import { showDialog } from "./Dialog";
 import { EnterForFavourites } from "./EnterForFavourites";
 import { SessionExpired } from "./SessionExpired";
-import React from "react";
 import { setUser } from "../store";
 export function ItemCard({ item_id, name, price, liked, removed }) {
   const [error, setError] = useState("");

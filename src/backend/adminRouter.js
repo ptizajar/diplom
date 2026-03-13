@@ -353,7 +353,7 @@ adminRouter.get("/filterOrders", async function (req, res) {
     const status = req.query.status;
     if ((status === "Все")) {
       const result = await pool.query(
-        `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
+        `SELECT o.order_id, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
@@ -362,7 +362,7 @@ adminRouter.get("/filterOrders", async function (req, res) {
       res.status(200).json(result.rows);
     }
     const result = await pool.query(
-      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
+      `SELECT o.order_id, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 

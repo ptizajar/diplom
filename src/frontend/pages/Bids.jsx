@@ -75,7 +75,7 @@ function Bids() {
           <OrderCard
             key={bid.order_id}
             order_id={bid.order_id}
-            login={bid.login}
+            email={bid.email}
             user_name={bid.user_name}
             item_id={bid.item_id}
             article={bid.item_name}

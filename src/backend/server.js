@@ -204,22 +204,22 @@ app.get("/api/refresh-session", async function (req, res) {
 // });
 
 app.post("/api/registrate", upload.none(), async function (req, res) {
-  const { login, user_name, phone, password, password2 } = req.body;
+  const {  user_name, phone,email, password, password2 } = req.body;
   const errors = [];
   try {
     // --- ВАЛИДАЦИЯ ПОЛЕЙ ---
-    // Логин
-    !login && errors.push("Логин обязателен");
-    login?.length < 3 && errors.push("Логин должен быть не менее 3 символов");
-    login?.length > 50 && errors.push("Логин должен быть не более 50 символов");
-    login &&
-      !/^[a-zA-Z0-9_.@]+$/.test(login) &&
-      errors.push(
-        "Логин может содержать только латиницу, цифры, символы _ @ .",
-      );
-    login &&
-      /\s/.test(login) &&
-      errors.push("Логин не должен содержать пробелы");
+    // // Логин
+    // !login && errors.push("Логин обязателен");
+    // login?.length < 3 && errors.push("Логин должен быть не менее 3 символов");
+    // login?.length > 50 && errors.push("Логин должен быть не более 50 символов");
+    // login &&
+    //   !/^[a-zA-Z0-9_.@]+$/.test(login) &&
+    //   errors.push(
+    //     "Логин может содержать только латиницу, цифры, символы _ @ .",
+    //   );
+    // login &&
+    //   /\s/.test(login) &&
+    //   errors.push("Логин не должен содержать пробелы");
 
     // Имя
     !user_name && errors.push("Имя обязательно");
@@ -241,6 +241,29 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
     digitsOnly &&
       !/^[78]/.test(digitsOnly) &&
       errors.push("Первая цифра номера должна быть 7 или 8");
+
+    // Валидация email
+    !email && errors.push("Email обязателен");
+    email?.trim().length < 5 &&
+      errors.push("Email должен быть не менее 5 символов");
+    email?.trim().length > 100 &&
+      errors.push("Email должен быть не более 100 символов");
+    email &&
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim()) &&
+      errors.push("Введите корректный email адрес");
+    email &&
+      email.trim().includes("..") &&
+      errors.push("Email не может содержать две точки подряд");
+    email &&
+      (() => {
+        const localPart = email.trim().split("@")[0];
+        return (
+          localPart && (localPart.startsWith(".") || localPart.endsWith("."))
+        );
+      })() &&
+      errors.push(
+        "Локальная часть email не может начинаться или заканчиваться точкой",
+      );
 
     // Пароль
     !password && errors.push("Пароль обязателен");
@@ -273,17 +296,17 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
     }
 
     // ПРОВЕРКА УНИКАЛЬНОСТИ
-    const findLogin = await pool.query("select * from users where login=$1", [
-      login,
+    const findEmail = await pool.query("select * from users where email=$1", [
+      email,
     ]);
-    if (findLogin.rowCount > 0) {
+    if (findEmail.rowCount > 0) {
       res
         .status(400)
-        .json({ error: "Пользователь с таким логином уже существует" });
+        .json({ error: "Пользователь с такой почтой уже существует" });
     } else {
       const result = await pool.query(
-        "INSERT INTO users (login, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5)  RETURNING user_id, login, user_name, phone, is_admin",
-        [login, hashPasswordMD5(password), user_name, phone.trim(), false],
+        "INSERT INTO users ( email, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5)  RETURNING user_id, user_name, phone, is_admin, email",
+        [email, hashPasswordMD5(password), user_name, phone.trim(), false],
       );
       const cookie = crypto.randomBytes(64).toString("base64");
       const currentUser = result.rows[0];
@@ -303,10 +326,10 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
   }
 });
 
-const tries = new Map(); //key-login,value-array of tries by time
+const tries = new Map(); //key-email,value-array of tries by time
 app.post("/api/login", upload.none(), async function (req, res) {
-  const { login, password } = req.body;
-  const currentTries = tries.get(login) || [];
+  const { email, password } = req.body;
+  const currentTries = tries.get(email) || [];
   if (currentTries.length === 3) {
     const timeGone = Date.now() - currentTries[2]; //время которое прошло с первой попытки из трёх
     if (timeGone < 5 * 60 * 1000) {
@@ -315,23 +338,23 @@ app.post("/api/login", upload.none(), async function (req, res) {
     }
   }
   try {
-    const findLogin = await pool.query("select * from users where login=$1", [
-      login,
+    const findEmail = await pool.query("select * from users where email=$1", [
+      email,
     ]);
-    if (findLogin.rowCount === 0) {
-      tries.set(login, [Date.now(), ...(tries.get(login) || []).slice(0, 2)]); //добавляем в начало дату, копируя в хвост что было до этого(первые два элемента) или пустой массив если ничего не было
+    if (findEmail.rowCount === 0) {
+      tries.set(email, [Date.now(), ...(tries.get(email) || []).slice(0, 2)]); //добавляем в начало дату, копируя в хвост что было до этого(первые два элемента) или пустой массив если ничего не было
       res.status(401).json({ error: "Неверный логин или пароль" });
       return;
     }
-    const savedPassword = findLogin.rows[0].password;
+    const savedPassword = findEmail.rows[0].password;
     const givenPassword = hashPasswordMD5(password);
     if (savedPassword !== givenPassword) {
-      tries.set(login, [Date.now(), ...(tries.get(login) || []).slice(0, 2)]);
-      res.status(401).json({ error: "Неверный логин или пароль" });
+      tries.set(email, [Date.now(), ...(tries.get(email) || []).slice(0, 2)]);
+      res.status(401).json({ error: "Неверный email или пароль" });
       return;
     }
     const cookie = crypto.randomBytes(64).toString("base64");
-    const currentUser = findLogin.rows[0];
+    const currentUser = findEmail.rows[0];
     const sessionTTL = 24 * 60 * 60; // 24 часа в секундах
     const testSessionTTl = 10;
     await redisConnection;
@@ -339,11 +362,11 @@ app.post("/api/login", upload.none(), async function (req, res) {
     res
       .status(200)
       .cookie("sessionId", cookie, {
-        maxAge: sessionTTl * 1000, // Конвертируем в миллисекунды
+        maxAge: sessionTTL * 1000, // Конвертируем в миллисекунды
       })
       .json(currentUser);
 
-    tries.delete(login);
+    tries.delete(email);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -590,7 +613,7 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
 });
 
 app.get("/api/bids", async function (req, res) {
-   if (!req.user) {
+  if (!req.user) {
     return res.status(401).json({
       error: "Не авторизован",
     });
@@ -598,7 +621,7 @@ app.get("/api/bids", async function (req, res) {
   const userId = req.user?.user_id;
   try {
     const result = await pool.query(
-      `SELECT o.order_id, u.login, o.user_name, o.item_id, i.item_name, o.price, o.recall_date, o.phone, o.status 
+      `SELECT o.order_id, u.email, o.user_name, o.item_id, i.item_name, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
@@ -621,7 +644,7 @@ app.get("/api/user_data", async function (req, res) {
     }
     const userId = req.user?.user_id;
     const result = await pool.query(
-      "select user_name, phone from users where user_id = $1",
+      "select user_name, phone, email from users where user_id = $1",
       [userId],
     );
     res.status(200).json(result.rows[0]);
@@ -640,10 +663,11 @@ app.put("/api/edit_user", upload.none(), async function (req, res) {
     const userId = req.user?.user_id;
     const newName = req.body.user_name;
     const newPhone = req.body.phone;
+    const email  = req.body.email;
 
     const result = await pool.query(
-      "UPDATE users SET user_name=$1, phone=$2 WHERE user_id=$3 returning user_id, login, user_name, phone, is_admin",
-      [newName, newPhone, userId],
+      "UPDATE users SET user_name=$1, phone=$2, email=$3 WHERE user_id=$4 returning user_id, email, user_name, phone, is_admin",
+      [newName, newPhone, email, userId],
     );
 
     const updatedUser = result.rows[0];
@@ -665,3 +689,5 @@ app.get("/*splat", (req, res) => {
 });
 
 app.listen(3001);
+
+console.log(hashPasswordMD5("admin"))

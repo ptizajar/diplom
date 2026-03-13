@@ -40,10 +40,10 @@ export function RegistrationForm({ onCloseClick }) {
         }
 
         const validationData = {
-            login: formData.get('login') || '',
             user_name: formData.get('user_name') || '',
             phone: formData.get('phone') || '',
-            password: formData.get('password') || ''
+            password: formData.get('password') || '',
+            email: formData.get('email') || ''
         };
 
         const isValid = checkForm(validationData);
@@ -86,20 +86,6 @@ export function RegistrationForm({ onCloseClick }) {
                 <input
                     type="text"
                     className="form-field"
-                    placeholder="Логин"
-                    name="login"
-                    onChange={(e) => handleChange('login', e.target.value)}
-                    onBlur={(e) => handleBlur('login', e.target.value)}
-                    required
-                    disabled={isSubmitting} />
-                {errors.login?.length > 0 && (
-                    <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
-                        {errors.login[0]}
-                    </div>
-                )}
-                <input
-                    type="text"
-                    className="form-field"
                     placeholder="Имя"
                     name="user_name"
                     onChange={(e) => handleChange('user_name', e.target.value)}
@@ -109,6 +95,20 @@ export function RegistrationForm({ onCloseClick }) {
                 {errors.user_name?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.user_name[0]}
+                    </div>
+                )}
+                 <input
+                    type="text"
+                    className="form-field"
+                    placeholder="Email"
+                    name="email"
+                    onChange={(e) => handleChange('email', e.target.value)}
+                    onBlur={(e) => handleBlur('email', e.target.value)}
+                    required
+                    disabled={isSubmitting} />
+                {errors.email?.length > 0 && (
+                    <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+                        {errors.email[0]}
                     </div>
                 )}
                 <input

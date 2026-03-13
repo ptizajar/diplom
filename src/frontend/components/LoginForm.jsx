@@ -6,14 +6,16 @@ import { RegistrationForm } from "./RegistrationForm";
 import { backend } from "../api-globals";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store";
+import { ChangePassword } from "./ChangePassword";
 import "../css/toast.css"
 
 
 export function LoginForm({ onCloseClick }) {
     const [error, setError] = useState('');
+    const dispatch = useDispatch();
     function switchForm(newform) {
-        onCloseClick();
         showDialog(newform);
+        onCloseClick();
     }
     async function save(e) {
         e.preventDefault();
@@ -36,13 +38,13 @@ export function LoginForm({ onCloseClick }) {
         onCloseClick();
     }
 
-    const dispatch = useDispatch();
+    
 
     return (
         <>
             <form className="form" onSubmit={save} id="loginForm" method="POST" encType="multipart/form-data">
                 <p>Войти</p>
-                <input type="text" className="form-field" placeholder="Логин" name="login" required />
+                <input type="text" className="form-field" placeholder="Email" name="email" required />
                 <input type="password" className="form-field" placeholder="Пароль" name="password" required />
                 <p>или</p>
                 <button className="form-button" onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
@@ -50,6 +52,7 @@ export function LoginForm({ onCloseClick }) {
                 <div className='button-holder'>
                     <button className='form-button' type="submit">ОК</button>
                     <button className='form-button' onClick={onCloseClick}>Отмена</button>
+                    <button className='form-button' onClick={() => switchForm(ChangePassword)}>Забыли пароль?</button>
                 </div>
             </form>
             {error && (

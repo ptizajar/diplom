@@ -3,7 +3,7 @@ import { backend } from "../api-globals";
 import "../css/itemCard.css"
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-export function OrderCard({ order_id, login, user_name, item_id, article, price, recall, phone, status, onStatusChange }) {
+export function OrderCard({ order_id, email, user_name, item_id, article, price, recall, phone, status, onStatusChange }) {
     const currentUser = useSelector((state) => state.user.currentUser);
     const [error, setError] = useState("");
     const [currentStatus, setCurrentStatus] = useState(status);
@@ -38,8 +38,8 @@ export function OrderCard({ order_id, login, user_name, item_id, article, price,
     return (
         <>
             <div className="item-card" >
-                {currentUser?.is_admin && <><span>Логин</span>
-                    <p className="item-name">{login}</p></>}
+                {currentUser?.is_admin && <><span>Email</span>
+                    <p className="item-name">{email}</p></>}
                 <span>Имя</span>
                 <p className="item-name">{user_name}</p>
                 <span>Номер телефона</span>
