@@ -9,8 +9,11 @@ import { serialize } from "v8";
 import { adminRouter } from "./adminRouter";
 import { pool, redisConnection, client } from "./connections";
 import path from "path";
+import { emailService } from "./sendEmail";
 const multer = require("multer");
 const upload = multer();
+
+require("./sendEmail");
 
 app.use(cors());
 app.use(cookieParser());
@@ -204,7 +207,7 @@ app.get("/api/refresh-session", async function (req, res) {
 // });
 
 app.post("/api/registrate", upload.none(), async function (req, res) {
-  const {  user_name, phone,email, password, password2 } = req.body;
+  const { user_name, phone, email, password, password2 } = req.body;
   const errors = [];
   try {
     // --- ВАЛИДАЦИЯ ПОЛЕЙ ---
@@ -286,9 +289,6 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
     password &&
       /[а-яА-ЯёЁ]/.test(password) &&
       errors.push("Пароль должен содержать только латиницу");
-
-    // Пароли совпадают
-    password !== password2 && errors.push("Пароли не совпадают");
 
     // Если есть ошибки валидации - сразу возвращаем
     if (errors.length > 0) {
@@ -663,7 +663,7 @@ app.put("/api/edit_user", upload.none(), async function (req, res) {
     const userId = req.user?.user_id;
     const newName = req.body.user_name;
     const newPhone = req.body.phone;
-    const email  = req.body.email;
+    const email = req.body.email;
 
     const result = await pool.query(
       "UPDATE users SET user_name=$1, phone=$2, email=$3 WHERE user_id=$4 returning user_id, email, user_name, phone, is_admin",
@@ -682,6 +682,114 @@ app.put("/api/edit_user", upload.none(), async function (req, res) {
   }
 });
 
+const codes = new Map();
+app.post("/api/send_code", upload.none(), async function (req, res) {
+  try {
+    const email = req.body.email;
+    const currentTries = tries.get(email) || [];
+     if (currentTries.length === 3) {
+      const timeGone = Date.now() - currentTries[2]; //время которое прошло с первой попытки из трёх
+      if (timeGone < 5 * 60 * 1000) {
+        res.status(429).json({ error: "Слишком много попыток" });
+        return;
+      }
+    }
+    const currentUser = await pool.query(
+      "select user_id from users where email=$1",
+      [email],
+    );
+    if (currentUser.rows.length === 0) {
+      res.status(400).json({ error: "Вы не зарегестрированы" });
+      return;
+    }
+    
+    const code = Math.round(Math.random() * 1000000); //число от 1 до 1000000
+    emailService.sendVerificationCode(email, code);
+    const timer = Date.now();
+    codes.set(email, { code, timer, tries: 0 });
+    res.status(200).json({});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/change_password", upload.none(), async function (req, res) {
+    const errors = [];
+  try {
+    const code = req.body.code;
+    const email = req.body.email;
+    const password = req.body.password;
+    const codeInfo = codes.get(email);
+    const currentTries = tries.get(email) || [];
+    if (currentTries.length === 3) {
+      const timeGone = Date.now() - currentTries[2]; //время которое прошло с первой попытки из трёх
+      if (timeGone < 5 * 60 * 1000) {
+        res.status(429).json({ error: "Слишком много попыток" });
+        return;
+      }
+    }
+    if (!codeInfo) {
+      res.status(400).json({ error: "Неверный email" });
+      return;
+    }
+    if (codeInfo.code != code) {
+      tries.set(email, [Date.now(), ...(tries.get(email) || []).slice(0, 2)]); //добавляем в начало дату, копируя в хвост что было до этого(первые два элемента) или пустой массив если ничего не было
+      res.status(400).json({ error: "Неверный код" });
+      return;
+    }
+    const currentUser = await pool.query(
+      "select user_id from users where email=$1",
+      [email],
+    );
+    if (!currentUser.rows.length) {
+      res.status(400).json({ error: "Вы не зарегестрированы" });
+      return;
+    }
+
+    const timeDif = (Date.now() - codeInfo.timer) / 1000;
+    if (timeDif > 600) {
+      res.status(400).json({ error: "Время действия кода истекло" });
+      return;
+    }
+     // Пароль
+    !password && errors.push("Пароль обязателен");
+    password?.length < 6 &&
+      errors.push("Пароль должен быть не менее 6 символов");
+    password?.length > 50 &&
+      errors.push("Пароль должен быть не более 50 символов");
+    password &&
+      /\s/.test(password) &&
+      errors.push("Пароль не должен содержать пробелы");
+    password &&
+      !/[A-Z]/.test(password) &&
+      errors.push("Пароль должен содержать хотя бы одну заглавную букву");
+    password &&
+      !/[0-9]/.test(password) &&
+      errors.push("Пароль должен содержать хотя бы одну цифру");
+    password &&
+      !/[\W_]/.test(password) &&
+      errors.push("Пароль должен содержать хотя бы один специальный символ");
+    password &&
+      /[а-яА-ЯёЁ]/.test(password) &&
+      errors.push("Пароль должен содержать только латиницу");
+
+    // Если есть ошибки валидации - сразу возвращаем
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors.join(". ") });
+    }
+    const userId = currentUser.rows[0].user_id;
+
+    await pool.query("update users set password=$1 where user_id=$2", [
+      hashPasswordMD5(password),
+      userId,
+    ]);
+    codes.clear();
+    res.status(200).json({});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.use(express.static("static"));
 
 app.get("/*splat", (req, res) => {
@@ -690,4 +798,4 @@ app.get("/*splat", (req, res) => {
 
 app.listen(3001);
 
-console.log(hashPasswordMD5("admin"))
+

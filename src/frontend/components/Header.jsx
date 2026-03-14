@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../reset.css";
 import "../css/header.css";
@@ -10,14 +10,11 @@ import { useSelector } from "react-redux";
 export function Header() {
   const [error, setError] = useState("");
   const currentUser = useSelector((state) => state.user.currentUser);
- function loadOrNavigate(action) {
+  function loadOrNavigate(action) {
     if (action === 'navigate') {
       dispatch(setUser(null));
       navigate('/')
-    } else {
-      loadData();
     }
-
   }
   return (
     <>
@@ -35,14 +32,14 @@ export function Header() {
               Каталог
             </li>
           </Link>
-          {!currentUser && <Link onClick={(e) => {e.preventDefault(); showDialog(LoginForm, undefined, loadOrNavigate);}} className="menu-link">
+          {!currentUser && <Link onClick={(e) => { e.preventDefault(); showDialog(LoginForm, undefined, loadOrNavigate); }} className="menu-link">
             <li className="menu-item">
               <img src="/public/login.svg" className="menu-icon"></img>
               Войти
             </li>
           </Link>}
-          
-           {currentUser && !currentUser.is_admin && <Link to={"/account"} className="menu-link">
+
+          {currentUser && !currentUser.is_admin && <Link to={"/account"} className="menu-link">
             <li className="menu-item">
               <img src="/public/login.svg" className="menu-icon"></img>
               Аккаунт
@@ -60,7 +57,7 @@ export function Header() {
               Управление
             </li>
           </Link>}
-           {currentUser?.is_admin && <Link to={"/bids"} className="menu-link">
+          {currentUser?.is_admin && <Link to={"/bids"} className="menu-link">
             <li className="menu-item">
               <img src="/public/admin.svg" className="menu-icon"></img>
               Заявки
@@ -72,7 +69,7 @@ export function Header() {
         <div className="toast-notification">
           <div className="toast-content">
             <span className="toast-message">{error}</span>
-            <button onClick={()=>setError("")} className="toast-close">×</button>
+            <button onClick={() => setError("")} className="toast-close">×</button>
           </div>
           {/* Прогресс-бар для автоскрытия */}
           <div className="toast-progress"></div>
