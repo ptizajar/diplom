@@ -70,6 +70,7 @@ export function RegistrationForm({ onCloseClick }) {
 
         dispatch(setUser(result));
         clearErrors();
+        setIsSubmitting(false);
         onCloseClick();
 
     }
