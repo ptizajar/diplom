@@ -383,9 +383,6 @@ app.post("/api/logout", upload.none(), async function (req, res) {
   }
 });
 
-
-
-
 app.post("/api/favourites", upload.none(), async function (req, res) {
   try {
     if (!req.user) {
@@ -608,7 +605,12 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
        VALUES ($1, $2, NOW(), $3, $4, $5, $6, $7) RETURNING *`,
       [userId, param, preferred_datetime, price, "Оформлен", user_name, phone],
     );
+    const orderData = {
+      order_id: result.rows[0].order_id,
+      created_at: result.rows[0].date,
+    };
 
+    emailService.sendNewOrderNotification(orderData).catch(console.error);
     res.status(200).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -707,7 +709,7 @@ app.post("/api/send_code", upload.none(), async function (req, res) {
     }
 
     const code = Math.round(Math.random() * 1000000); //число от 1 до 1000000
-    emailService.sendVerificationCode(email, code);
+    emailService.sendVerificationCode(email, code).catch(console.error);
     const timer = Date.now();
     codes.set(email, { code, timer, tries: 0 });
     res.status(200).json({});
@@ -793,22 +795,21 @@ app.post("/api/change_password", upload.none(), async function (req, res) {
   }
 });
 
-
 app.delete("/api/delete_acc", async function (req, res) {
-   try {
+  try {
     if (!req.user) {
       return res.status(401).json({ error: "Не авторизован" });
     }
     const userId = req.user.user_id;
-    const sessionId = req.cookies.sessionId; 
-    
+    const sessionId = req.cookies.sessionId;
+
     await pool.query("DELETE FROM users WHERE user_id = $1", [userId]);
     await client.del(sessionId);
 
-    res.status(200)
-       .clearCookie("sessionId")
-       .json({ message: "Аккаунт успешно удален" });
-       
+    res
+      .status(200)
+      .clearCookie("sessionId")
+      .json({ message: "Аккаунт успешно удален" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
