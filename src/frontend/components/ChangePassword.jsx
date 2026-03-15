@@ -11,6 +11,7 @@ export function ChangePassword({ onCloseClick }) {
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [sent, setSent] = useState(false);
+    const [showPasswords, setShowPasswords] = useState(false);
     const { errors, checkField, checkForm, clearErrors } = useValidation('registration');
     const handleChange = (fieldName, value) => {
         if (fieldName !== 'password2') {
@@ -25,6 +26,7 @@ export function ChangePassword({ onCloseClick }) {
     };
     async function confirm(e) {
         e.preventDefault();
+        setError("");
         const formData = new FormData(document.getElementById('changePassword'));
         const validationData = {
             password: formData.get('password') || ''
@@ -52,12 +54,14 @@ export function ChangePassword({ onCloseClick }) {
             return;
         }
         await res.json();
+        clearErrors();
         setIsSubmitting(false);
         onCloseClick();
     }
 
     async function send(e) {
         e.preventDefault();
+         clearErrors();
         const formData = new FormData(document.getElementById('changePassword'));
         const res = await fetch(`${backend}/api/send_code`, {
             method: 'POST',
@@ -79,7 +83,7 @@ export function ChangePassword({ onCloseClick }) {
                 <input type="text" className="form-field" placeholder="email" name="email" required hidden={sent} />
                 {sent && <>
                     <input type="text" className="form-field" placeholder="Код" name="code" required />
-                    <input type="password" className="form-field" placeholder="Пароль" name="password" required
+                    <input type={showPasswords ? "text" : "password"} className="form-field" placeholder="Пароль" name="password" required
                         onChange={(e) => handleChange('password', e.target.value)}
                         onBlur={(e) => handleBlur('password', e.target.value)}
                     />
@@ -88,7 +92,25 @@ export function ChangePassword({ onCloseClick }) {
                             {errors.password[0]}
                         </div>
                     )}
-                    <input type="password" className="form-field" placeholder="Повторите пароль" name="password2" required />
+                    <input type={showPasswords ? "text" : "password"} className="form-field" placeholder="Повторите пароль" name="password2" required />
+
+                    <div style={{
+                        margin: '15px 0',
+                        textAlign: 'left',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}>
+                        <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                checked={showPasswords}
+                                onChange={(e) => setShowPasswords(e.target.checked)}
+                                disabled={isSubmitting}
+                                style={{ marginRight: '8px', width: 'auto' }}
+                            />
+                            <span>Показать пароли</span>
+                        </label>
+                    </div>
                 </>}
 
                 <div className='button-holder'>

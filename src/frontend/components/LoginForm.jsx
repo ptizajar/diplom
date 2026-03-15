@@ -12,6 +12,8 @@ import "../css/toast.css"
 
 export function LoginForm({ onCloseClick }) {
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showPasswords, setShowPasswords] = useState(false);
     const dispatch = useDispatch();
     function switchForm(newform) {
         showDialog(newform);
@@ -19,7 +21,7 @@ export function LoginForm({ onCloseClick }) {
     }
     async function save(e) {
         e.preventDefault();
-
+        setIsSubmitting(true);
         const res = await fetch(`${backend}/api/login`, {
             method: 'POST',
             body: new FormData(loginForm)
@@ -35,17 +37,32 @@ export function LoginForm({ onCloseClick }) {
 
 
         dispatch(setUser(result));
+        setIsSubmitting(false);
         onCloseClick();
     }
 
-    
+
 
     return (
         <>
             <form className="form" onSubmit={save} id="loginForm" method="POST" encType="multipart/form-data">
                 <p>Войти</p>
                 <input type="text" className="form-field" placeholder="Email" name="email" required />
-                <input type="password" className="form-field" placeholder="Пароль" name="password" required />
+                <input type={showPasswords ? "text" : "password"} className="form-field" placeholder="Пароль" name="password" required />
+
+                <div className="checkbox-container" style={{ margin: '15px 0', textAlign: 'left' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                        <input
+                            type="checkbox"
+                            checked={showPasswords}
+                            onChange={(e) => setShowPasswords(e.target.checked)}
+                            disabled={isSubmitting}
+                            style={{ marginRight: '8px', width: 'auto' }}
+                        />
+                        <span>Показать пароль</span>
+                    </label>
+                </div>
+
                 <p>или</p>
                 <button className="form-button" onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
 

@@ -51,7 +51,6 @@ export function OrderForm({ onCloseClick, param }) {
         e.preventDefault();
         setError("");
         if (!currentUser) {
-            // showDialog(EnterForFavourites)
             setError('Войдите, чтобы оставить заявку на заказ');
             return;
         }
@@ -121,7 +120,7 @@ export function OrderForm({ onCloseClick, param }) {
         });
         if (res.status === 401) {
             showDialog(SessionExpired, undefined, onCloseClick);
-            onCloseClick();
+             setIsSubmitting(false);
             return;
         }
         if (!res.ok && res.status !== 401) {

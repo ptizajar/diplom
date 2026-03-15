@@ -21,6 +21,7 @@ export function Account() {
   const error401 = useRef(false);
 
   async function loadBids() {
+    setError("");
     if (!currentUser) {
       return;
     }
@@ -44,6 +45,7 @@ export function Account() {
   }
 
   async function loadData() {
+    setError("");
     if (!currentUser) {
       return;
     }
@@ -65,8 +67,9 @@ export function Account() {
     const data = await res.json();
     setUserData(data);
   }
-  async function logout(e) {
-    e.preventDefault();
+
+
+  async function logout() {
     setError("");
 
     const res = await fetch(`${backend}/api/logout`, {
@@ -80,6 +83,28 @@ export function Account() {
     }
     navigate('/');
     dispatch(setUser(null))
+  }
+
+  async function deleteAcc() {
+    setError("");
+    const res = await fetch(`${backend}/api/delete_acc`, {
+      method: 'DELETE'
+    });
+    if (res.status === 401 && !error401.current) {
+      error401.current = true;
+      showDialog(SessionExpired, undefined, () => {
+        error401.current = false; dispatch(setUser(null)); navigate('/')
+      });
+      return;
+    }
+    if (!res.ok && res.status !== 401) {
+      const err = await res.json();
+      setError(err.error);
+      return;
+    }
+    navigate('/');
+    dispatch(setUser(null))
+
   }
 
   function loadOrNavigate(action) {
@@ -114,7 +139,8 @@ export function Account() {
   return (
     <>
       <p>Account</p>
-      {currentUser && <button onClick={logout}>Logout</button>}
+      <button onClick={logout}>Logout</button>
+      <button style={{ color: "red" }} onClick={deleteAcc}>Delete account</button>
       <div>{userData.user_name} </div>
       <div>{userData.phone} </div>
       <div>{userData.email}</div>

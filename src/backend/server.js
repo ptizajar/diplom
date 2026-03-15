@@ -383,6 +383,9 @@ app.post("/api/logout", upload.none(), async function (req, res) {
   }
 });
 
+
+
+
 app.post("/api/favourites", upload.none(), async function (req, res) {
   try {
     if (!req.user) {
@@ -687,7 +690,7 @@ app.post("/api/send_code", upload.none(), async function (req, res) {
   try {
     const email = req.body.email;
     const currentTries = tries.get(email) || [];
-     if (currentTries.length === 3) {
+    if (currentTries.length === 3) {
       const timeGone = Date.now() - currentTries[2]; //время которое прошло с первой попытки из трёх
       if (timeGone < 5 * 60 * 1000) {
         res.status(429).json({ error: "Слишком много попыток" });
@@ -702,7 +705,7 @@ app.post("/api/send_code", upload.none(), async function (req, res) {
       res.status(400).json({ error: "Вы не зарегестрированы" });
       return;
     }
-    
+
     const code = Math.round(Math.random() * 1000000); //число от 1 до 1000000
     emailService.sendVerificationCode(email, code);
     const timer = Date.now();
@@ -714,7 +717,7 @@ app.post("/api/send_code", upload.none(), async function (req, res) {
 });
 
 app.post("/api/change_password", upload.none(), async function (req, res) {
-    const errors = [];
+  const errors = [];
   try {
     const code = req.body.code;
     const email = req.body.email;
@@ -751,7 +754,7 @@ app.post("/api/change_password", upload.none(), async function (req, res) {
       res.status(400).json({ error: "Время действия кода истекло" });
       return;
     }
-     // Пароль
+    // Пароль
     !password && errors.push("Пароль обязателен");
     password?.length < 6 &&
       errors.push("Пароль должен быть не менее 6 символов");
@@ -790,6 +793,26 @@ app.post("/api/change_password", upload.none(), async function (req, res) {
   }
 });
 
+
+app.delete("/api/delete_acc", async function (req, res) {
+   try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Не авторизован" });
+    }
+    const userId = req.user.user_id;
+    const sessionId = req.cookies.sessionId; 
+    
+    await pool.query("DELETE FROM users WHERE user_id = $1", [userId]);
+    await client.del(sessionId);
+
+    res.status(200)
+       .clearCookie("sessionId")
+       .json({ message: "Аккаунт успешно удален" });
+       
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 app.use(express.static("static"));
 
 app.get("/*splat", (req, res) => {
@@ -797,5 +820,3 @@ app.get("/*splat", (req, res) => {
 });
 
 app.listen(3001);
-
-
