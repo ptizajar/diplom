@@ -13,6 +13,7 @@ import "../css/toast.css"
 export function RegistrationForm({ onCloseClick }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
+    const [showPasswords, setShowPasswords] = useState(false);
     const dispatch = useDispatch();
 
     const { errors, checkField, checkForm, clearErrors } = useValidation('registration');
@@ -98,7 +99,7 @@ export function RegistrationForm({ onCloseClick }) {
                         {errors.user_name[0]}
                     </div>
                 )}
-                 <input
+                <input
                     type="text"
                     className="form-field"
                     placeholder="Email"
@@ -127,7 +128,7 @@ export function RegistrationForm({ onCloseClick }) {
                     </div>
                 )}
                 <input
-                    type="password"
+                    type={showPasswords ? "text" : "password"}
                     className="form-field"
                     placeholder="Пароль"
                     name="password"
@@ -141,11 +142,24 @@ export function RegistrationForm({ onCloseClick }) {
                     </div>
                 )}
                 <input
-                    type="password"
+                    type={showPasswords ? "text" : "password"}
                     className="form-field"
                     placeholder="Повторите пароль"
                     name="password2"
                     required />
+
+                <div className="checkbox-container" style={{ margin: '15px 0', textAlign: 'left' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                        <input
+                            type="checkbox"
+                            checked={showPasswords}
+                            onChange={(e) => setShowPasswords(e.target.checked)}
+                            disabled={isSubmitting}
+                            style={{ marginRight: '8px', width: 'auto' }}
+                        />
+                        <span>Показать пароли</span>
+                    </label>
+                </div>
                 <p>или</p>
                 <button
                     className="form-button"

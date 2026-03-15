@@ -6,14 +6,16 @@ import "../css/toast.css"
 import { OrderForm } from "../components/OrderForm";
 import { showDialog } from "../components/Dialog";
 import { setUser } from "../store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { LoginForm } from "../components/LoginForm";
 
 export function ItemPage() {
   const { item_id } = useParams();
   const [item, setItem] = useState();
   const [error, setError] = useState("");
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.user.currentUser);
   async function load() {
     const res = await fetch(`${backend}/api/item/${item_id}`);
     if (!res.ok) {
@@ -24,15 +26,15 @@ export function ItemPage() {
     const data = await res.json();
     setItem(data);
   }
- function loadOrNavigate(action) {
-    if (action === 'navigate') {
-      dispatch(setUser(null));
-      navigate('/')
-    } else {
-      load();
-    }
 
+  function handleOrderClick() {
+    if (!currentUser) {
+      showDialog(LoginForm, undefined, load);
+      return;
+    }
+    showDialog(OrderForm, { item_id }, load);
   }
+
   useEffect(() => {
     load();
   }, [])
@@ -58,7 +60,7 @@ export function ItemPage() {
       Описание: {item?.description}
       <br />
       <div style={{ backgroundImage: `url('${backend}/api/item/image/${item_id}')`, width: "300px", height: "300px", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}></div>
-      <button style={{width: '100px', height: '20px'}} onClick={() => showDialog(OrderForm,{item_id}, loadOrNavigate)}>Заказать</button>
+      <button style={{ width: '100px', height: '20px' }} onClick={handleOrderClick}>Заказать</button>
       {error && (
         <div className="toast-notification">
           <div className="toast-content">
