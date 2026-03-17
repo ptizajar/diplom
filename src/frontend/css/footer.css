@@ -1,0 +1,10 @@
+.footer {
+    margin-top: 60px;
+    width: 100%;
+    min-height: 170px;
+    height: fit-content;
+    background-color: #2A3E3C;
+    flex-shrink: 0;
+    color: white;
+    text-align: center;
+}
