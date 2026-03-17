@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/toast.css"
-import {CategoryCard} from "../components/CategoryCard";
+import { CategoryCard } from "../components/CategoryCard";
 import { backend } from "../api-globals";
 import "../css/categoryCard.css"
 
@@ -26,7 +26,7 @@ export function Catalog() {
   return (
     <>
       Каталог
-      <div className="card-holder">
+      <div className="category-card-holder">
         {categories.map((category) => (
           <CategoryCard
             key={category.category_id}

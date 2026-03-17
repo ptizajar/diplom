@@ -8,7 +8,7 @@ import { showDialog } from "./Dialog";
 import { EnterForFavourites } from "./EnterForFavourites";
 import { SessionExpired } from "./SessionExpired";
 import { setUser } from "../store";
-export function ItemCard({ item_id, name, price, liked, removed }) {
+export function ItemCard({ item_id, name, price, liked, length, width, height, removed }) {
   const [error, setError] = useState("");
   const [currentLiked, setCurrentLiked] = useState(liked);
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -46,9 +46,10 @@ export function ItemCard({ item_id, name, price, liked, removed }) {
       <Link className="item-card" to={`/item/${item_id}`}>
         <div className="item-image-holder" >
           <img className="item-image" src={`${backend}/api/item/image/${item_id}`} style={style} alt="товар" />
-          <button className="heart-icon" onClick={like}><img src={currentLiked ? "/public/liked.svg" : "/public/favourites.svg"} alt="в избранное" /></button>
+          <button className="heart-icon" onClick={like}><img src={currentLiked ? "/public/liked.svg" : "/public/heart.svg"} alt="в избранное" /></button>
         </div>
         <p className="item-name">{name}</p>
+        <p className="item-size">{length} х {width} х {height} см</p>
         <p className="item-price">{price} ₽</p>
       </Link>
 

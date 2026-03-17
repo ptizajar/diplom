@@ -20,47 +20,47 @@ export function Header() {
     <>
       <nav className="header">
         <ul className="header-menu">
-          <Link to={"/"} className="menu-link--logo">
-            <li className="menu-item--logo">
+          <Link to={"/"} className="menu-link menu-link--logo">
+            <li className="menu-item menu-item--logo">
               <img src="/public/logo.svg" className="menu-icon--logo"></img>
-              МАКС-МЕБЕЛЬ
+             <span>МАКС-МЕБЕЛЬ</span>
             </li>
           </Link>
           <Link to={"/catalog"} className="menu-link">
             <li className="menu-item">
               <img src="/public/catalog.svg" className="menu-icon"></img>
-              Каталог
+              <span>Каталог</span>
             </li>
           </Link>
           {!currentUser && <Link onClick={(e) => { e.preventDefault(); showDialog(LoginForm, undefined, loadOrNavigate); }} className="menu-link">
             <li className="menu-item">
-              <img src="/public/login.svg" className="menu-icon"></img>
-              Войти
+              <img src="/public/account.svg" className="menu-icon"></img>
+             <span>Войти</span>
             </li>
           </Link>}
 
           {currentUser && !currentUser.is_admin && <Link to={"/account"} className="menu-link">
             <li className="menu-item">
-              <img src="/public/login.svg" className="menu-icon"></img>
-              Аккаунт
+              <img src="/public/account.svg" className="menu-icon"></img>
+              <span>Аккаунт</span>
             </li>
           </Link>}
-          <Link to={"/favourites"} className="menu-link">
+          {currentUser && <Link to={"/favourites"} className="menu-link">
             <li className="menu-item">
-              <img src="/public/favourites.svg" className="menu-icon"></img>
-              Избранное
+              <img src="/public/heart.svg" className="menu-icon"></img>
+              <span>Избранное</span>
             </li>
-          </Link>
+          </Link>}
           {currentUser?.is_admin && <Link to={"/admin"} className="menu-link">
             <li className="menu-item">
               <img src="/public/admin.svg" className="menu-icon"></img>
-              Управление
+              <span>Управление</span>
             </li>
           </Link>}
           {currentUser?.is_admin && <Link to={"/bids"} className="menu-link">
             <li className="menu-item">
-              <img src="/public/admin.svg" className="menu-icon"></img>
-              Заявки
+              <img src="/public/bids.svg" className="menu-icon"></img>
+              <span>Заявки</span>
             </li>
           </Link>}
         </ul>

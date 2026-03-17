@@ -1,18 +1,19 @@
 import React from "react";
 import { useState } from "react";
-import {ItemCard} from "../components/ItemCard";
+import { ItemCard } from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
 import "../css/home.css"
 import "../css/itemCard.css"
 import "../css/toast.css"
+import "../css/footer.css"
 
 export function Home() {
   const [items, setItems] = useState([]);
-  const [error,setError] = useState("");
+  const [error, setError] = useState("");
   async function loadItems() {
-    const res = await fetch(`${backend}/api/showed_items`, {credentials: "same-origin"});
-     if (!res.ok) {
+    const res = await fetch(`${backend}/api/showed_items`, { credentials: "same-origin" });
+    if (!res.ok) {
       const err = await res.json();
       setError(err.error);
       return;
@@ -23,8 +24,11 @@ export function Home() {
   useEffect(() => { loadItems() }, []);
   return (
     <>
-      <p>Главная</p>
-      <p style={{fontSize:"24px"}}> МАКС-МЕБЕЛЬ - лучшее решение для вашего офиса</p>
+      <div className="banner">
+        <p className="line">Максимум пространства</p>
+        <p className="line indent">Максимум идей</p>
+      </div>
+
       <h1 className="title">Хиты продаж</h1>
       <div className="card-holder">
         {items.map(
@@ -35,10 +39,32 @@ export function Home() {
                 item_id={item.item_id}
                 name={item.item_name}
                 price={item.price}
+                width={Math.round(item.width)}
+                height={Math.round(item.height)}
+                length={Math.round(item.length)}
                 liked={item.liked}
               ></ItemCard>
             )
         )}
+      </div>
+      <h1 className="title">О нас</h1>
+      <div className="info-holder">
+        <div className="info">
+          <strong>МАКС-МЕБЕЛЬ</strong> занимается оптовой продажей офисной мебели, являясь партнером ведущих компаний в сфере производства и поставки мебели для бизнеса. Мы предлагаем своим клиентам широкий ассортимент надежной и эргономичной продукции по выгодным ценам.
+          В нашем каталоге  вы сможете подобрать все необходимое для оснащения офиса: рабочие и компьютерные кресла, столы, шкафы, системы хранения, а также комплексные решения для переговорных комнат и ресепшен.
+        </div>
+
+        <div className="adress-info">
+          <div className="adress">
+            <img src="/public/map.svg"></img>
+            г. Ростов-на-Дону, ул. Извилистая 7
+          </div>
+          <div className="map-holder">
+            <iframe src="https://yandex.ru/map-widget/v1/?ll=39.633967%2C47.202894&mode=whatshere&whatshere%5Bpoint%5D=39.630200%2C47.200736&whatshere%5Bzoom%5D=17&z=15"
+              style={{ position: "relative", width: "100%", height: "100%" }}>
+            </iframe>
+          </div>
+        </div>
       </div>
       {error && (
         <div className="toast-notification">

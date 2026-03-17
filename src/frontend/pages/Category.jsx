@@ -50,6 +50,9 @@ export function Category() {
             name={item.item_name}
             price={item.price}
             liked={item.liked}
+            width = {Math.round(item.width)}
+            height = {Math.round(item.height)}
+            length = {Math.round(item.length)}
             removed={item.removed}
           ></ItemCard>
 
