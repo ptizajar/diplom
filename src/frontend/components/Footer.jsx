@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../css/footer.css";
+import f from "../css/.module/footer.module.css"
 export function Footer() {
   return (
-    <div className="footer">
+    <div className={f.footer}>
       Футер
       <Link to={"/politics"}>
         <button>Политика конфиденциальности</button>

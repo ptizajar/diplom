@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import "../css/form.css"
+import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { backend } from "../api-globals"
 import "../css/toast.css"
@@ -78,12 +78,12 @@ export function ChangePassword({ onCloseClick }) {
 
     return (
         <>
-            <form className="form" onSubmit={confirm} id="changePassword" method="POST" encType="multipart/form-data">
+            <form className={f.form} onSubmit={confirm} id="changePassword" method="POST" encType="multipart/form-data">
                 {sent ? <p>Мы выслали Вам код на email</p> : <p>Подтверждение по email</p>}
-                <input type="text" className="form-field" placeholder="email" name="email" required hidden={sent} />
+                <input type="text" className={f.field} placeholder="email" name="email" required hidden={sent} />
                 {sent && <>
-                    <input type="text" className="form-field" placeholder="Код" name="code" required />
-                    <input type={showPasswords ? "text" : "password"} className="form-field" placeholder="Пароль" name="password" required
+                    <input type="text" className={f.field} placeholder="Код" name="code" required />
+                    <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Пароль" name="password" required
                         onChange={(e) => handleChange('password', e.target.value)}
                         onBlur={(e) => handleBlur('password', e.target.value)}
                     />
@@ -92,7 +92,7 @@ export function ChangePassword({ onCloseClick }) {
                             {errors.password[0]}
                         </div>
                     )}
-                    <input type={showPasswords ? "text" : "password"} className="form-field" placeholder="Повторите пароль" name="password2" required />
+                    <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Повторите пароль" name="password2" required />
 
                     <div style={{
                         margin: '15px 0',
@@ -113,11 +113,11 @@ export function ChangePassword({ onCloseClick }) {
                     </div>
                 </>}
 
-                <div className='button-holder'>
+                <div className={f.buttonHolder}>
                     {sent ?
-                        <button className='form-button' type="submit" onClick={confirm}>Подтвердить</button>
-                        : <button className='form-button' type="submit" onClick={send}>Выслать код</button>}
-                    <button className='form-button' onClick={() => { onCloseClick('navigate') }}>Отмена</button>
+                        <button className={f.formButton} type="submit" onClick={confirm}>Подтвердить</button>
+                        : <button className={f.formButton} type="submit" onClick={send}>Выслать код</button>}
+                    <button className={f.formButton} onClick={() => { onCloseClick('navigate') }}>Отмена</button>
                 </div>
             </form>
             {error && (

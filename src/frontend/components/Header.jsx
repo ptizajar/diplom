@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../reset.css";
-import "../css/header.css";
+
+import h from "../css/.module/header.module.css";
 import "../css/toast.css";
 import { LoginForm } from "./LoginForm";
 import { showDialog } from "./Dialog";
@@ -18,48 +18,48 @@ export function Header() {
   }
   return (
     <>
-      <nav className="header">
-        <ul className="header-menu">
-          <Link to={"/"} className="menu-link menu-link--logo">
-            <li className="menu-item menu-item--logo">
-              <img src="/public/logo.svg" className="menu-icon--logo"></img>
+      <nav className={h.header}>
+        <ul className={h.menu}>
+          <Link to={"/"} className={`${h.link} ${h.linkLogo}`}>
+            <li className={`${h.item} ${h.itemLogo}`}>
+              <img src="/public/logo.svg" className={h.iconLogo}></img>
              <span>МАКС-МЕБЕЛЬ</span>
             </li>
           </Link>
-          <Link to={"/catalog"} className="menu-link">
-            <li className="menu-item">
-              <img src="/public/catalog.svg" className="menu-icon"></img>
+          <Link to={"/catalog"} className={h.link}>
+            <li className={h.item}>
+              <img src="/public/catalog.svg" className={h.icon}></img>
               <span>Каталог</span>
             </li>
           </Link>
-          {!currentUser && <Link onClick={(e) => { e.preventDefault(); showDialog(LoginForm, undefined, loadOrNavigate); }} className="menu-link">
-            <li className="menu-item">
-              <img src="/public/account.svg" className="menu-icon"></img>
+          {!currentUser && <Link onClick={(e) => { e.preventDefault(); showDialog(LoginForm, undefined, loadOrNavigate); }} className={h.link}>
+            <li className={h.item}>
+              <img src="/public/account.svg" className={h.icon}></img>
              <span>Войти</span>
             </li>
           </Link>}
 
-          {currentUser && !currentUser.is_admin && <Link to={"/account"} className="menu-link">
-            <li className="menu-item">
-              <img src="/public/account.svg" className="menu-icon"></img>
+          {currentUser && !currentUser.is_admin && <Link to={"/account"} className={h.link}>
+            <li className={h.item}>
+              <img src="/public/account.svg" className={h.icon}></img>
               <span>Аккаунт</span>
             </li>
           </Link>}
-          {currentUser && <Link to={"/favourites"} className="menu-link">
-            <li className="menu-item">
-              <img src="/public/heart.svg" className="menu-icon"></img>
+          {currentUser && <Link to={"/favourites"} className={h.link}>
+            <li className={h.item}>
+              <img src="/public/heart.svg" className={h.icon}></img>
               <span>Избранное</span>
             </li>
           </Link>}
-          {currentUser?.is_admin && <Link to={"/admin"} className="menu-link">
-            <li className="menu-item">
-              <img src="/public/admin.svg" className="menu-icon"></img>
+          {currentUser?.is_admin && <Link to={"/admin"} className={h.link}>
+            <li className={h.item}>
+              <img src="/public/admin.svg" className={h.icon}></img>
               <span>Управление</span>
             </li>
           </Link>}
-          {currentUser?.is_admin && <Link to={"/bids"} className="menu-link">
-            <li className="menu-item">
-              <img src="/public/bids.svg" className="menu-icon"></img>
+          {currentUser?.is_admin && <Link to={"/bids"} className={h.link}>
+            <li className={h.item}>
+              <img src="/public/bids.svg" className={h.icon}></img>
               <span>Заявки</span>
             </li>
           </Link>}

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
-.card-holder {
+.cardHolder {
     display: flex;
     flex-wrap: wrap;
     margin-top: 35px;
@@ -13,46 +13,7 @@
     box-sizing: border-box;
 }
 
-
-
-.item-image {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    object-fit: contain;
-
-}
-
-
-.heart-icon {
-    background-color: transparent;
-    border: 0px;
-    position: absolute;
-    right: 0px;
-}
-
-
-.item-name {
-    font-family: 'Exo 2', sans-serif;
-    font-size: 18px;
-    color: black;
-}
-
-.item-price {
-    font-family: 'Exo 2', sans-serif;
-    font-size: 24px;
-    color: #2A3E3C;
-}
-
-.item-size {
-    font-family: 'Exo 2', sans-serif;
-    font-size: 16px;
-    color: #2A3E3C;
-}
-
-.item-card {
+.card {
     width: 260px;
     height: 300px;
     border: 3px solid #B8B2A2;
@@ -66,14 +27,53 @@
 
 }
 
-.item-image-holder {
+.imageHolder {
     position: relative;
     width: 100%;
     height: 60%;
 }
 
+.image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    object-fit: contain;
 
-.admin-button-holder {
+}
+
+
+.icon {
+    background-color: transparent;
+    border: 0px;
+    position: absolute;
+    right: 0px;
+}
+
+
+.name {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 18px;
+    color: black;
+}
+
+.price {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 24px;
+    color: #2A3E3C;
+}
+
+.size {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    color: #2A3E3C;
+}
+
+
+
+
+.adminButtonHolder {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -81,7 +81,7 @@
 
 }
 
-.admin-item-button {
+.adminButton {
     background-color: #2A3E3C;
     border-radius: 8px;
     font-family: Arial, Helvetica, sans-serif;
@@ -92,8 +92,15 @@
     width: 48%;
 }
 
+@media (max-width: 1250px) {
+    .cardHolder {
+        column-gap: clamp(15px, 15px, 30px);
+    }
+
+}
+
 @media (max-width: 900px) {
-    .card-holder {
+    .cardHolder {
         justify-content: center;
         column-gap: clamp(50px, 100px, 100px);
     }

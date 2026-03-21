@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import "../css/form.css"
+import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { showDialog } from "./Dialog";
 import { RegistrationForm } from "./RegistrationForm";
@@ -45,12 +45,12 @@ export function LoginForm({ onCloseClick }) {
 
     return (
         <>
-            <form className="form" onSubmit={save} id="loginForm" method="POST" encType="multipart/form-data">
+            <form className={f.form} onSubmit={save} id="loginForm" method="POST" encType="multipart/form-data">
                 <p>Войти</p>
-                <input type="text" className="form-field" placeholder="Email" name="email" required />
-                <input type={showPasswords ? "text" : "password"} className="form-field" placeholder="Пароль" name="password" required />
+                <input type="text" className={f.field} placeholder="Email" name="email" required />
+                <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Пароль" name="password" required />
 
-                <div className="checkbox-container" style={{ margin: '15px 0', textAlign: 'left' }}>
+                <div style={{ margin: '15px 0', textAlign: 'left' }}>
                     <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                         <input
                             type="checkbox"
@@ -64,12 +64,12 @@ export function LoginForm({ onCloseClick }) {
                 </div>
 
                 <p>или</p>
-                <button className="form-button" onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
+                <button className={f.button} onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
 
-                <div className='button-holder'>
-                    <button className='form-button' type="submit">ОК</button>
-                    <button className='form-button' onClick={onCloseClick}>Отмена</button>
-                    <button className='form-button' onClick={() => switchForm(ChangePassword)}>Забыли пароль?</button>
+                <div className={f.buttonHolder}>
+                    <button className={f.button} type="submit">ОК</button>
+                    <button className={f.button} onClick={onCloseClick}>Отмена</button>
+                    <button className={f.button} onClick={() => switchForm(ChangePassword)}>Забыли пароль?</button>
                 </div>
             </form>
             {error && (

@@ -2,7 +2,6 @@ import { forAdminOnly } from "../components/ForAdminOnly";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
-import "../css/itemCard.css"
 import "../css/toast.css"
 import { OrderCard } from "../components/OrderCard";
 

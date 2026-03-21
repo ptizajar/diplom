@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react"
-import "../css/form.css"
+import React, { useState } from "react"
+import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
@@ -82,12 +82,12 @@ export function RegistrationForm({ onCloseClick }) {
     }
     return (
         <>
-            <form className="form" onSubmit={save} id="registrationForm" method="POST" encType="multipart/form-data">
+            <form className={f.form} onSubmit={save} id="registrationForm" method="POST" encType="multipart/form-data">
                 <p>Зарегестрироваться</p>
                 <p>{error}</p>
                 <input
                     type="text"
-                    className="form-field"
+                    className={f.field}
                     placeholder="Имя"
                     name="user_name"
                     onChange={(e) => handleChange('user_name', e.target.value)}
@@ -101,7 +101,7 @@ export function RegistrationForm({ onCloseClick }) {
                 )}
                 <input
                     type="text"
-                    className="form-field"
+                    className={f.field}
                     placeholder="Email"
                     name="email"
                     onChange={(e) => handleChange('email', e.target.value)}
@@ -115,7 +115,7 @@ export function RegistrationForm({ onCloseClick }) {
                 )}
                 <input
                     type="tel"
-                    className="form-field"
+                    className={f.field}
                     placeholder="Номер телефона"
                     name="phone"
                     onChange={(e) => handleChange('phone', e.target.value)}
@@ -129,7 +129,7 @@ export function RegistrationForm({ onCloseClick }) {
                 )}
                 <input
                     type={showPasswords ? "text" : "password"}
-                    className="form-field"
+                    className={f.field}
                     placeholder="Пароль"
                     name="password"
                     onChange={(e) => handleChange('password', e.target.value)}
@@ -143,12 +143,12 @@ export function RegistrationForm({ onCloseClick }) {
                 )}
                 <input
                     type={showPasswords ? "text" : "password"}
-                    className="form-field"
+                    className={f.field}
                     placeholder="Повторите пароль"
                     name="password2"
                     required />
 
-                <div className="checkbox-container" style={{ margin: '15px 0', textAlign: 'left' }}>
+                <div style={{ margin: '15px 0', textAlign: 'left' }}>
                     <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                         <input
                             type="checkbox"
@@ -162,7 +162,7 @@ export function RegistrationForm({ onCloseClick }) {
                 </div>
                 <p>или</p>
                 <button
-                    className="form-button"
+                    className={f.button}
                     onClick={() => {
                         clearErrors();
                         switchForm(LoginForm)
@@ -170,16 +170,16 @@ export function RegistrationForm({ onCloseClick }) {
                     Войти
                 </button>
 
-                <div className='button-holder'>
+                <div className={f.buttonHolder}>
                     <button
-                        className='form-button'
+                        className={f.button}
                         type="submit"
                         disabled={isSubmitting}>
                         {isSubmitting ? 'Регистрация...' : 'Зарегистрироваться'}
                         ОК
                     </button>
                     <button
-                        className='form-button'
+                        className={f.button}
                         onClick={() => {
                             clearErrors();
                             onCloseClick()

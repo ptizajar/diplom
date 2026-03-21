@@ -1,4 +1,4 @@
-import "../css/form.css"
+import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { backend } from "../api-globals";
 import { useState } from "react";
@@ -49,11 +49,11 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
     const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.category_id}')` } : {};
     return (
         <>
-            <form className="form" onSubmit={save} id="addCategoryForm" method="PUT" encType="multipart/form-data">
+            <form className={f.form} onSubmit={save} id="addCategoryForm" method="PUT" encType="multipart/form-data">
                 {param ? "Редактировать категорию" : "Добавить категорию"}
                 <input
                     type="text"
-                    className="form-field"
+                    className={f.field}
                     placeholder="Название"
                     name="category_name"
                     required
@@ -66,7 +66,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                         {errors.category_name[0]}
                     </div>
                 )}
-                <div className="form-image" style={style}>
+                <div className={f.image} style={style}>
                     <input
                         type="file"
                         placeholder="Загрузите изображение"
@@ -76,16 +76,16 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                 </div>
                 <input type="hidden" name="category_id" value={param?.category_id} />
 
-                <div className='button-holder'>
+                <div className={f.buttonHolder}>
                     <button
-                        className='form-button'
+                        className={f.button}
                         type="submit"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Сохранение...' : 'ОК'}
                     </button>
                     <button
-                        className='form-button'
+                        className={f.button}
                         onClick={() => {
                             clearErrors();
                             onCloseClick()

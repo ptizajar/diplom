@@ -3,10 +3,10 @@ import { useState } from "react";
 import { ItemCard } from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
-import "../css/home.css"
-import "../css/itemCard.css"
+import l from "../css/.module/layout.module.css";
+import h from "../css/.module/home.module.css";
+import i from  "../css/.module/itemCard.module.css"
 import "../css/toast.css"
-import "../css/footer.css"
 
 export function Home() {
   const [items, setItems] = useState([]);
@@ -24,13 +24,13 @@ export function Home() {
   useEffect(() => { loadItems() }, []);
   return (
     <>
-      <div className="banner">
-        <p className="line">Максимум пространства</p>
-        <p className="line indent">Максимум идей</p>
+      <div className={h.banner}>
+        <p className={h.line}>Максимум пространства</p>
+        <p className={`${h.line} ${h.indent}`}>Максимум идей</p>
       </div>
 
-      <h1 className="title">Хиты продаж</h1>
-      <div className="card-holder">
+      <h1 className={l.title}>Хиты продаж</h1>
+      <div className={i.cardHolder}>
         {items.map(
           (item) =>
             !item.show && (
@@ -47,19 +47,19 @@ export function Home() {
             )
         )}
       </div>
-      <h1 className="title">О нас</h1>
-      <div className="info-holder">
-        <div className="info">
+      <h1 className={l.title}>О нас</h1>
+      <div className={h.infoHolder}>
+        <div className={h.info}>
           <strong>МАКС-МЕБЕЛЬ</strong> занимается оптовой продажей офисной мебели, являясь партнером ведущих компаний в сфере производства и поставки мебели для бизнеса. Мы предлагаем своим клиентам широкий ассортимент надежной и эргономичной продукции по выгодным ценам.
           В нашем каталоге  вы сможете подобрать все необходимое для оснащения офиса: рабочие и компьютерные кресла, столы, шкафы, системы хранения, а также комплексные решения для переговорных комнат и ресепшен.
         </div>
 
-        <div className="adress-info">
-          <div className="adress">
+        <div className={h.adressInfo}>
+          <div className={h.adress}>
             <img src="/public/map.svg"></img>
             г. Ростов-на-Дону, ул. Извилистая 7
           </div>
-          <div className="map-holder">
+          <div className={h.mapHolder}>
             <iframe src="https://yandex.ru/map-widget/v1/?ll=39.633967%2C47.202894&mode=whatshere&whatshere%5Bpoint%5D=39.630200%2C47.200736&whatshere%5Bzoom%5D=17&z=15"
               style={{ position: "relative", width: "100%", height: "100%" }}>
             </iframe>

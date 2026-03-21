@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../css/toast.css"
 import { CategoryCard } from "../components/CategoryCard";
 import { backend } from "../api-globals";
-import "../css/categoryCard.css"
+import c from "../css/.module/categoryCard.module.css"
+import l from "../css/.module/layout.module.css";
 
 export function Catalog() {
   const [categories, setCategories] = useState([]);
@@ -25,8 +26,8 @@ export function Catalog() {
 
   return (
     <>
-      Каталог
-      <div className="category-card-holder">
+      <h1 className={l.title}>Каталог</h1>
+      <div className={c.cardHolder}>
         {categories.map((category) => (
           <CategoryCard
             key={category.category_id}

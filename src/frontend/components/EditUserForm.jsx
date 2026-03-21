@@ -1,4 +1,4 @@
-import "../css/form.css"
+import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { backend } from "../api-globals";
 import { useState } from "react";
@@ -58,11 +58,11 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
 
     return (
         <>
-            <form className="form" onSubmit={save} id="editUserForm" method="PUT" encType="multipart/form-data">
+            <form className={f.form} onSubmit={save} id="editUserForm" method="PUT" encType="multipart/form-data">
                 Редактировать
                 <input
                     type="text"
-                    className="form-field"
+                    className={f.field}
                     placeholder="Имя"
                     name="user_name"
                     required
@@ -77,7 +77,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                 )}
                 <input
                     type="text"
-                    className="form-field"
+                    className={f.field}
                     placeholder="Email"
                     name="email"
                     required
@@ -92,7 +92,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                 )}
                 <input
                     type="text"
-                    className="form-field"
+                    className={f.field}
                     placeholder="Телефон"
                     name="phone"
                     required
@@ -106,16 +106,16 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                     </div>
                 )}
 
-                <div className='button-holder'>
+                <div className={f.buttonHolder}>
                     <button
-                        className='form-button'
+                        className={f.button}
                         type="submit"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Сохранение...' : 'ОК'}
                     </button>
                     <button
-                        className='form-button'
+                        className={f.button}
                         onClick={() => {
                             clearErrors();
                             onCloseClick()

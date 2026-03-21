@@ -4,7 +4,7 @@ import {AdminCategoryCard} from "../components/AdminCategoryCard";
 import { showDialog } from "../components/Dialog";
 import { AddCategoryForm } from "../components/AddCategoryForm";
 import { backend } from "../api-globals";
-import "../css/categoryCard.css"
+import c from "../css/.module/categoryCard.module.css"
 import { forAdminOnly } from "../components/ForAdminOnly";
 import "../css/toast.css"
 import { setUser } from "../store";
@@ -52,7 +52,7 @@ async function logout(e) {
       <p>Администрирование</p>
       <button onClick={logout}>Logout</button>
       <button onClick={() => showDialog(AddCategoryForm, undefined, load)}>Добавить категорию</button>
-      <div className="card-holder">
+      <div className={c.cardHolder}>
         {categories.map((category) => (
           <AdminCategoryCard
             key={category.category_id}

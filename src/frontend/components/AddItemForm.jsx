@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-
+import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { backend } from "../api-globals";
 import { useValidation } from "../validation/useValidation";
@@ -74,11 +74,11 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
 
     return (
         <>
-        <form className="form" onSubmit={save} id="addItemForm" method="PUT" encType="multipart/form-data">
+        <form className={f.form} onSubmit={save} id="addItemForm" method="PUT" encType="multipart/form-data">
             {param.item_id ? "Редактировать товар" : "Добавить товар"}
             <input
                 type="text"
-                className="form-field"
+                className={f.field}
                 placeholder="Артикул"
                 name="article"
                 required
@@ -94,7 +94,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             )}
             <input
                 type="text"
-                className="form-field"
+                className={f.field}
                 placeholder="Название"
                 name="item_name"
                 required
@@ -111,7 +111,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             <input
                 type="number"
                 pattern="[0-9]*"
-                className="form-field"
+                className={f.field}
                 placeholder="Длина"
                 name="length"
                 required
@@ -120,7 +120,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             <input
                 type="number"
                 pattern="[0-9]*"
-                className="form-field"
+                className={f.field}
                 placeholder="Ширина"
                 name="width"
                 required
@@ -129,7 +129,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             <input
                 type="number"
                 pattern="[0-9]*"
-                className="form-field"
+                className={f.field}
                 placeholder="Высота"
                 name="height"
                 required
@@ -138,7 +138,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             <input
                 type="number"
                 pattern="[0-9]*"
-                className="form-field"
+                className={f.field}
                 placeholder="Заказ от"
                 name="quantity"
                 required
@@ -147,7 +147,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             <input
                 type="number"
                 pattern="[0-9]*"
-                className="form-field"
+                className={f.field}
                 placeholder="Цена"
                 name="price"
                 required
@@ -155,7 +155,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                 disabled={isSubmitting} />
             <textarea
                 type="text"
-                className="form-field"
+                className={f.field}
                 placeholder="Описание"
                 name="description"
                 defaultValue={item?.description}
@@ -167,10 +167,10 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                     {errors.item_description[0]}
                 </div>
             )}
-            <div className="form-image" style={style}>
+            <div className={f.image} style={style}>
                 <input type="file" placeholder="Загрузите изображение" name="item_image" accept="image/png, image/jpeg" required={!param} />
             </div>
-            <div className="form-checkbox">
+            <div className={f.checkbox}>
                 <label htmlFor="check1">Отображать на главной</label>
                 <input id="check1" type="checkbox" name="show" defaultChecked={item?.show}></input>
             </div>
@@ -178,16 +178,16 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
             <input type="hidden" name="item_id" value={param.item_id} />
             <input type="hidden" name="category_id" value={param.category_id} />
 
-            <div className='button-holder'>
+            <div className={f.buttonHolder}>
                 <button
-                    className='form-button'
+                    className={f.button}
                     type="submit"
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? 'Сохранение...' : 'ОК'}
                 </button>
                 <button
-                    className='form-button'
+                    className={f.button}
                     onClick={() => {
                         clearErrors();
                         onCloseClick()

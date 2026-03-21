@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { backend } from "../api-globals";
-import "../css/itemCard.css"
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import i from  "../css/.module/itemCard.module.css"
 export function OrderCard({ order_id, email, user_name, item_id, article, price, recall, phone, status, onStatusChange }) {
     const currentUser = useSelector((state) => state.user.currentUser);
     const [error, setError] = useState("");
@@ -37,21 +37,21 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
 
     return (
         <>
-            <div className="item-card" >
+            <div className={i.card} >
                 {currentUser?.is_admin && <><span>Email</span>
-                    <p className="item-name">{email}</p></>}
+                    <p className={i.name}>{email}</p></>}
                 <span>Имя</span>
-                <p className="item-name">{user_name}</p>
+                <p className={i.name}>{user_name}</p>
                 <span>Номер телефона</span>
-                <p className="item-name">{phone}</p>
+                <p className={i.name}>{phone}</p>
                 <span>Товар</span>
-                <Link to={`/item/${item_id}`} className="item-name">{article}</Link>
+                <Link to={`/item/${item_id}`} className={i.name}>{article}</Link>
                 <span>Цена</span>
-                <p className="item-name">{price}</p>
+                <p className={i.name}>{price}</p>
                 <span>Когда перезвонить</span>
-                <p className="item-name">{recall}</p>
+                <p className={i.name}>{recall}</p>
                 <span>Статус</span>
-                <p className="item-name">{status}</p>
+                <p className={i.name}>{status}</p>
                 {currentUser?.is_admin && status === 'Оформлен' &&
                     <>
                         <button onClick={confirmed}>Подтверждено</button>

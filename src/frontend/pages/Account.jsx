@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { backend } from "../api-globals";
-import "../css/itemCard.css"
 import "../css/toast.css"
+import i from  "../css/.module/itemCard.module.css"
 import { OrderCard } from "../components/OrderCard";
 import { showDialog } from "../components/Dialog";
 import { EditUserForm } from "../components/EditUserForm";
@@ -145,7 +145,7 @@ export function Account() {
       <div>{userData.phone} </div>
       <div>{userData.email}</div>
       <button onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
-      <div className="card-holder">
+      <div className={i.cardHolder}>
         {bids.map((bid) => (
           <OrderCard
             key={bid.order_id}

@@ -10,7 +10,7 @@ font-size: 20px;
 gap: 25px;
 width: 100%;
 }
-.form-image{
+.image{
     background-color:rgba(160,220,255,0.3);
     background-repeat: no-repeat;
     border: 2px solid rgba(160,220,255);
@@ -21,7 +21,7 @@ width: 100%;
     background-position: center;
 }
 
-.form-field{
+.field{
     background-color:rgba(160,220,255,0.3);
     border: 2px solid rgba(160,220,255);
     border-radius: 10px;
@@ -30,7 +30,7 @@ width: 100%;
     
 }
 
-.form-field::placeholder{
+.field::placeholder{
     color: #2A52BE;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -39,14 +39,14 @@ width: 100%;
    
 }
 
-.button-holder{
+.buttonHolder{
     display: flex;
     flex-direction: row;
      gap:35px;
      width:100%;
 }
 
-.form-button{
+.button{
     width: 133px;
     height: 35px;
     background-color: #2A52BE;
@@ -58,7 +58,7 @@ width: 100%;
    
 }
 
-.form-checkbox{
+.checkbox{
     font-size: 16px;
     font-weight: normal;
     display: flex;

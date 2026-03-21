@@ -16,7 +16,7 @@ import { Provider, useDispatch } from "react-redux";
 import { setUser } from "./store";
 import { Account } from "./pages/Account";
 import { PriceHistory } from "./pages/PriceHistory";
-import "./css/index.css"
+import "./reset.css"
 
 
 
