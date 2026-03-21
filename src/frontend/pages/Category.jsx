@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import {ItemCard} from "../components/ItemCard";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
-import "../css/itemCard.css"
+import i from  "../css/.module/itemCard.module.css"
 import "../css/toast.css"
 
 
@@ -41,7 +41,7 @@ export function Category() {
   return (
     <>
       <p>{categoryName}</p>
-      <div className="card-holder" >
+      <div className={i.cardHolder} >
         {items.map((item) => (
 
           <ItemCard

@@ -5,7 +5,7 @@ import {AdminItemCard} from "../components/AdminItemCard";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import { showDialog } from "../components/Dialog";
-import "../css/itemCard.css"
+import i from  "../css/.module/itemCard.module.css"
 import { forAdminOnly } from "../components/ForAdminOnly";
 import "../css/toast.css"
 
@@ -45,7 +45,7 @@ function AdminCategory() {
     <>
       <p>{categoryName}</p>
       <button onClick={() => showDialog(AddItemForm, { category_id }, loadItems)}>Добавить товар</button>
-      <div className="card-holder">
+      <div className={i.cardHolder}>
         {items.map((item) => (
 
           <AdminItemCard
@@ -53,6 +53,9 @@ function AdminCategory() {
             item_id={item.item_id}
             name={item.item_name}
             price={item.price}
+            width = {Math.round(item.width)}
+            height = {Math.round(item.height)}
+            length = {Math.round(item.length)}
             liked={item.liked}
             onClose={loadItems}
             removed={item.removed}

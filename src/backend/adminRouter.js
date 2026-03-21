@@ -299,7 +299,7 @@ adminRouter.get(
     try {
       const param = req.params.id;
       const result = await pool.query(
-        "select item_id, item_name, price, removed from item where category_id=$1 ORDER BY removed ASC",
+        "select item_id, item_name, price, removed,  length, width, height from item where category_id=$1 ORDER BY removed ASC",
         [param],
       );
       if (req.user?.user_id) {

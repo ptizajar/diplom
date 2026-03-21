@@ -1,0 +1,21 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Вся высота окна браузера */
+}
+
+.content {
+  flex: 1 0 auto;
+  /* Контент занимает всё свободное место */
+  width: 100%;
+}
+
+.title {
+  color: #2A3E3C;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  margin-left: 5%;
+  margin-top: 35px;
+}

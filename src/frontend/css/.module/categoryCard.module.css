@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.cardHolder {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 60px;
+    margin-left: 5%;
+    margin-right: 5%;
+    justify-content: center;
+    gap: 10%;
+    row-gap: 45px;
+}
+
+.card {
+    width: 380px;
+    height: 280px;
+    position: relative;
+    border-radius: 15px;
+    border: 3px solid #2A3E3C;
+}
+
+.categoryImage {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+
+.categoryName {
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    padding-left: 10%;
+    width: 60%;
+    height: 50px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 15px;
+    background-color: #2A3E3C;
+    color: white;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 18px;
+
+}
+
+
+
+.adminButtonHolder {
+    display: flex;
+    justify-content: space-between;
+    /* width:260px; */
+    width: 100%;
+    margin-top: 20px;
+
+}
+
+.adminButton {
+    background-color: #2A3E3C;
+    border-radius: 8px;
+    font-family: 'Exo 2', sans-serif;
+    color: white;
+    font-size: 18px;
+    height: 35px;
+    border: 0px;
+    width: 48%;
+}

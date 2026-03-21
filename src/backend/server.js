@@ -308,7 +308,7 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
         "INSERT INTO users ( email, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5)  RETURNING user_id, user_name, phone, is_admin, email",
         [email, hashPasswordMD5(password), user_name, phone.trim(), false],
       );
-      const cookie = crypto.randomBytes(64).toString("base64");
+      const cookie = crypto.randomBytes(64).toString("hex");
       const currentUser = result.rows[0];
 
       await redisConnection;
@@ -317,6 +317,9 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
       res
         .status(200)
         .cookie("sessionId", cookie, {
+          httpOnly: true, //защита от xss атак
+          sameSite: "strict", // Защита от CSRF
+          //secure: process.env.NODE_ENV === 'production',
           maxAge: sessionTTL * 1000, // Конвертируем в миллисекунды
         })
         .json(currentUser);
@@ -362,6 +365,9 @@ app.post("/api/login", upload.none(), async function (req, res) {
     res
       .status(200)
       .cookie("sessionId", cookie, {
+        httpOnly: true, //защита от xss атак
+        sameSite: "strict", // Защита от CSRF
+        //secure: process.env.NODE_ENV === 'production',
         maxAge: sessionTTL * 1000, // Конвертируем в миллисекунды
       })
       .json(currentUser);
@@ -372,12 +378,19 @@ app.post("/api/login", upload.none(), async function (req, res) {
   }
 });
 
-app.post("/api/logout", upload.none(), async function (req, res) {
+app.post("/api/logout", async function (req, res) {
   try {
     await redisConnection;
     const sessionId = req.cookies.sessionId;
     await client.del(sessionId);
-    res.status(200).clearCookie("sessionId").json({});
+    res
+      .status(200)
+      .clearCookie("sessionId", {
+        httpOnly: true, //защита от xss атак
+        sameSite: "strict", // Защита от CSRF
+        //secure: process.env.NODE_ENV === 'production',
+      })
+      .json({});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

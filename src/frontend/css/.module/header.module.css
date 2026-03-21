@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
+* {
+  padding: 0px;
+  margin: 0px;
+}
 
 .header {
   background-image: url('/public/wood_background.jpg');
@@ -8,33 +12,32 @@
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1;
 }
 
-.header-menu {
+.menu {
   height: 100%;
   width: 100%;
 
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
+  align-items: center;
   list-style-type: none;
   padding-left: 20px;
   padding-right: 20px;
 }
 
-.menu-link {
+.link {
   background: transparent;
   text-decoration: none;
 }
 
-.menu-link--logo {
+.linkLogo {
   width: 40%;
 }
 
-.menu-item {
-  padding-top: 12px;
-  padding-bottom: 12px;
+.item {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -49,30 +52,31 @@
 
 }
 
-.menu-item--logo {
+.itemLogo {
   flex-direction: row;
   justify-content: start;
   gap: 2%;
   font-size: 20px;
 }
 
-.menu-icon--logo {
+.icon {
+  height: 24px;
+  width: auto;
+}
+
+.iconLogo {
   height: 34px;
   width: 34px;
 
 }
 
-.menu-icon {
-  height: 24px;
-  width: auto;
-}
 
 @media screen and (max-width: 688px) {
-  .menu-item {
+  .item {
     font-size: 14px;
   }
 
-  .menu-item--logo {
+  .itemLogo {
     font-size: 16px;
   }
 
@@ -80,7 +84,7 @@
 }
 
 @media screen and (max-width: 411px) {
-  .menu-item--logo span {
+  .itemLogo span {
     display: none;
   }
 

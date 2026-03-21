@@ -2,12 +2,12 @@ import {Header} from "./Header";
 import {Footer} from "./Footer";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import "../css/layout.css";
+import l from "../css/.module/layout.module.css";
 function Layout() {
   return (
-    <div className="layout">
+    <div className={l.layout}>
       <Header />
-      <main className="main-content">
+      <main className={l.content}>
         <Outlet />
       </main>
       <Footer />

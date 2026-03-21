@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ItemCard } from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
-import "../css/itemCard.css"
+import i from  "../css/.module/itemCard.module.css"
 import "../css/toast.css"
 import { useSelector } from "react-redux";
 import { showDialog } from "../components/Dialog";
@@ -44,7 +44,7 @@ export function Favourites() {
           <p>Добавляйте товары в избранное, нажимая на ❤️</p>
         </div>}
 
-      {items.length > 0 && <div className="card-holder">
+      {items.length > 0 && <div className={i.cardHolder}>
         {items.map(item => (
           <ItemCard
             key={item.item_id}

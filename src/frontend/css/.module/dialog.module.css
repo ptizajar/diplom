@@ -8,13 +8,14 @@
     backdrop-filter: blur(10px);
     align-items: center;
     justify-content: center;
+      z-index: 2;
 }
 
-body.no-scroll {
+body.noScroll {
     overflow: hidden;
 }
 
-.dialog-content {
+.content {
     background-color: white;
 
     border: 3px solid #2A52BE;

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
-import "../css/home.css"
 import { useDispatch, useSelector } from "react-redux";
-import "../css/itemCard.css"
+import i from  "../css/.module/itemCard.module.css"
 import { showDialog } from "./Dialog";
 import { EnterForFavourites } from "./EnterForFavourites";
 import { SessionExpired } from "./SessionExpired";
@@ -43,14 +42,14 @@ export function ItemCard({ item_id, name, price, liked, length, width, height, r
   const style = removed ? { filter: "grayscale(100%)" } : {};
   return (
     <>
-      <Link className="item-card" to={`/item/${item_id}`}>
-        <div className="item-image-holder" >
-          <img className="item-image" src={`${backend}/api/item/image/${item_id}`} style={style} alt="товар" />
-          <button className="heart-icon" onClick={like}><img src={currentLiked ? "/public/liked.svg" : "/public/heart.svg"} alt="в избранное" /></button>
+      <Link className={i.card} to={`/item/${item_id}`}>
+        <div className={i.imageHolder} >
+          <img className={i.image} src={`${backend}/api/item/image/${item_id}`} style={style} alt="товар" />
+          <button className={i.icon} onClick={like}><img src={currentLiked ? "/public/liked.svg" : "/public/heart.svg"} alt="в избранное" /></button>
         </div>
-        <p className="item-name">{name}</p>
-        <p className="item-size">{length} х {width} х {height} см</p>
-        <p className="item-price">{price} ₽</p>
+        <p className={i.name}>{name}</p>
+        <p className={i.size}>{length} х {width} х {height} см</p>
+        <p className={i.price}>{price} ₽</p>
       </Link>
 
       {error && (

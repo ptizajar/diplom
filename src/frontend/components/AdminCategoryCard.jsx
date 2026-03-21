@@ -4,7 +4,7 @@ import {CategoryCard} from "./CategoryCard";
 import { AddCategoryForm } from "./AddCategoryForm";
 import { showDialog } from "./Dialog";
 import { backend } from "../api-globals";
-import "../css/categoryCard.css"
+import c from "../css/.module/categoryCard.module.css"
 import "../css/toast.css"
 
 export function AdminCategoryCard({ category_id, name, onClose }) {
@@ -28,9 +28,9 @@ export function AdminCategoryCard({ category_id, name, onClose }) {
     <>
       <div>
         <CategoryCard category_id={category_id} name={name} url="admin_category" />
-        <div className="admin-button-holder">
-          <button className="admin-item-button" onClick={() => showDialog(AddCategoryForm, { name, category_id }, onClose)}>Редактировать</button>
-          <button className="admin-item-button" onClick={deleteCategory}>Удалить</button>
+        <div className={c.adminButtonHolder}>
+          <button className={c.adminButton} onClick={() => showDialog(AddCategoryForm, { name, category_id }, onClose)}>Редактировать</button>
+          <button className={c.adminButton} onClick={deleteCategory}>Удалить</button>
         </div>
       </div>
       {error && (

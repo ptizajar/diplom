@@ -1,4 +1,4 @@
-import "../css/form.css"
+import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { backend } from "../api-globals";
 import { useState } from "react";
@@ -137,14 +137,14 @@ export function OrderForm({ onCloseClick, param }) {
 
     return (
         <>
-            <form className="form" onSubmit={save} id="orderForm" method="POST" encType="multipart/form-data">
+            <form className={f.form} onSubmit={save} id="orderForm" method="POST" encType="multipart/form-data">
                 <div style={{ marginBottom: '15px', width: '100%' }}>
                     <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
                         Как к Вам обращаться?
                     </label>
                     <input
                         type="text"
-                        className="form-field"
+                        className={f.field}
                         placeholder="Имя"
                         name="user_name"
                         defaultValue={currentUser?.user_name}
@@ -165,7 +165,7 @@ export function OrderForm({ onCloseClick, param }) {
                     </label>
                     <input
                         type="tel"
-                        className="form-field"
+                        className={f.field}
                         placeholder="Номер телефона"
                         name="phone"
                         defaultValue={currentUser?.phone}
@@ -187,7 +187,7 @@ export function OrderForm({ onCloseClick, param }) {
 
                     <input
                         type="datetime-local"
-                        className="form-field"
+                        className={f.field}
                         name="preferred_datetime"
                         min={getMinDateTime()}
                         max={getMaxDateTime()}
@@ -202,16 +202,16 @@ export function OrderForm({ onCloseClick, param }) {
                     </div>
                 </div>
 
-                <div className='button-holder'>
+                <div className={f.buttonHolder}>
                     <button
-                        className='form-button'
+                        className={f.button}
                         type="submit"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Сохранение...' : 'ОК'}
                     </button>
                     <button
-                        className='form-button'
+                        className={f.button}
                         onClick={() => {
                             clearErrors();
                             onCloseClick();
