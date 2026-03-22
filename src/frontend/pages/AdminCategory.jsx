@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AddItemForm } from "../components/AddItemForm";
-import {AdminItemCard} from "../components/AdminItemCard";
-import { Link } from "react-router-dom";
+import { AdminItemCard } from "../components/AdminItemCard";
+import l from "../css/.module/layout.module.css";
+import a from "../css/.module/admin.module.css";
 import { backend } from "../api-globals";
 import { showDialog } from "../components/Dialog";
-import i from  "../css/.module/itemCard.module.css"
+import i from "../css/.module/itemCard.module.css"
 import { forAdminOnly } from "../components/ForAdminOnly";
 import "../css/toast.css"
+import { setUser } from "../store";
+import { useDispatch } from "react-redux";
 
 function AdminCategory() {
   const { category_id } = useParams();
   const [error, setError] = useState("");
   const [categoryName, setCategoryName] = useState(null);
   const [items, setItems] = useState([]);
-
+  const dispatch = useDispatch();
 
   async function loadCategory() {
     const res = await fetch(`${backend}/api/category/${category_id}`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
@@ -32,10 +36,28 @@ function AdminCategory() {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
     setItems(data);
+  }
+  async function logout(e) {
+    e.preventDefault();
+    setError("");
+
+    const res = await fetch(`${backend}/api/logout`, {
+      method: 'POST'
+
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      setError(err.error);
+      setTimeout(() => setError(""), 5000);
+      return;
+    }
+    navigate('/');
+    dispatch(setUser(null))
   }
   useEffect(() => { loadCategory() }, []);
   useEffect(() => { loadItems() }, []);
@@ -43,8 +65,14 @@ function AdminCategory() {
 
   return (
     <>
-      <p>{categoryName}</p>
-      <button onClick={() => showDialog(AddItemForm, { category_id }, loadItems)}>Добавить товар</button>
+
+      <div className={a.adminContainer}>
+        <h1 className={l.title} style={{ marginTop: "0px" }}>{categoryName}</h1>
+        <button className={a.adminButton} onClick={() => showDialog(AddItemForm, { category_id }, loadItems)}>Добавить товар</button>
+        <button className={`${a.adminButton} ${a.logoutButton}`} onClick={logout}>Выйти</button>
+      </div>
+
+
       <div className={i.cardHolder}>
         {items.map((item) => (
 
@@ -53,9 +81,9 @@ function AdminCategory() {
             item_id={item.item_id}
             name={item.item_name}
             price={item.price}
-            width = {Math.round(item.width)}
-            height = {Math.round(item.height)}
-            length = {Math.round(item.length)}
+            width={Math.round(item.width)}
+            height={Math.round(item.height)}
+            length={Math.round(item.length)}
             liked={item.liked}
             onClose={loadItems}
             removed={item.removed}

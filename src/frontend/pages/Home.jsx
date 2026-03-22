@@ -16,6 +16,7 @@ export function Home() {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();

@@ -38,6 +38,7 @@ export function Account() {
     if (!res.ok && res.status !== 401) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
@@ -62,6 +63,7 @@ export function Account() {
     if (!res.ok && res.status !== 401) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
@@ -79,6 +81,7 @@ export function Account() {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     navigate('/');
@@ -100,6 +103,7 @@ export function Account() {
     if (!res.ok && res.status !== 401) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     navigate('/');

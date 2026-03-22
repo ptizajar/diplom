@@ -87,19 +87,6 @@ export const validationRules = {
   },
 
   registration: {
-    // login: {
-    //   min: 3,
-    //   max: 50,
-    //   pattern: /^[a-zA-Z0-9_.@]+$/,
-    //   patternError: "Только латиница, цифры, символы _ @ .",
-    //   custom: [
-    //     (value) => {
-    //       if (/\s/.test(value)) return "Нельзя использовать пробелы";
-    //       return null;
-    //     },
-    //   ],
-    // },
-
     user_name: {
       min: 2,
       max: 50,
@@ -191,59 +178,105 @@ export const validationRules = {
       ],
     },
   },
+
+
+ order: {
+    user_name: {
+      min: 2,
+      max: 50,
+      pattern: /^[а-яА-ЯёЁ\s\-]+$/,
+      patternError: "Только кириллица, пробелы и дефисы",
+      custom: [
+        (value) => {
+          if (value.startsWith("-") || value.startsWith(" "))
+            return "Нельзя начинать с пробела или дефиса";
+          return null;
+        },
+        (value) => {
+          if (value.endsWith("-") || value.endsWith(" "))
+            return "Нельзя заканчивать пробелом или дефисом";
+          return null;
+        },
+        (value) => {
+          if (/\s\s+/.test(value))
+            return "Нельзя использовать несколько пробелов подряд";
+          return null;
+        },
+      ],
+    },
+
+    phone: {
+      pattern: /^[+\s\-\(\)0-9]+$/,
+      patternError: "Номер может содержать только цифры, пробелы, скобки, дефисы и знак +",
+      custom: [
+        (value) => {
+          if (!/^(\+7|8)/.test(value)) {
+            return "Номер должен начинаться с +7 или 8";
+          }
+          return null;
+        },
+        (value) => {
+          const digitsOnly = value.replace(/\D/g, "");
+          if (digitsOnly.length !== 11) {
+            return "Номер должен содержать 11 цифр";
+          }
+          return null;
+        },
+      ],
+    },
+
+    preferred_datetime: {
+      required: true,
+      custom: [
+        (value) => {
+          if (!value) return "Пожалуйста, выберите дату и время";
+          return null;
+        },
+        (value) => {
+          const selected = new Date(value);
+          const now = new Date();
+          const minDate = new Date(now);
+          minDate.setMinutes(minDate.getMinutes() + 30);
+          
+          if (selected < minDate) {
+            const minTime = minDate.toLocaleTimeString('ru-RU', {
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            const minDateStr = minDate.toLocaleDateString('ru-RU');
+            return `Пожалуйста, выберите время не ранее ${minTime} ${minDateStr}`;
+          }
+          return null;
+        },
+        (value) => {
+          const selected = new Date(value);
+          const maxDate = new Date();
+          maxDate.setDate(maxDate.getDate() + 14);
+          maxDate.setHours(16, 59, 0, 0);
+          
+          if (selected > maxDate) {
+            const maxTime = maxDate.toLocaleTimeString('ru-RU', {
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            const maxDateStr = maxDate.toLocaleDateString('ru-RU');
+            return `Пожалуйста, выберите время не позднее ${maxTime} ${maxDateStr}`;
+          }
+          return null;
+        },
+        (value) => {
+          const selected = new Date(value);
+          const hours = selected.getHours();
+          
+          if (hours < 10 || hours >= 17) {
+            return "Пожалуйста, выберите время с 10:00 до 17:00";
+          }
+          return null;
+        },
+      ],
+    },
+  },
 };
 
-// // Функция валидации одного поля. Возвращает список ошибок
-// export const validateField = (type, fieldName, value) => {//type - category или item
-//   const rules = validationRules[type]?.[fieldName];//поиск правил по названию и типу поля
-//   if (!rules) return [];
 
-//   const trimmed = value ? value.toString().trim() : "";
-//   const errors = [];
 
-//   // Проверка длины
-//   if (trimmed) {
-//     if (rules.min && trimmed.length < rules.min) {//если правило существует и длина без пробелов...
-//       errors.push(`Минимум ${rules.min} символа`);
-//     }
-//     if (rules.max && trimmed.length > rules.max) {
-//       errors.push(`Максимум ${rules.max} символов`);
-//     }
-//   }
-
-//   // Проверка паттерна
-//   if (trimmed && rules.pattern && !rules.pattern.test(value)) {//если есть значение, правило (паттерн) существует и значение не подходит
-//     errors.push(rules.patternError);
-//   }
-
-//   // Кастомные правила
-//   if (trimmed && rules.custom) {//если есть значения и особое правило
-//     for (const rule of rules.custom) {
-//       const error = rule(value);//вызов каждой функции-правила из списка(она вернет сообщение или null)
-//       if (error) {
-//         errors.push(error);
-//         break;
-//       }
-//     }
-//   }
-
-//   return errors;
-// };
-
-// // Функция валидации всей формы. Возвращает объект: валидность формы и объект ошибок
-// export const validateForm = (type, formData) => {
-//   const errors = {};
-//   const rules = validationRules[type];
-
-//   Object.keys(rules).forEach((fieldName) => {//итерация правил по названиям полей
-//     const fieldErrors = validateField(type, fieldName, formData[fieldName]);
-//     if (fieldErrors.length > 0) {
-//       errors[fieldName] = fieldErrors;//записываем ошибку в формате ключ-значение
-//     }
-//   });
-
-//   return {
-//     isValid: Object.keys(errors).length === 0,//флаг валидности формы
-//     errors,
-//   };
-// };

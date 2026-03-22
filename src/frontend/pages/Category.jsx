@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {ItemCard} from "../components/ItemCard";
-import { Link } from "react-router-dom";
+import l from "../css/.module/layout.module.css";
 import { backend } from "../api-globals";
 import i from  "../css/.module/itemCard.module.css"
 import "../css/toast.css"
@@ -18,6 +18,7 @@ export function Category() {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
@@ -29,6 +30,7 @@ export function Category() {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
@@ -40,7 +42,7 @@ export function Category() {
 
   return (
     <>
-      <p>{categoryName}</p>
+      <h1 className={l.title}>{categoryName}</h1>
       <div className={i.cardHolder} >
         {items.map((item) => (
 

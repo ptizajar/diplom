@@ -40,6 +40,7 @@ export function ChangePassword({ onCloseClick }) {
         const missMatch = formData.get("password") !== formData.get("password2");
         if (missMatch) {
             setError("Пароли не совпадают");
+            setTimeout(() => setError(""), 5000);
             return;
         }
         setIsSubmitting(true)
@@ -50,6 +51,7 @@ export function ChangePassword({ onCloseClick }) {
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
+            setTimeout(() => setError(""), 5000);
             setIsSubmitting(false);
             return;
         }
@@ -70,6 +72,7 @@ export function ChangePassword({ onCloseClick }) {
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
+            setTimeout(() => setError(""), 5000);
             return;
         }
         await res.json();

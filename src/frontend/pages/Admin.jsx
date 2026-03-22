@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {useNavigate } from "react-router-dom";
-import {AdminCategoryCard} from "../components/AdminCategoryCard";
+import { useNavigate } from "react-router-dom";
+import { AdminCategoryCard } from "../components/AdminCategoryCard";
 import { showDialog } from "../components/Dialog";
 import { AddCategoryForm } from "../components/AddCategoryForm";
 import { backend } from "../api-globals";
-import c from "../css/.module/categoryCard.module.css"
+import c from "../css/.module/categoryCard.module.css";
+import l from "../css/.module/layout.module.css";
+import a from "../css/.module/admin.module.css";
 import { forAdminOnly } from "../components/ForAdminOnly";
 import "../css/toast.css"
 import { setUser } from "../store";
@@ -21,12 +23,13 @@ function Admin() {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
     setCategories(data);
   }
-async function logout(e) {
+  async function logout(e) {
     e.preventDefault();
     setError("");
 
@@ -49,9 +52,14 @@ async function logout(e) {
 
   return (
     <>
-      <p>Администрирование</p>
-      <button onClick={logout}>Logout</button>
-      <button onClick={() => showDialog(AddCategoryForm, undefined, load)}>Добавить категорию</button>
+      <div className={a.adminContainer}>
+        <h1 className={l.title} style={{ marginTop: "0px" }}>Администрирование</h1>
+        <button className={a.adminButton} onClick={() => showDialog(AddCategoryForm, undefined, load)}>
+          Добавить категорию
+        </button>
+        <button className={`${a.adminButton} ${a.logoutButton}`} onClick={logout}>Выйти</button>
+      </div>
+
       <div className={c.cardHolder}>
         {categories.map((category) => (
           <AdminCategoryCard

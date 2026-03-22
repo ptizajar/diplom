@@ -18,6 +18,7 @@ export function AdminCategoryCard({ category_id, name, onClose }) {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
 
