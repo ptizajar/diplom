@@ -1,55 +1,171 @@
 
-import { useState } from 'react';
+// import { useState } from 'react';
+// import { validationRules } from './validation.js';
+
+// export const useValidation = (type) => {
+//   const [errors, setErrors] = useState({});
+  
+//   // Вспомогательная функция валидации одного поля возвращает массив ошибок
+//   const validateField = (fieldName, value) => {
+//     const rules = validationRules[type]?.[fieldName];//поиск правила по названию поля и типа
+//     if (!rules) return [];
+    
+//     const trimmed = value ? value.toString().trim() : "";
+//     const errors = [];
+    
+//     // Проверка длины
+//     if (trimmed) {
+//       if (rules.min && trimmed.length < rules.min) {//если правило длины есть и...
+//         errors.push(`Минимум ${rules.min} символа`);
+//       }
+//       if (rules.max && trimmed.length > rules.max) {
+//         errors.push(`Максимум ${rules.max} символов`);
+//       }
+//     }
+    
+//     // Проверка паттерна
+//     if (trimmed && rules.pattern && !rules.pattern.test(value)) {//если есть значение, паттерн и значение не валидно
+//       errors.push(rules.patternError);
+//     }
+    
+//     // Кастомные правила
+//     if (trimmed && rules.custom) {
+//       for (const rule of rules.custom) {
+//         const error = rule(value);//возвращает строку или false
+//         if (error) {
+//           errors.push(error);
+//           break;
+//         }
+//       }
+//     }
+    
+//     return errors;
+//   };
+  
+
+//   // Вспомогательная функция валидации всей формы
+//   const validateForm = (formData) => {
+//     const errors = {};
+//     const rules = validationRules[type];
+    
+//     Object.keys(rules).forEach((fieldName) => {//итерация по ключам правил и полям
+//       const fieldErrors = validateField(fieldName, formData[fieldName]);//formData[fieldName] - value
+//       if (fieldErrors.length > 0) {
+//         errors[fieldName] = fieldErrors;
+//       }
+//     });
+    
+//     return {
+//       isValid: Object.keys(errors).length === 0,
+//       errors,
+//     };
+//   };
+  
+//   // Основной метод для проверки поля
+//   const checkField = (fieldName, value) => {
+//     const fieldErrors = validateField(fieldName, value);
+    
+//     if (fieldErrors.length > 0) {
+//       setErrors(prev => ({ ...prev, [fieldName]: fieldErrors }));
+//       return false;
+//     }
+    
+//     // Очищаем ошибку, если она была
+//     setErrors(prev => {
+//       if (!prev[fieldName]) return prev;
+//       const newErrors = { ...prev };
+//       delete newErrors[fieldName];
+//       return newErrors;
+//     });
+    
+//     return true;
+//   };
+  
+//   // Метод для проверки всей формы
+//   const checkForm = (formData) => {
+//     const result = validateForm(formData);
+//     setErrors(result.errors);
+//     return result.isValid;
+//   };
+  
+//   // Опционально: метод для ручной очистки ошибок
+//   const clearErrors = () => setErrors({});
+  
+//   return {
+//     errors,          // Текущие ошибки
+//     checkField,      // Проверить одно поле
+//     checkForm,       // Проверить всю форму
+//     clearErrors,     // Очистить все ошибки
+//     validateField,   // Экспортируем для использования вне компонента 
+//     validateForm,    // Экспортируем для использования вне компонента 
+//   };
+// };
+
+
+
+
+import { useState, useCallback } from 'react';
 import { validationRules } from './validation.js';
 
 export const useValidation = (type) => {
   const [errors, setErrors] = useState({});
   
-  // Вспомогательная функция валидации одного поля возвращает массив ошибок
-  const validateField = (fieldName, value) => {
-    const rules = validationRules[type]?.[fieldName];//поиск правила по названию поля и типа
+  // Вспомогательная функция валидации одного поля
+  const validateField = useCallback((fieldName, value) => {
+    const rules = validationRules[type]?.[fieldName];
     if (!rules) return [];
     
-    const trimmed = value ? value.toString().trim() : "";
-    const errors = [];
+    const rawValue = value ?? '';
+    const trimmed = typeof rawValue === 'string' ? rawValue.trim() : '';
+    const fieldErrors = [];
+    
+    // Проверка обязательности
+    if (rules.required && !trimmed && !value) {
+      fieldErrors.push('Поле обязательно для заполнения');
+      return fieldErrors;
+    }
+    
+    // Если поле пустое и не обязательное - пропускаем остальные проверки
+    if (!trimmed && !value && !rules.required) {
+      return [];
+    }
     
     // Проверка длины
-    if (trimmed) {
-      if (rules.min && trimmed.length < rules.min) {//если правило длины есть и...
-        errors.push(`Минимум ${rules.min} символа`);
+    if (typeof trimmed === 'string') {
+      if (rules.min && trimmed.length < rules.min) {
+        fieldErrors.push(`Минимум ${rules.min} символов`);
       }
       if (rules.max && trimmed.length > rules.max) {
-        errors.push(`Максимум ${rules.max} символов`);
+        fieldErrors.push(`Максимум ${rules.max} символов`);
       }
     }
     
     // Проверка паттерна
-    if (trimmed && rules.pattern && !rules.pattern.test(value)) {//если есть значение, паттерн и значение не валидно
-      errors.push(rules.patternError);
+    if (fieldErrors.length === 0 && rules.pattern && !rules.pattern.test(value)) {
+      fieldErrors.push(rules.patternError || 'Некорректный формат');
     }
     
     // Кастомные правила
-    if (trimmed && rules.custom) {
+    if (rules.custom) {
       for (const rule of rules.custom) {
-        const error = rule(value);//возвращает строку или false
+        const error = rule(value);
         if (error) {
-          errors.push(error);
+          fieldErrors.push(error);
           break;
         }
       }
     }
     
-    return errors;
-  };
+    return fieldErrors;
+  }, [type]);
   
-
-  // Вспомогательная функция валидации всей формы
-  const validateForm = (formData) => {
+  // Валидация всей формы
+  const validateForm = useCallback((formData) => {
     const errors = {};
     const rules = validationRules[type];
     
-    Object.keys(rules).forEach((fieldName) => {//итерация по ключам правил и полям
-      const fieldErrors = validateField(fieldName, formData[fieldName]);//formData[fieldName] - value
+    Object.keys(rules).forEach((fieldName) => {
+      const fieldErrors = validateField(fieldName, formData[fieldName]);
       if (fieldErrors.length > 0) {
         errors[fieldName] = fieldErrors;
       }
@@ -59,10 +175,10 @@ export const useValidation = (type) => {
       isValid: Object.keys(errors).length === 0,
       errors,
     };
-  };
+  }, [type, validateField]);
   
-  // Основной метод для проверки поля
-  const checkField = (fieldName, value) => {
+  // Проверка одного поля
+  const checkField = useCallback((fieldName, value) => {
     const fieldErrors = validateField(fieldName, value);
     
     if (fieldErrors.length > 0) {
@@ -70,7 +186,7 @@ export const useValidation = (type) => {
       return false;
     }
     
-    // Очищаем ошибку, если она была
+    // Очищаем ошибку
     setErrors(prev => {
       if (!prev[fieldName]) return prev;
       const newErrors = { ...prev };
@@ -79,24 +195,22 @@ export const useValidation = (type) => {
     });
     
     return true;
-  };
+  }, [validateField]);
   
-  // Метод для проверки всей формы
-  const checkForm = (formData) => {
+  // Проверка всей формы
+  const checkForm = useCallback((formData) => {
     const result = validateForm(formData);
     setErrors(result.errors);
     return result.isValid;
-  };
+  }, [validateForm]);
   
-  // Опционально: метод для ручной очистки ошибок
-  const clearErrors = () => setErrors({});
+  // Очистка ошибок
+  const clearErrors = useCallback(() => setErrors({}), []);
   
   return {
-    errors,          // Текущие ошибки
-    checkField,      // Проверить одно поле
-    checkForm,       // Проверить всю форму
-    clearErrors,     // Очистить все ошибки
-    validateField,   // Экспортируем для использования вне компонента 
-    validateForm,    // Экспортируем для использования вне компонента 
+    errors,
+    checkField,
+    checkForm,
+    clearErrors,
   };
 };

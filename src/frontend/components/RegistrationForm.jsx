@@ -37,6 +37,7 @@ export function RegistrationForm({ onCloseClick }) {
         const missMatch = formData.get("password") !== formData.get("password2");
         if (missMatch) {
             setError("Пароли не совпадают");
+            setTimeout(() => setError(""), 5000);
             return;
         }
 
@@ -64,6 +65,7 @@ export function RegistrationForm({ onCloseClick }) {
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
+            setTimeout(() => setError(""), 5000);
             setIsSubmitting(false)
             return;
         }

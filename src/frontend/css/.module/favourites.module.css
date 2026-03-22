@@ -1,0 +1,15 @@
+
+.noFavourites {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    width: 100%;
+    text-align: center;
+    color: #2A3E3C;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 32px;
+    line-height: 50px;
+    font-weight: 600;
+}

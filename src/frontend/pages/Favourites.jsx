@@ -3,7 +3,9 @@ import { useState } from "react";
 import { ItemCard } from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
-import i from  "../css/.module/itemCard.module.css"
+import i from  "../css/.module/itemCard.module.css";
+import f from  "../css/.module/favourites.module.css";
+import l from "../css/.module/layout.module.css";
 import "../css/toast.css"
 import { useSelector } from "react-redux";
 import { showDialog } from "../components/Dialog";
@@ -25,6 +27,7 @@ export function Favourites() {
     if (!res.ok && res.status !== 401) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
@@ -34,14 +37,12 @@ export function Favourites() {
 
   return (
     <>
-      <p>Избранное</p>
-
-      {!currentUser && <div>Залогиньтесь</div>}
+      <p className={l.title}>Избранное</p>
 
       {!items.length && currentUser &&
-        <div style={{ textAlign: 'center', padding: '50px' }}>
-          <h3>В избранном ничего нет</h3>
-          <p>Добавляйте товары в избранное, нажимая на ❤️</p>
+        <div className={f.noFavourites}>
+          <p>В избранном ничего нет</p>
+          <p>Добавляйте товары в избранное, нажимая на <img src="/public/heart.svg"></img></p>
         </div>}
 
       {items.length > 0 && <div className={i.cardHolder}>

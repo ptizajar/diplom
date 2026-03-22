@@ -1,0 +1,64 @@
+/* .adminButton {
+    height: fit-content;
+    width: fit-content; 
+    padding: 8px 5%;
+    color: white;
+    background-color: #2A3E3C;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    border-radius: 10px;
+    white-space: nowrap;
+
+}
+
+.adminContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: fit-content;
+    margin-top: 35px;
+}
+
+.leftGroup {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+} */
+
+.adminContainer {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 35px;
+    gap: 20px;
+}
+
+.adminButton {
+    height: fit-content;
+    padding: 8px 5%;
+    color: white;
+    background-color: #2A3E3C;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    border-radius: 10px;
+    white-space: nowrap;
+    width: fit-content;
+    cursor: pointer;
+    border: none;
+    margin-left: 1vw;
+}
+
+.logoutButton {
+    min-width: 90px;
+    max-width: 130px;
+     display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: end;
+    padding: 8px 5%; /* паддинги остаются процентными для адаптивности */
+    box-sizing: border-box; /* чтобы паддинги входили в ширину */
+}

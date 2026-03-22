@@ -35,8 +35,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
         setIsSubmitting(true);
         const res = await fetch(`${backend}/api/edit_user`, {
             method: 'PUT',
-            body: formData,
-            credentials: 'include' // Важно для cookies
+            body: formData
         });
         if (res.status === 401) {
             showDialog(SessionExpired, undefined, onCloseClick);
@@ -46,6 +45,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
         if (!res.ok && res.status !== 401) {
             const err = await res.json();
             setError(err.error);
+            setTimeout(() => setError(""), 5000);
             setIsSubmitting(false)
             return;
         }

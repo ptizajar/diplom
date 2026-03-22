@@ -8,7 +8,6 @@ import { showDialog } from "./Dialog";
 import { useSelector } from "react-redux";
 
 export function Header() {
-  const [error, setError] = useState("");
   const currentUser = useSelector((state) => state.user.currentUser);
   function loadOrNavigate(action) {
     if (action === 'navigate') {
@@ -65,16 +64,6 @@ export function Header() {
           </Link>}
         </ul>
       </nav>
-      {error && (
-        <div className="toast-notification">
-          <div className="toast-content">
-            <span className="toast-message">{error}</span>
-            <button onClick={() => setError("")} className="toast-close">×</button>
-          </div>
-          {/* Прогресс-бар для автоскрытия */}
-          <div className="toast-progress"></div>
-        </div>
-      )}
     </>
 
   );

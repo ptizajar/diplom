@@ -143,3 +143,8 @@ html,
 body {
     height: 100%;
 }
+
+button {
+  all: unset; /* убирает все дефолтные стили */
+  cursor: pointer;
+}

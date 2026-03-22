@@ -16,22 +16,12 @@ function Bids() {
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const data = await res.json();
     setBids(data);
   }
-  
-  // async function load() {
-  //   const res = await fetch(`${backend}/api/bids`);
-  //   if (!res.ok) {
-  //     const err = await res.json();
-  //     setError(err.error);
-  //     return;
-  //   }
-  //   const data = await res.json();
-  //   setBids(data);
-  // }
 
   useEffect(() => {
      filterOrders('Оформлен');

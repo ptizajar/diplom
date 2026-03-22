@@ -20,6 +20,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
+            setTimeout(() => setError(""), 5000);
             setIsSubmitting(false)
             return;
         }
