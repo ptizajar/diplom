@@ -1,69 +1,191 @@
-.form{
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-color: #2A52BE;
-font-family: Arial, Helvetica, sans-serif;
-font-weight: bold;
-font-size: 20px;
-gap: 25px;
-width: 100%;
-}
-.image{
-    background-color:rgba(160,220,255,0.3);
-    background-repeat: no-repeat;
-    border: 2px solid rgba(160,220,255);
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 3px solid #2A3E3C;
     border-radius: 15px;
-    width:100%;
-    min-height: 214px;
+    align-items: center;
+    /* gap: 25px; */
+    width: 100%;
+    height: auto;
+    gap: 10px;
+    padding: 30px 10%;
+}
+
+.title {
+    color: #2A3E3C;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.inputHolder {
+    height: fit-content;
+    width: 100%;
+
+
+}
+
+.inputHolder:first-of-type {
+    margin-top: 10px;
+}
+
+.label {
+    color: #2A3E3C;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+
+
+}
+
+.image {
+    background-color: #E3E0DA;
+    background-repeat: no-repeat;
+    border: 2px solid #B8B2A2;
+    border-radius: 15px;
+    width: 100%;
+    height: 200px;
     background-size: contain;
     background-position: center;
+    margin-top: 10px;
+
 }
 
-.field{
-    background-color:rgba(160,220,255,0.3);
-    border: 2px solid rgba(160,220,255);
+.fileInput {
+    width: 100%;
+    height: 100%;
+    /* font-family: 'Exo 2', sans-serif;
+    color: #2A3E3C; */
+    color: transparent;
+    font-size: 12px;
+}
+
+.fileInput::file-selector-button {
+    background-color: #2A3E3C;
+    color: white;
+    font-family: 'Exo 2', sans-serif;
+    border: none;
     border-radius: 10px;
-    width:100%;
-    min-height: 30px;
-    
+    padding: 8px 8px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
-.field::placeholder{
-    color: #2A52BE;
-    font-family: Arial, Helvetica, sans-serif;
+.field {
+    background-color: #E3E0DA;
+    border: 2px solid #B8B2A2;
+    border-radius: 10px;
+    width: 100%;
+    height: 30px;
+    margin-top: 10px;
+    padding: 5px;
+    font-family: 'Exo 2', sans-serif;
+}
+
+.field::placeholder {
+    color: #2A3E3C;
+    font-family: 'Exo 2', sans-serif;
     font-size: 14px;
     padding-left: 5%;
     padding-top: 7px;
-   
+
 }
 
-.buttonHolder{
+.buttonHolder {
     display: flex;
     flex-direction: row;
-     gap:35px;
-     width:100%;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
 }
 
-.button{
-    width: 133px;
+.button {
+    width: 40%;
     height: 35px;
-    background-color: #2A52BE;
+    background-color: #2A3E3C;
     border-radius: 10px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Exo 2', sans-serif;
     color: white;
     font-size: 16px;
-    border: 0px;
-   
+    text-align: center;
+    white-space: nowrap;
+    padding-left: 8px;
+    padding-right: 8px;
+
 }
 
-.checkbox{
-    font-size: 16px;
-    font-weight: normal;
-    display: flex;
-    justify-content: space-around;
+.checkboxHolder {
     width: 100%;
-    /* margin-top: -10px;
-    margin-bottom: -10px; */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+
+}
+
+
+
+
+/* Убираем голубой фон у выбранных элементов в datalist/autocomplete */
+input:-webkit-autofill,
+input:-internal-autofill-selected,
+input:-internal-autofill-previewed {
+    background-color: transparent !important;
+    background-image: none !important;
+    color: inherit !important;
+    -webkit-box-shadow: 0 0 0 1000px #E3E0DA inset !important;
+}
+
+/* Для Firefox */
+input:-moz-autofill {
+    background-color: transparent !important;
+    filter: none !important;
+}
+
+input[type="datetime-local"]::-webkit-datetime-edit {
+    color: transparent;
+}
+
+
+
+.twoColumns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    /* Расстояние между левой и правой колонкой */
+    width: 100%;
+    align-items: start;
+    /* Важно: колонки не растягиваются друг под друга */
+    margin-top: 25px;
+}
+
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+}
+
+
+
+.twoColumns textarea {
+    height: 240px;
+    resize: vertical;
+}
+
+.twoColumns .image {
+    height: 200px;
+    margin-top: 10px;
+}
+
+.checkboxInGrid {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    margin-left: 10px;
 }

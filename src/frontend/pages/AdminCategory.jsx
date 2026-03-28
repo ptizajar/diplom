@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AddItemForm } from "../components/AddItemForm";
 import { AdminItemCard } from "../components/AdminItemCard";
 import l from "../css/.module/layout.module.css";
@@ -18,6 +18,7 @@ function AdminCategory() {
   const [categoryName, setCategoryName] = useState(null);
   const [items, setItems] = useState([]);
   const dispatch = useDispatch();
+  const navigate=useNavigate();
 
   async function loadCategory() {
     const res = await fetch(`${backend}/api/category/${category_id}`);

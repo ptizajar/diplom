@@ -81,11 +81,11 @@ adminRouter.delete(
   async function (req, res) {
     try {
       const param = req.params.id;
-      const isEmpty = await pool.query(
+      const count = await pool.query(
         "select count(*) from category where category_id=$1",
         [param],
       );
-      if (isEmpty) {
+      if (count.rows[0].count > 0) {
         return res.status(409).json({
           error: "Категория не пуста",
         });
@@ -351,7 +351,7 @@ adminRouter.put("/changeStatus", upload.none(), async function (req, res) {
 adminRouter.get("/filterOrders", async function (req, res) {
   try {
     const status = req.query.status;
-    if ((status === "Все")) {
+    if (status === "Все") {
       const result = await pool.query(
         `SELECT o.order_id, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 

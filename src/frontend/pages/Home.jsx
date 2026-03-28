@@ -5,7 +5,7 @@ import { backend } from "../api-globals";
 import { useEffect } from "react";
 import l from "../css/.module/layout.module.css";
 import h from "../css/.module/home.module.css";
-import i from  "../css/.module/itemCard.module.css"
+import i from "../css/.module/itemCard.module.css"
 import "../css/toast.css"
 
 export function Home() {
@@ -35,16 +35,18 @@ export function Home() {
         {items.map(
           (item) =>
             !item.show && (
-              <ItemCard
-                key={item.item_id}
-                item_id={item.item_id}
-                name={item.item_name}
-                price={item.price}
-                width={Math.round(item.width)}
-                height={Math.round(item.height)}
-                length={Math.round(item.length)}
-                liked={item.liked}
-              ></ItemCard>
+              <div className={i.cardWrapper}>
+                <ItemCard
+                  key={item.item_id}
+                  item_id={item.item_id}
+                  name={item.item_name}
+                  price={item.price}
+                  width={Math.round(item.width)}
+                  height={Math.round(item.height)}
+                  length={Math.round(item.length)}
+                  liked={item.liked}
+                ></ItemCard>
+              </div>
             )
         )}
       </div>

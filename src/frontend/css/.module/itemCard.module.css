@@ -1,4 +1,4 @@
-.cardHolder {
+/* .cardHolder {
     display: flex;
     flex-wrap: wrap;
     margin-top: 35px;
@@ -8,7 +8,24 @@
     justify-content: space-between;
     row-gap: 35px;
     box-sizing: border-box;
+} */
+
+.cardHolder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 5%;
+    box-sizing: border-box;
+    row-gap: 30px;
 }
+
+/* .cardHolder::after {
+    content: "";
+    width: 260px;
+    display: inline-block;
+    height: 100px;
+} */
 
 .card {
     width: 260px;
@@ -16,12 +33,28 @@
     border: 3px solid #B8B2A2;
     border-radius: 15px;
     padding: 30px;
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
+}
+
+.cardWrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardWrapper:first-child:last-child {
+    align-items: start;
+}
+
+.cardWrapper:not(:last-child) {
+    margin-right: 20px;
 }
 
 .imageHolder {
@@ -72,10 +105,11 @@
 
 .adminButtonHolder {
     display: grid;
-     grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
     width: 100%;
     margin-top: 20px;
+    max-width: 260px;
 
 }
 
@@ -90,7 +124,7 @@
     text-align: center;
 }
 
-@media (max-width: 1250px) {
+/* @media (max-width: 1250px) {
     .cardHolder {
         column-gap: clamp(15px, 15px, 30px);
     }
@@ -101,5 +135,13 @@
     .cardHolder {
         justify-content: center;
         column-gap: clamp(50px, 100px, 100px);
+    }
+} */
+
+@media (max-width: 600px) {
+    .cardHolder {
+        /* На мобилках можно сделать карточки на всю ширину или оставить по центру */
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        justify-content: center;
     }
 }

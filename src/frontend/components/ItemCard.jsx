@@ -4,9 +4,9 @@ import { backend } from "../api-globals";
 import { useDispatch, useSelector } from "react-redux";
 import i from  "../css/.module/itemCard.module.css"
 import { showDialog } from "./Dialog";
-import { EnterForFavourites } from "./EnterForFavourites";
 import { SessionExpired } from "./SessionExpired";
 import { setUser } from "../store";
+import { LoginForm } from "./LoginForm";
 export function ItemCard({ item_id, name, price, liked, length, width, height, removed }) {
   const [error, setError] = useState("");
   const [currentLiked, setCurrentLiked] = useState(liked);
@@ -16,7 +16,7 @@ export function ItemCard({ item_id, name, price, liked, length, width, height, r
   async function like(e) {
     e.preventDefault();
     if (!currentUser) {
-      showDialog(EnterForFavourites)
+      showDialog(LoginForm)
       return;
     }
     const formData = new FormData();

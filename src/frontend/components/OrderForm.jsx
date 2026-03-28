@@ -143,8 +143,9 @@ export function OrderForm({ onCloseClick, param }) {
     return (
         <>
             <form className={f.form} onSubmit={save} id="orderForm" method="POST" encType="multipart/form-data">
-                <div style={{ marginBottom: '15px', width: '100%' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                <p className={f.title}>Оформить заявку</p>
+                <div className={f.inputHolder}>
+                    <label className={f.label}>
                         Как к Вам обращаться?
                     </label>
                     <input
@@ -157,15 +158,16 @@ export function OrderForm({ onCloseClick, param }) {
                         onChange={(e) => checkField('user_name', e.target.value)}
                         onBlur={(e) => checkField('user_name', e.target.value)}
                         disabled={isSubmitting} />
-                    {errors.user_name?.length > 0 && (
-                        <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
-                            {errors.user_name[0]}
-                        </div>
-                    )}
                 </div>
+                {errors.user_name?.length > 0 && (
+                    <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+                        {errors.user_name[0]}
+                    </div>
+                )}
 
-                <div style={{ marginBottom: '15px', width: '100%' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+
+                <div className={f.inputHolder}>
+                    <label className={f.label}>
                         Номер телефона
                     </label>
                     <input
@@ -178,15 +180,16 @@ export function OrderForm({ onCloseClick, param }) {
                         onChange={(e) => checkField('phone', e.target.value)}
                         onBlur={(e) => checkField('phone', e.target.value)}
                         disabled={isSubmitting} />
-                    {errors.phone?.length > 0 && (
-                        <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
-                            {errors.phone[0]}
-                        </div>
-                    )}
                 </div>
+                {errors.phone?.length > 0 && (
+                    <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+                        {errors.phone[0]}
+                    </div>
+                )}
 
-                <div style={{ marginBottom: '15px', width: '100%' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+
+                <div className={f.inputHolder}>
+                    <label className={f.label}>
                         Удобные дата и время (МСК):
                     </label>
 
@@ -207,9 +210,9 @@ export function OrderForm({ onCloseClick, param }) {
                             {errors.preferred_datetime[0]}
                         </div>
                     )}
-                    <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
-                        • Рабочие часы: с 10:00 до 17:00<br />
-                        • Можно выбрать время в течение ближайших двух недель
+                    <div className={f.label} style={{ fontSize: "12px", marginTop: "10px", textAlign:"center" }}>
+                        Рабочие часы: с 10:00 до 17:00<br />
+                        Выберите время в ближайшие 14 дней
                     </div>
                 </div>
 
@@ -219,7 +222,7 @@ export function OrderForm({ onCloseClick, param }) {
                         type="submit"
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Сохранение...' : 'ОК'}
+                        ОК
                     </button>
                     <button
                         className={f.button}

@@ -59,47 +59,56 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
     return (
         <>
             <form className={f.form} onSubmit={save} id="editUserForm" method="PUT" encType="multipart/form-data">
-                Редактировать
-                <input
-                    type="text"
-                    className={f.field}
-                    placeholder="Имя"
-                    name="user_name"
-                    required
-                    defaultValue={currentUser?.user_name}
-                    onChange={(e) => checkField('name', e.target.value)}
-                    onBlur={(e) => checkField('name', e.target.value)}//потеря фокуса
-                    disabled={isSubmitting} />
+                <p className={f.title}>Редактировать</p>
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Имя</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        placeholder="Имя"
+                        name="user_name"
+                        required
+                        defaultValue={currentUser?.user_name}
+                        onChange={(e) => checkField('name', e.target.value)}
+                        onBlur={(e) => checkField('name', e.target.value)}//потеря фокуса
+                        disabled={isSubmitting} />
+                </div>
                 {errors.user_name?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.user_name[0]}
                     </div>
                 )}
-                <input
-                    type="text"
-                    className={f.field}
-                    placeholder="Email"
-                    name="email"
-                    required
-                    defaultValue={currentUser?.email}
-                    onChange={(e) => checkField('email', e.target.value)}
-                    onBlur={(e) => checkField('email', e.target.value)}//потеря фокуса
-                    disabled={isSubmitting} />
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Email</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        placeholder="Email"
+                        name="email"
+                        required
+                        defaultValue={currentUser?.email}
+                        onChange={(e) => checkField('email', e.target.value)}
+                        onBlur={(e) => checkField('email', e.target.value)}//потеря фокуса
+                        disabled={isSubmitting} />
+                </div>
                 {errors.email?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.email[0]}
                     </div>
                 )}
-                <input
-                    type="text"
-                    className={f.field}
-                    placeholder="Телефон"
-                    name="phone"
-                    required
-                    defaultValue={currentUser?.phone}
-                    onChange={(e) => checkField('phone', e.target.value)}
-                    onBlur={(e) => checkField('phone', e.target.value)}//потеря фокуса
-                    disabled={isSubmitting} />
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Телефон</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        placeholder="Телефон"
+                        name="phone"
+                        required
+                        defaultValue={currentUser?.phone}
+                        onChange={(e) => checkField('phone', e.target.value)}
+                        onBlur={(e) => checkField('phone', e.target.value)}//потеря фокуса
+                        disabled={isSubmitting} />
+                </div>
                 {errors.phone?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.phone[0]}
@@ -112,7 +121,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                         type="submit"
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Сохранение...' : 'ОК'}
+                       ОК
                     </button>
                     <button
                         className={f.button}

@@ -156,7 +156,7 @@ export function Account() {
             order_id={bid.order_id}
             user_name={bid.user_name}
             item_id={bid.item_id}
-            article={bid.item_name}
+            article={bid.article}
             price={bid.price}
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}
