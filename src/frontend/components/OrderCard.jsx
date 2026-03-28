@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { backend } from "../api-globals";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import i from  "../css/.module/itemCard.module.css"
+import f from "../css/.module/form.module.css"
 export function OrderCard({ order_id, email, user_name, item_id, article, price, recall, phone, status, onStatusChange }) {
     const currentUser = useSelector((state) => state.user.currentUser);
     const [error, setError] = useState("");
@@ -37,7 +37,64 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
 
     return (
         <>
-            <div className={i.card} >
+            <div className={f.form} style={{ width: "280px", padding: "30px 25px" }}>
+                <p className={f.title} style={{ fontSize: "20px" }}>Заказ №{order_id}</p>
+
+                {currentUser?.is_admin && (
+                    <div className={f.inputHolder}>
+                        <span className={f.label}>Email</span>
+                        <p className={f.field}>{email} </p>
+                    </div>
+                )}
+
+                <div className={f.inputHolder}>
+                    <span className={f.label}>Имя</span>
+                    <p className={f.field} > {user_name} </p>
+                </div>
+
+                <div className={f.inputHolder}>
+                    <span className={f.label}>Номер телефона</span>
+                    <p className={f.field} >{phone} </p>
+                </div>
+
+                <div className={f.inputHolder}>
+                    <span className={f.label}>Товар</span>
+                    <Link to={`/item/${item_id}`} className={f.field} style={{ display: "block", color: "black" }}>
+                        {article}
+                    </Link>
+                </div>
+
+                <div className={f.inputHolder}>
+                    <span className={f.label}>Цена</span>
+                    <p className={f.field} >{price}</p>
+                </div>
+
+                <div className={f.inputHolder}>
+                    <span className={f.label}>Когда перезвонить</span>
+                    <p className={f.field} > {recall}  </p>
+                </div>
+
+                <div className={f.inputHolder}>
+                    <span className={f.label}>Статус</span>
+                    <p className={f.field} >  {status}  </p>
+                </div>
+
+                {/* Блок кнопок управления для админа */}
+                {currentUser?.is_admin && (
+                    <div className={f.buttonHolder} >
+                        {status === 'Оформлен' && (
+                            <>
+                                <button className={f.button} style={{width: "fit-content"}} onClick={confirmed}>Подтвердить</button>
+                                <button className={f.button} onClick={canceled}>Отменить</button>
+                            </>
+                        )}
+                        {status === 'Подтвержден' && (
+                            <button className={f.button} onClick={canceled}>Отменить </button>
+                        )}
+                    </div>
+                )}
+            </div>
+            {/* <div className={i.card} >
                 {currentUser?.is_admin && <><span>Email</span>
                     <p className={i.name}>{email}</p></>}
                 <span>Имя</span>
@@ -58,7 +115,7 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
                         <button onClick={canceled}>Отменено</button>
                     </>}
                 {currentUser?.is_admin && status === 'Подтвержден' && <button onClick={canceled}>Отменено</button>}
-            </div>
+            </div> */}
 
             {error && (
                 <div className="toast-notification">

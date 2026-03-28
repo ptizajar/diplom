@@ -1,7 +1,7 @@
 import f from "../css/.module/form.module.css"
 import "../api-globals"
 import { backend } from "../api-globals";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
 import React from "react";
@@ -10,11 +10,22 @@ import React from "react";
 export function AddCategoryForm({ onCloseClick, param }) {//получает из Dialog
     const [isSubmitting, setIsSubmitting] = useState(false);//проверять находится ли форма в процессе отправки на сервер
     const [error, setError] = useState("");
+    const [preview, setPreview] = useState(null);
     const { errors, checkField, checkForm, clearErrors } = useValidation('category');
 
-    // const handleFieldChange = (e) => {
-    //     checkField('category', e.target.value);
-    // };
+   // Очистка памяти от временной ссылки при размонтировании
+    useEffect(() => {
+        return () => { if (preview) URL.revokeObjectURL(preview); };
+    }, [preview]);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Создаем временную ссылку на выбранный файл
+            const objectUrl = URL.createObjectURL(file);
+            setPreview(objectUrl);
+        }
+    };
 
     async function save(e) {//on submit
         e.preventDefault();
@@ -46,35 +57,50 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
         clearErrors();
         onCloseClick();
     }
-
-    const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.category_id}')` } : {};
+// Определяем, какую картинку показывать: новую выбранную, старую из БД или ничего
+    const getBackgroundImage = () => {
+        if (preview) return `url('${preview}')`;
+        if (param?.category_id) return `url('${backend}/api/category/image/${param.category_id}')`;
+        return 'none';
+    };
+    const style = { backgroundImage: getBackgroundImage() };
+    // const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.category_id}')` } : {};
     return (
         <>
             <form className={f.form} onSubmit={save} id="addCategoryForm" method="PUT" encType="multipart/form-data">
-                {param ? "Редактировать категорию" : "Добавить категорию"}
-                <input
-                    type="text"
-                    className={f.field}
-                    placeholder="Название"
-                    name="category_name"
-                    required
-                    defaultValue={param?.name}
-                    onChange={(e) => checkField('category_name', e.target.value)}
-                    onBlur={(e) => checkField('category_name', e.target.value)}//потеря фокуса
-                    disabled={isSubmitting} />
+                <p className={f.title}>{param ? "Редактировать категорию" : "Добавить категорию"}</p>
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Название</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        placeholder="Название"
+                        name="category_name"
+                        required
+                        defaultValue={param?.name}
+                        onChange={(e) => checkField('category_name', e.target.value)}
+                        onBlur={(e) => checkField('category_name', e.target.value)}//потеря фокуса
+                        disabled={isSubmitting} />
+                </div>
                 {errors.category_name?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.category_name[0]}
                     </div>
                 )}
-                <div className={f.image} style={style}>
-                    <input
-                        type="file"
-                        placeholder="Загрузите изображение"
-                        name="category_image"
-                        accept="image/png, image/jpeg"
-                        required={!param} />
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Изображение</label>
+                    <div className={f.image} style={style}>
+                        <input
+                            className={f.fileInput}
+                            type="file"
+                            placeholder="Загрузите изображение"
+                            name="category_image"
+                            accept="image/png, image/jpeg"
+                            required={!param}
+                            onChange={handleImageChange} />
+                    </div>
                 </div>
+        
                 <input type="hidden" name="category_id" value={param?.category_id} />
 
                 <div className={f.buttonHolder}>
@@ -83,7 +109,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                         type="submit"
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Сохранение...' : 'ОК'}
+                        ОК
                     </button>
                     <button
                         className={f.button}
@@ -107,6 +133,6 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                     <div className="toast-progress"></div>
                 </div>
             )}
-            </>
+        </>
     )
 }

@@ -134,8 +134,6 @@ export const validationRules = {
     },
 
     email: {
-    min: 5,
-    max: 100,
     pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     patternError: "Введите корректный email адрес",
     custom: [

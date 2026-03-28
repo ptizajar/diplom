@@ -18,18 +18,6 @@ export function RegistrationForm({ onCloseClick }) {
 
     const { errors, checkField, checkForm, clearErrors } = useValidation('registration');
 
-    const handleChange = (fieldName, value) => {
-        if (fieldName !== 'password2') {
-            checkField(fieldName, value);
-        }
-    };
-
-    const handleBlur = (fieldName, value) => {
-        if (fieldName !== 'password2') {
-            checkField(fieldName, value);
-        }
-    };
-
     async function save(e) {
         e.preventDefault();
         const formData = new FormData(registrationForm);
@@ -85,99 +73,97 @@ export function RegistrationForm({ onCloseClick }) {
     return (
         <>
             <form className={f.form} onSubmit={save} id="registrationForm" method="POST" encType="multipart/form-data">
-                <p>Зарегестрироваться</p>
-                <p>{error}</p>
-                <input
-                    type="text"
-                    className={f.field}
-                    placeholder="Имя"
-                    name="user_name"
-                    onChange={(e) => handleChange('user_name', e.target.value)}
-                    onBlur={(e) => handleBlur('user_name', e.target.value)}
-                    required
-                    disabled={isSubmitting} />
+                <p className={f.title}>Зарегестрироваться</p>
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Имя</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        placeholder="Имя"
+                        name="user_name"
+                        onChange={(e) => checkField('user_name', e.target.value)}
+                        onBlur={(e) => checkField('user_name', e.target.value)}
+                        required
+                        disabled={isSubmitting} />
+                </div>
                 {errors.user_name?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.user_name[0]}
                     </div>
                 )}
-                <input
-                    type="text"
-                    className={f.field}
-                    placeholder="Email"
-                    name="email"
-                    onChange={(e) => handleChange('email', e.target.value)}
-                    onBlur={(e) => handleBlur('email', e.target.value)}
-                    required
-                    disabled={isSubmitting} />
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Email</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        placeholder="Email"
+                        name="email"
+                        onChange={(e) => checkField('email', e.target.value)}
+                        onBlur={(e) => checkField('email', e.target.value)}
+                        required
+                        disabled={isSubmitting} />
+                </div>
                 {errors.email?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.email[0]}
                     </div>
                 )}
-                <input
-                    type="tel"
-                    className={f.field}
-                    placeholder="Номер телефона"
-                    name="phone"
-                    onChange={(e) => handleChange('phone', e.target.value)}
-                    onBlur={(e) => handleBlur('phone', e.target.value)}
-                    required
-                    disabled={isSubmitting} />
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Номер телефона</label>
+                    <input
+                        type="tel"
+                        className={f.field}
+                        placeholder="Номер телефона"
+                        name="phone"
+                        onChange={(e) => checkField('phone', e.target.value)}
+                        onBlur={(e) => checkField('phone', e.target.value)}
+                        required
+                        disabled={isSubmitting} />
+                </div>
                 {errors.phone?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.phone[0]}
                     </div>
                 )}
-                <input
-                    type={showPasswords ? "text" : "password"}
-                    className={f.field}
-                    placeholder="Пароль"
-                    name="password"
-                    onChange={(e) => handleChange('password', e.target.value)}
-                    onBlur={(e) => handleBlur('password', e.target.value)}
-                    required
-                    disabled={isSubmitting} />
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Пароль</label>
+                    <input
+                        type={showPasswords ? "text" : "password"}
+                        className={f.field}
+                        placeholder="Пароль"
+                        name="password"
+                        onChange={(e) => checkField('password', e.target.value)}
+                        onBlur={(e) => checkField('password', e.target.value)}
+                        required
+                        disabled={isSubmitting} />
+                </div>
                 {errors.password?.length > 0 && (
                     <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                         {errors.password[0]}
                     </div>
                 )}
-                <input
-                    type={showPasswords ? "text" : "password"}
-                    className={f.field}
-                    placeholder="Повторите пароль"
-                    name="password2"
-                    required />
-
-                <div style={{ margin: '15px 0', textAlign: 'left' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                        <input
-                            type="checkbox"
-                            checked={showPasswords}
-                            onChange={(e) => setShowPasswords(e.target.checked)}
-                            disabled={isSubmitting}
-                            style={{ marginRight: '8px', width: 'auto' }}
-                        />
-                        <span>Показать пароли</span>
-                    </label>
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Повторите пароль</label>
+                    <input
+                        type={showPasswords ? "text" : "password"}
+                        className={f.field}
+                        placeholder="Повторите пароль"
+                        name="password2"
+                        required />
                 </div>
-                <p>или</p>
-                <button
-                    className={f.button}
-                    onClick={() => {
-                        clearErrors();
-                        switchForm(LoginForm)
-                    }}>
-                    Войти
-                </button>
-
+                <div className={f.checkboxHolder}>
+                    <label className={f.label} htmlFor="checkbox">Показать пароль</label>
+                    <input
+                        type="checkbox"
+                        id="checkbox"
+                        checked={showPasswords}
+                        onChange={(e) => setShowPasswords(e.target.checked)}
+                        disabled={isSubmitting}
+                        style={{ marginRight: '8px', width: 'auto' }}
+                    />
+                </div>
                 <div className={f.buttonHolder}>
-                    <button
-                        className={f.button}
-                        type="submit"
-                        disabled={isSubmitting}>
-                        {isSubmitting ? 'Регистрация...' : 'Зарегистрироваться'}
+                    <button className={f.button} type="submit" disabled={isSubmitting}>
                         ОК
                     </button>
                     <button
@@ -190,6 +176,20 @@ export function RegistrationForm({ onCloseClick }) {
                         Отмена
                     </button>
                 </div>
+                <p className={f.label} style={{marginTop:"10px"}}>Уже есть аккаунт?</p>
+                <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
+                    <button
+                        className={f.button}
+                        style={{ width: "60%" }}
+                        onClick={() => {
+                            clearErrors();
+                            switchForm(LoginForm)
+                        }}>
+                        Войти
+                    </button>
+                </div>
+
+
             </form>
             {error && (
                 <div className="toast-notification">

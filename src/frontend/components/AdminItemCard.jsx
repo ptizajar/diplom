@@ -38,7 +38,7 @@ export function AdminItemCard({ item_id, name, price, onClose, liked, removed, l
   }
   return (
     <>
-      <div>
+      <div className={i.cardWrapper}>
         <ItemCard
           item_id={item_id}
           name={name}

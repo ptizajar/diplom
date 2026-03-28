@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {ItemCard} from "../components/ItemCard";
+import { ItemCard } from "../components/ItemCard";
 import l from "../css/.module/layout.module.css";
 import { backend } from "../api-globals";
-import i from  "../css/.module/itemCard.module.css"
+import i from "../css/.module/itemCard.module.css"
 import "../css/toast.css"
 
 
@@ -45,19 +45,19 @@ export function Category() {
       <h1 className={l.title}>{categoryName}</h1>
       <div className={i.cardHolder} >
         {items.map((item) => (
-
-          <ItemCard
-            key={item.item_id}
-            item_id={item.item_id}
-            name={item.item_name}
-            price={item.price}
-            liked={item.liked}
-            width = {Math.round(item.width)}
-            height = {Math.round(item.height)}
-            length = {Math.round(item.length)}
-            removed={item.removed}
-          ></ItemCard>
-
+          <div className={i.cardWrapper}>
+            <ItemCard
+              key={item.item_id}
+              item_id={item.item_id}
+              name={item.item_name}
+              price={item.price}
+              liked={item.liked}
+              width={Math.round(item.width)}
+              height={Math.round(item.height)}
+              length={Math.round(item.length)}
+              removed={item.removed}
+            ></ItemCard>
+          </div>
         ))}
       </div>
       {error && (

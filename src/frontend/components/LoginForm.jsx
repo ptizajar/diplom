@@ -47,30 +47,38 @@ export function LoginForm({ onCloseClick }) {
     return (
         <>
             <form className={f.form} onSubmit={save} id="loginForm" method="POST" encType="multipart/form-data">
-                <p>Войти</p>
-                <input type="text" className={f.field} placeholder="Email" name="email" required />
-                <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Пароль" name="password" required />
-
-                <div style={{ margin: '15px 0', textAlign: 'left' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                        <input
-                            type="checkbox"
-                            checked={showPasswords}
-                            onChange={(e) => setShowPasswords(e.target.checked)}
-                            disabled={isSubmitting}
-                            style={{ marginRight: '8px', width: 'auto' }}
-                        />
-                        <span>Показать пароль</span>
-                    </label>
+                <p className={f.title}>Войти</p>
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Email</label>
+                    <input type="text" className={f.field} placeholder="Email" name="email" required />
+                </div>
+                <div className={f.inputHolder}>
+                    <label className={f.label}>Пароль</label>
+                    <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Пароль" name="password" required />
                 </div>
 
-                <p>или</p>
-                <button className={f.button} onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
-
+                <div className={f.checkboxHolder}>
+                    <label className={f.label} htmlFor="checkbox">Показать пароль </label>
+                    <input
+                        type="checkbox"
+                        id="checkbox"
+                        checked={showPasswords}
+                        onChange={(e) => setShowPasswords(e.target.checked)}
+                        disabled={isSubmitting}
+                        style={{ marginRight: '8px', width: 'auto' }}
+                    />
+                </div>
                 <div className={f.buttonHolder}>
                     <button className={f.button} type="submit">ОК</button>
                     <button className={f.button} onClick={onCloseClick}>Отмена</button>
-                    <button className={f.button} onClick={() => switchForm(ChangePassword)}>Забыли пароль?</button>
+                </div>
+                <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
+                    <button className={f.button} style={{ width: "60%" }} onClick={() => switchForm(ChangePassword)}>Забыли пароль?</button>
+                </div>
+
+                <p className={f.label} style={{marginTop:"10px"}}>Ещё нет аккаунта?</p>
+                <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
+                    <button className={f.button} style={{ width: "60%" }} onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
                 </div>
             </form>
             {error && (

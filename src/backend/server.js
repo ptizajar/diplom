@@ -210,20 +210,6 @@ app.post("/api/registrate", upload.none(), async function (req, res) {
   const { user_name, phone, email, password, password2 } = req.body;
   const errors = [];
   try {
-    // --- ВАЛИДАЦИЯ ПОЛЕЙ ---
-    // // Логин
-    // !login && errors.push("Логин обязателен");
-    // login?.length < 3 && errors.push("Логин должен быть не менее 3 символов");
-    // login?.length > 50 && errors.push("Логин должен быть не более 50 символов");
-    // login &&
-    //   !/^[a-zA-Z0-9_.@]+$/.test(login) &&
-    //   errors.push(
-    //     "Логин может содержать только латиницу, цифры, символы _ @ .",
-    //   );
-    // login &&
-    //   /\s/.test(login) &&
-    //   errors.push("Логин не должен содержать пробелы");
-
     // Имя
     !user_name && errors.push("Имя обязательно");
     user_name?.trim().length < 2 &&
@@ -639,7 +625,7 @@ app.get("/api/bids", async function (req, res) {
   const userId = req.user?.user_id;
   try {
     const result = await pool.query(
-      `SELECT o.order_id, u.email, o.user_name, o.item_id, i.item_name, o.price, o.recall_date, o.phone, o.status 
+      `SELECT o.order_id, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
