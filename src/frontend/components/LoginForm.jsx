@@ -29,6 +29,7 @@ export function LoginForm({ onCloseClick }) {
         });
         if (!res.ok) {
             const err = await res.json();
+            setIsSubmitting(false);
             setError(err.error);
             setTimeout(() => setError(""), 5000);
             return;

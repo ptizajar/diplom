@@ -11,15 +11,19 @@
 } */
 
 .cardHolder {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 50px;
     width: 100%;
     padding: 0 5%;
     box-sizing: border-box;
-    row-gap: 30px;
+    margin-top: 35px;
 }
-
+.cardWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 /* .cardHolder::after {
     content: "";
     width: 260px;
@@ -42,20 +46,7 @@
 
 }
 
-.cardWrapper {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-.cardWrapper:first-child:last-child {
-    align-items: start;
-}
-
-.cardWrapper:not(:last-child) {
-    margin-right: 20px;
-}
 
 .imageHolder {
     position: relative;

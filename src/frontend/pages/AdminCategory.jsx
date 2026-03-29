@@ -70,7 +70,7 @@ function AdminCategory() {
       <div className={a.adminContainer}>
         <h1 className={l.title} style={{ marginTop: "0px" }}>{categoryName}</h1>
         <button className={a.adminButton} onClick={() => showDialog(AddItemForm, { category_id }, loadItems)}>Добавить товар</button>
-        <button className={`${a.adminButton} ${a.logoutButton}`} onClick={logout}>Выйти</button>
+        <button className={a.adminButton} style={{justifySelf:"end"}} onClick={logout}>Выйти</button>
       </div>
 
 

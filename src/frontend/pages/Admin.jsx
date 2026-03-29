@@ -54,10 +54,10 @@ function Admin() {
     <>
       <div className={a.adminContainer}>
         <h1 className={l.title} style={{ marginTop: "0px" }}>Администрирование</h1>
-        <button className={a.adminButton} onClick={() => showDialog(AddCategoryForm, undefined, load)}>
+        <button className={a.adminButton} style={{marginLeft:"10px"}} onClick={() => showDialog(AddCategoryForm, undefined, load)}>
           Добавить категорию
         </button>
-        <button className={`${a.adminButton} ${a.logoutButton}`} onClick={logout}>Выйти</button>
+        <button className={a.adminButton} onClick={logout} style={{justifySelf:"end"}}>Выйти</button>
       </div>
 
       <div className={c.cardHolder}>
