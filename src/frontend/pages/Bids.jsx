@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/toast.css"
 import { OrderCard } from "../components/OrderCard";
+import l from "../css/.module/layout.module.css";
+import a from "../css/.module/admin.module.css";
+import i from "../css/.module/itemCard.module.css";
 
 function Bids() {
   const [bids, setBids] = useState([]);
   const [error, setError] = useState("");
 
- async function filterOrders(status) {
+  async function filterOrders(status) {
     const res = await fetch(`${backend}/api/admin/filterOrders?status=${status}`, {
       method: 'GET',
     });
@@ -24,7 +27,7 @@ function Bids() {
   }
 
   useEffect(() => {
-     filterOrders('Оформлен');
+    filterOrders('Оформлен');
   }, [])
 
   const formatDate = (dateString) => {
@@ -46,20 +49,22 @@ function Bids() {
   function canceled() {
     filterOrders('Отменен')
   }
-  function all(){
+  function all() {
     filterOrders('Все')
   }
 
- 
+
   return (
     <>
-      <p>Заявки</p>
-      <button onClick={created}>Оформленные</button>
-      <button onClick={confirmed}>Подтвержденные</button>
-      <button onClick={canceled}>Отмененные</button>
-      <button onClick={all}>Все</button>
-      {bids.length===0 && <div>Заказов нет</div>}
-      <div className="card-holder">
+      <h1 className={l.title}>Заявки</h1>
+      <div className={a.adminButtonContainer}>
+        <button className={a.adminButton} onClick={created}>Оформленные</button>
+        <button className={a.adminButton} onClick={confirmed}>Подтвержденные</button>
+        <button className={a.adminButton} onClick={canceled}>Отмененные</button>
+        <button className={a.adminButton} onClick={all}>Все</button>
+      </div>
+      {bids.length === 0 && <div>Заказов нет</div>}
+      <div className={i.cardHolder}>
         {bids.map((bid) => (
           <OrderCard
             key={bid.order_id}

@@ -26,6 +26,13 @@
     align-items: center;
     gap: 20px;
 } */
+.adminButtonContainer {
+    display: flex;
+    gap: 10px;
+    height: fit-content;
+    margin-top: 20px;
+    margin-left: 5%;
+}
 
 .adminContainer {
     display: grid;
@@ -40,6 +47,7 @@
 .adminButton {
     height: fit-content;
     padding: 8px 5%;
+    box-sizing: border-box;
     color: white;
     background-color: #2A3E3C;
     font-family: 'Exo 2', sans-serif;
@@ -49,16 +57,17 @@
     width: fit-content;
     cursor: pointer;
     border: none;
-    margin-left: 1vw;
+    /* margin-left: 1vw; */
+    text-align: center;
 }
 
-.logoutButton {
-    min-width: 90px;
-    max-width: 130px;
-     display: flex;
-    justify-content: center;
-    align-items: center;
-    justify-self: end;
-    padding: 8px 5%; /* паддинги остаются процентными для адаптивности */
-    box-sizing: border-box; /* чтобы паддинги входили в ширину */
+.adminContainer .adminButton{
+     min-width: 140px;
+    padding: 8px 8px;
+}
+
+.adminButtonContainer .adminButton {
+    min-width: 140px;
+    padding: 8px 8px;
+
 }

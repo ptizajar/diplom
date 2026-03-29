@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/toast.css"
-import i from  "../css/.module/itemCard.module.css"
+import i from "../css/.module/itemCard.module.css";
+import l from "../css/.module/layout.module.css";
+import a from "../css/.module/admin.module.css";
 import { OrderCard } from "../components/OrderCard";
 import { showDialog } from "../components/Dialog";
 import { EditUserForm } from "../components/EditUserForm";
@@ -142,13 +144,17 @@ export function Account() {
   };
   return (
     <>
-      <p>Account</p>
-      <button onClick={logout}>Logout</button>
-      <button style={{ color: "red" }} onClick={deleteAcc}>Delete account</button>
+      <h1 className={l.title}>Аккаунт</h1>
       <div>{userData.user_name} </div>
       <div>{userData.phone} </div>
       <div>{userData.email}</div>
-      <button onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
+      <div className={a.adminButtonContainer}>
+        <button className={a.adminButton} onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
+        <button className={a.adminButton} onClick={logout}>Выйти</button>
+        <button className={a.adminButton} style={{ backgroundColor: "#B71C1C" }} onClick={deleteAcc}>Удалить аккаунт</button>
+      </div>
+
+
       <div className={i.cardHolder}>
         {bids.map((bid) => (
           <OrderCard

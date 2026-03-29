@@ -139,7 +139,7 @@ app.get("/api/item/:id", async function (req, res) {
   try {
     const param = req.params.id;
     const result = await pool.query(
-      "select item_id,item_name,article,length,width,height,item_picture,price,description,quantity from item where item_id=$1 ",
+      "select item_id,item_name,article,length,width,height,item_picture,price,description,quantity, show from item where item_id=$1 ",
       [param],
     );
     res.status(200).json(result.rows[0]);
