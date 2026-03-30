@@ -238,7 +238,7 @@ adminRouter.put(
         res.status(200).json({});
 
         //  Сохраняем новую цену в историю (если она изменилась)
-        if (oldPrice !== parseFloat(price)) {
+        if (oldPrice != price) {
           await pool.query(
             "INSERT INTO price_history (item_id, price) VALUES ($1, $2)",
             [item_id, parseFloat(price)],
