@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { backend } from "../api-globals";
+import l from "../css/.module/layout.module.css";
+import t from "../css/.module/priceHistory.module.css";
 export function PriceHistory() {
     const { item_id } = useParams();
     const [error, setError] = useState("");
@@ -35,18 +37,32 @@ export function PriceHistory() {
     };
     const itemName = prices[0]?.item_name;
     return <>
-        <div>
-            <p>Товар {itemName}</p>
-            {prices.map((price) => (
-                <React.Fragment key={price.item_name + price.moscow_time}>
-                    <p>Цена {price?.price}</p>
-                    <br />
-                    <p>Дата {formatDate(price?.moscow_time)}</p>
-                    <br />
-                </React.Fragment>
+     <h1 className={l.title}> {itemName}</h1> 
+            <table className={t.table}>
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {prices.map((price) => (
+                        <tr key={price.item_name + price.moscow_time}>
+                            <td>{formatDate(price?.moscow_time)}</td>
+                             <td>{price?.price} ₽</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        {/* {prices.map((price) => (
+            <React.Fragment key={price.item_name + price.moscow_time}>
+                <p>Цена {price?.price}</p>
+                <br />
+                <p>Дата {formatDate(price?.moscow_time)}</p>
+                <br />
+            </React.Fragment>
 
-            ))}
-        </div>
+        ))} */}
         {error && (
             <div className="toast-notification">
                 <div className="toast-content">
