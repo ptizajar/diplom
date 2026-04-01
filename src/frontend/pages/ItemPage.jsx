@@ -8,6 +8,10 @@ import { showDialog } from "../components/Dialog";
 import { setUser } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { LoginForm } from "../components/LoginForm";
+import l from "../css/.module/layout.module.css";
+import i from "../css/.module/itemPage.module.css";
+import a from "../css/.module/admin.module.css";
+import h from "../css/.module/home.module.css"
 
 export function ItemPage() {
   const { item_id } = useParams();
@@ -44,24 +48,48 @@ export function ItemPage() {
 
   return (
     <>
-      Артикул {item?.article}
-      <br />
-      Название {item?.item_name}
-      <br />
-      Длина {item?.length} см
-      <br />
-      Ширина {item?.width} см
-      <br />
-      Высота {item?.height} см
-      <br />
-      Цена {item?.price} руб
-      <br />
-      Заказ от {item?.quantity} шт
-      <br />
-      Описание: {item?.description}
-      <br />
-      <div style={{ backgroundImage: `url('${backend}/api/item/image/${item_id}')`, width: "300px", height: "300px", backgroundSize: "contain", backgroundRepeat: "no-repeat" }}></div>
-      <button style={{ width: '100px', height: '20px' }} onClick={handleOrderClick}>Заказать</button>
+      <h1 className={l.title}>{item?.item_name}</h1>
+      <div className={i.itemHolder}>
+        <div className={i.image} style={{ backgroundImage: `url('${backend}/api/item/image/${item_id}')` }}></div>
+        <div className={i.tableHolder}>
+          <table className={i.table}>
+            <tbody>
+              <tr>
+                <td>Артикул</td>
+                <td>{item?.article}</td>
+              </tr>
+              <tr>
+                <td>Название</td>
+                <td>{item?.item_name}</td>
+              </tr>
+              <tr>
+                <td>Длина</td>
+                <td>{item?.length} см</td>
+              </tr>
+              <tr>
+                <td>Ширина</td>
+                <td>{item?.width} см</td>
+              </tr>
+              <tr>
+                <td>Высота</td>
+                <td>{item?.height} см</td>
+              </tr>
+              <tr>
+                <td>Заказ от</td>
+                <td>{item?.quantity} шт</td>
+              </tr>
+            </tbody>
+          </table>
+          <div className={i.priceHolder}>
+            <p className={i.price}>{item?.price} ₽</p>
+            <button className={a.adminButton} onClick={handleOrderClick}>Заказать</button>
+          </div>
+        </div>
+      </div>
+
+      <div className={h.info} style={{marginLeft:"5%", width:"90%", marginTop:"35px"}}>{item?.description}</div>
+
+
       {error && (
         <div className="toast-notification">
           <div className="toast-content">

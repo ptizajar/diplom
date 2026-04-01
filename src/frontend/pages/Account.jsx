@@ -5,6 +5,7 @@ import "../css/toast.css"
 import i from "../css/.module/itemCard.module.css";
 import l from "../css/.module/layout.module.css";
 import a from "../css/.module/admin.module.css";
+import f from "../css/.module/form.module.css";
 import { OrderCard } from "../components/OrderCard";
 import { showDialog } from "../components/Dialog";
 import { EditUserForm } from "../components/EditUserForm";
@@ -145,16 +146,18 @@ export function Account() {
   return (
     <>
       <h1 className={l.title}>Аккаунт</h1>
-      <div>{userData.user_name} </div>
-      <div>{userData.phone} </div>
-      <div>{userData.email}</div>
+      <div className={f.userData}>
+        <p className={f.labelBold}><b style={{ fontWeight: "bold" }}>Имя:</b> {userData.user_name} </p>
+        <p className={f.labelBold}><b style={{ fontWeight: "bold" }}>Номер телефона:</b> {userData.phone} </p>
+        <p className={f.labelBold}><b style={{ fontWeight: "bold" }}>Email:</b> {userData.email}</p>
+      </div>
       <div className={a.adminButtonContainer}>
         <button className={a.adminButton} onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
         <button className={a.adminButton} onClick={logout}>Выйти</button>
         <button className={a.adminButton} style={{ backgroundColor: "#B71C1C" }} onClick={deleteAcc}>Удалить аккаунт</button>
       </div>
 
-
+      <h1 className={l.title} >Заявки</h1>
       <div className={i.cardHolder}>
         {bids.map((bid) => (
           <OrderCard
