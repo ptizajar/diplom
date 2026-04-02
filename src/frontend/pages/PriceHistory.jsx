@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { backend } from "../api-globals";
+import { forAdminOnly } from "../components/ForAdminOnly";
 import l from "../css/.module/layout.module.css";
 import t from "../css/.module/priceHistory.module.css";
-export function PriceHistory() {
+ function PriceHistory() {
     const { item_id } = useParams();
     const [error, setError] = useState("");
     const [prices, setPrices] = useState([]);
@@ -75,3 +76,5 @@ export function PriceHistory() {
         )}
     </>;
 }
+
+export default forAdminOnly(PriceHistory);

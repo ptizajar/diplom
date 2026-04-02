@@ -15,7 +15,7 @@ import { store } from "./store";
 import { Provider, useDispatch } from "react-redux";
 import { setUser } from "./store";
 import { Account } from "./pages/Account";
-import { PriceHistory } from "./pages/PriceHistory";
+import PriceHistory from "./pages/PriceHistory";
 import "./reset.css"
 
 
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> }, // тоже самое что и path:""
       { path: "favourites", element: <Favourites /> },
-      { path: "politics", element: <Politics /> },
+      // { path: "politics", element: <Politics /> },
       { path: "catalog", element: <Catalog /> },
       { path: "category/:category_id", element: <Category /> },
       { path: "item/:item_id", element: <ItemPage /> },
