@@ -162,6 +162,16 @@ export function RegistrationForm({ onCloseClick }) {
                         style={{ marginRight: '8px', width: 'auto' }}
                     />
                 </div>
+                <div className={f.label} style={{ fontSize: "12px", marginTop: "10px", maxWidth:"300px" }}>
+                    Регистрируясь, я соглашаюсь с{" "}
+                    <a href="/public/privacy-policy.pdf" target="_blank" rel="noopener noreferrer" style={{color: "#2A3E3C"}}>
+                        Политикой конфиденциальности
+                    </a>
+                    {" "}и{" "}
+                    <a href="/public/consent.pdf" target="_blank" rel="noopener noreferrer" style={{color: "#2A3E3C"}}>
+                        Согласием на обработку персональных данных
+                    </a>
+                </div>
                 <div className={f.buttonHolder}>
                     <button className={f.button} type="submit" disabled={isSubmitting}>
                         ОК
@@ -176,7 +186,7 @@ export function RegistrationForm({ onCloseClick }) {
                         Отмена
                     </button>
                 </div>
-                <p className={f.label} style={{marginTop:"10px"}}>Уже есть аккаунт?</p>
+                <p className={f.label} style={{ marginTop: "10px" }}>Уже есть аккаунт?</p>
                 <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
                     <button
                         className={f.button}
