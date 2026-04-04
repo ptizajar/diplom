@@ -21,7 +21,7 @@ export function Account() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
-  const error401 = useRef(false);
+  const error401 = useRef(false);//была ли уже получена ошибка 401
 
   async function loadBids() {
     setError("");
@@ -34,7 +34,9 @@ export function Account() {
     if (res.status === 401 && !error401.current) {
       error401.current = true;
       showDialog(SessionExpired, undefined, () => {
-        error401.current = false; dispatch(setUser(null)); navigate('/')
+        error401.current = false;
+        dispatch(setUser(null));
+        navigate('/')
       });
       return;
     }
@@ -59,7 +61,9 @@ export function Account() {
     if (res.status === 401 && !error401.current) {
       error401.current = true;
       showDialog(SessionExpired, undefined, () => {
-        error401.current = false; dispatch(setUser(null)); navigate('/')
+        error401.current = false;
+        dispatch(setUser(null));
+        navigate('/')
       });
       return;
     }
@@ -99,7 +103,9 @@ export function Account() {
     if (res.status === 401 && !error401.current) {
       error401.current = true;
       showDialog(SessionExpired, undefined, () => {
-        error401.current = false; dispatch(setUser(null)); navigate('/')
+        error401.current = false;
+        dispatch(setUser(null));
+        navigate('/')
       });
       return;
     }
@@ -114,7 +120,7 @@ export function Account() {
 
   }
 
-  function loadOrNavigate(action) {
+  function loadOrNavigate(action) {//для следующего окна
     if (action === 'navigate') {
       dispatch(setUser(null));
       navigate('/')
@@ -130,7 +136,7 @@ export function Account() {
     loadBids();
     loadData();
     return () => {
-      error401.current = false;
+      error401.current = false;// при размонтировании
     };
   }, [])
 

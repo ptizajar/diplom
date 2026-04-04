@@ -55,15 +55,7 @@ import t from "../css/.module/priceHistory.module.css";
                     ))}
                 </tbody>
             </table>
-        {/* {prices.map((price) => (
-            <React.Fragment key={price.item_name + price.moscow_time}>
-                <p>Цена {price?.price}</p>
-                <br />
-                <p>Дата {formatDate(price?.moscow_time)}</p>
-                <br />
-            </React.Fragment>
 
-        ))} */}
         {error && (
             <div className="toast-notification">
                 <div className="toast-content">

@@ -12,7 +12,7 @@ export function Home() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState("");
   async function loadItems() {
-    const res = await fetch(`${backend}/api/showed_items`, { credentials: "same-origin" });
+    const res = await fetch(`${backend}/api/showed_items`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);

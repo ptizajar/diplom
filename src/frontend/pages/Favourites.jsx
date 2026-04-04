@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ItemCard } from "../components/ItemCard";
 import { backend } from "../api-globals";
 import { useEffect } from "react";
@@ -51,6 +50,9 @@ export function Favourites() {
             key={item.item_id}
             item_id={item.item_id}
             name={item.item_name}
+            width={Math.round(item.width)}
+            height={Math.round(item.height)}
+            length={Math.round(item.length)}
             price={item.price}
             liked={item.liked}
           />
