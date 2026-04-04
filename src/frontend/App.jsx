@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {Home} from "./pages/Home";
 import {Politics} from "./pages/Politics";
@@ -55,11 +55,11 @@ function AppImp({children}){
        refreshSession(); 
     },[]
   )
-  return children
+  return children // в данном случае router
 }
 
 function App() {
-  
+  //redux -> обновление сесии-> router
 
   return (
     <Provider store={store}>

@@ -2,7 +2,7 @@ import React from "react"
 import f from "../css/.module/form.module.css"
 import { showDialog } from "./Dialog";
 import { LoginForm } from "./LoginForm";
-export function EnterForFavourites({ onCloseClick }) {
+export function EnterForFavourites({ onCloseClick }) {//не используется удалить потом
     function switchForm(newform) {
         onCloseClick();
         showDialog(newform);

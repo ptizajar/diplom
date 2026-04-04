@@ -7,7 +7,7 @@ export function CategoryCard({ category_id, name, url}) {
     <div >
       <Link to={`/${url}/${category_id}`}>
         <div className={c.card}> 
-          <img  className={c.categoryImage} src={`${backend}/api/category/image/${category_id}`} alt="бассейн"  />
+          <img  className={c.categoryImage} src={`${backend}/api/category/image/${category_id}`} alt={name} />
           <div className={c.categoryName}> {name}</div>
         </div>
       </Link>

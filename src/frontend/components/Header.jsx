@@ -31,7 +31,7 @@ export function Header() {
               <span>Каталог</span>
             </li>
           </Link>
-          {!currentUser && <Link onClick={(e) => { e.preventDefault(); showDialog(LoginForm, undefined, loadOrNavigate); }} className={h.link}>
+          {!currentUser && <Link onClick={(e) => { e.preventDefault(); showDialog(LoginForm); }} className={h.link}>
             <li className={h.item}>
               <img src="/public/account.svg" className={h.icon}></img>
              <span>Войти</span>

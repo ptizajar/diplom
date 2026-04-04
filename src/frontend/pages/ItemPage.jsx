@@ -21,6 +21,7 @@ export function ItemPage() {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user.currentUser);
   async function load() {
+
     const res = await fetch(`${backend}/api/item/${item_id}`);
     if (!res.ok) {
       const err = await res.json();
@@ -34,10 +35,10 @@ export function ItemPage() {
 
   function handleOrderClick() {
     if (!currentUser) {
-      showDialog(LoginForm, undefined, load);
+      showDialog(LoginForm);
       return;
     }
-    showDialog(OrderForm, { item_id }, load);
+    showDialog(OrderForm, { item_id });
   }
 
   useEffect(() => {
@@ -82,12 +83,13 @@ export function ItemPage() {
           </table>
           <div className={i.priceHolder}>
             <p className={i.price}>{item?.price} ₽</p>
-            <button className={a.adminButton} onClick={handleOrderClick}>Заказать</button>
+            {!item?.removed && <button className={a.adminButton} onClick={handleOrderClick}>Заказать</button>}
+            {item?.removed && <p className={i.price}>Товар закончился</p>}
           </div>
         </div>
       </div>
 
-      <div className={h.info} style={{marginLeft:"5%", width:"90%", marginTop:"35px"}}>{item?.description}</div>
+      <div className={h.info} style={{ marginLeft: "5%", width: "90%", marginTop: "35px" }}>{item?.description}</div>
 
 
       {error && (

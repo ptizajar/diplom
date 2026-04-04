@@ -1,6 +1,5 @@
 import { forAdminOnly } from "../components/ForAdminOnly";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import "../css/toast.css"
 import { OrderCard } from "../components/OrderCard";
@@ -40,28 +39,17 @@ function Bids() {
     });
   };
 
-  function created() {
-    filterOrders('Оформлен')
-  }
-  function confirmed() {
-    filterOrders('Подтвержден')
-  }
-  function canceled() {
-    filterOrders('Отменен')
-  }
-  function all() {
-    filterOrders('Все')
-  }
+
 
 
   return (
     <>
       <h1 className={l.title}>Заявки</h1>
       <div className={a.adminButtonContainer}>
-        <button className={a.adminButton} onClick={created}>Оформленные</button>
-        <button className={a.adminButton} onClick={confirmed}>Подтвержденные</button>
-        <button className={a.adminButton} onClick={canceled}>Отмененные</button>
-        <button className={a.adminButton} onClick={all}>Все</button>
+        <button className={a.adminButton} onClick={() => filterOrders('Оформлен')}>Оформленные</button>
+        <button className={a.adminButton} onClick={() => filterOrders('Подтвержден')}>Подтвержденные</button>
+        <button className={a.adminButton} onClick={() => filterOrders('Отменен')}>Отмененные</button>
+        <button className={a.adminButton} onClick={() => filterOrders('Все')}>Все</button>
       </div>
       {bids.length === 0 && <div>Заказов нет</div>}
       <div className={i.cardHolder}>
@@ -77,7 +65,7 @@ function Bids() {
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}
             status={bid.status}
-            onStatusChange={created}
+            onStatusChange={() => filterOrders('Оформлен')}
           ></OrderCard>
         ))}
       </div>

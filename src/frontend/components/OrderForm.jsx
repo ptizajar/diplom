@@ -43,10 +43,6 @@ export function OrderForm({ onCloseClick, param }) {
         return maxDate.toISOString().slice(0, 16);
     };
 
-    // const handleFieldChange = (e) => {
-    //     checkField('registration', e.target.value);
-    // };
-
     async function save(e) {
         e.preventDefault();
         setError("");
@@ -71,50 +67,6 @@ export function OrderForm({ onCloseClick, param }) {
         // Проверяем обязательные поля
         const isValid = checkForm(formObject);
         if (!isValid) return;
-
-        // // Проверяем дату-время
-        // if (!preferredDatetime) {
-        //     setError("Пожалуйста, выберите дату и время");
-        //     setTimeout(() => setError(""), 5000);
-        //     return;
-        // }
-
-        // const selected = new Date(preferredDatetime);
-        // // const now = new Date();
-        // const minDate = new Date(getMinDateTime());
-        // const maxDate = new Date(getMaxDateTime());
-
-        // // Проверяем что не раньше минимального
-        // if (selected < minDate) {
-        //     const minTime = minDate.toLocaleTimeString('ru-RU', {
-        //         hour: '2-digit',
-        //         minute: '2-digit'
-        //     });
-        //     const minDateStr = minDate.toLocaleDateString('ru-RU');
-        //     setError(`Пожалуйста, выберите время не ранее ${minTime} ${minDateStr}`);
-        //     setTimeout(() => setError(""), 5000);
-        //     return;
-        // }
-
-        // // Проверяем что не позже максимума
-        // if (selected > maxDate) {
-        //     const maxTime = maxDate.toLocaleTimeString('ru-RU', {
-        //         hour: '2-digit',
-        //         minute: '2-digit'
-        //     });
-        //     const maxDateStr = maxDate.toLocaleDateString('ru-RU');
-        //     setError(`Пожалуйста, выберите время не позднее ${maxTime} ${maxDateStr}`);
-        //     setTimeout(() => setError(""), 5000);
-        //     return;
-        // }
-
-        // // Проверяем рабочие часы (10:00-17:00)
-        // const hours = selected.getHours();
-        // if (hours < 10 || hours >= 17) {
-        //     setError("Пожалуйста, выберите время с 10:00 до 17:00");
-        //     setTimeout(() => setError(""), 5000);
-        //     return;
-        // }
 
         setIsSubmitting(true);
 

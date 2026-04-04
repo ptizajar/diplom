@@ -2,6 +2,7 @@
 export const validationRules = {
   category: {
     category_name: {
+      required: true,
       min: 2,
       max: 50,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\s\-]+$/,
@@ -31,6 +32,7 @@ export const validationRules = {
 
   item: {
     item_article: {
+      required: true,
       min: 3,
       max: 50,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\-_]+$/,
@@ -53,6 +55,7 @@ export const validationRules = {
     },
 
     item_name: {
+      required: true,
       min: 2,
       max: 200,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\s\-\.,;:!?"'()]+$/,
@@ -87,6 +90,7 @@ export const validationRules = {
   },
 
   registration: {
+    required: true,
     user_name: {
       min: 2,
       max: 50,
@@ -112,6 +116,7 @@ export const validationRules = {
     },
 
     phone: {
+      required: true,
       pattern: /^[+\s\-\(\)0-9]+$/,
       patternError:
         "Номер может содержать только цифры, пробелы, скобки, дефисы и знак +",
@@ -134,24 +139,30 @@ export const validationRules = {
     },
 
     email: {
-    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    patternError: "Введите корректный email адрес",
-    custom: [
-      (value) => {
-        if (value.includes("..")) return "Email не может содержать две точки подряд";
-        return null;
-      },
-      (value) => {
-        const localPart = value.split('@')[0];
-        if (localPart && (localPart.startsWith('.') || localPart.endsWith('.'))) {
-          return "Локальная часть email не может начинаться или заканчиваться точкой";
-        }
-        return null;
-      }
-    ]
-  },
+      required: true,
+      pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      patternError: "Введите корректный email адрес",
+      custom: [
+        (value) => {
+          if (value.includes(".."))
+            return "Email не может содержать две точки подряд";
+          return null;
+        },
+        (value) => {
+          const localPart = value.split("@")[0];
+          if (
+            localPart &&
+            (localPart.startsWith(".") || localPart.endsWith("."))
+          ) {
+            return "Локальная часть email не может начинаться или заканчиваться точкой";
+          }
+          return null;
+        },
+      ],
+    },
 
     password: {
+      required: true,
       min: 6,
       max: 50,
       pattern: /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]+$/,
@@ -164,8 +175,7 @@ export const validationRules = {
           return null;
         },
         (value) => {
-          if (!/[0-9]/.test(value)) 
-            return "Должна быть хотя бы одна цифра";
+          if (!/[0-9]/.test(value)) return "Должна быть хотя бы одна цифра";
           return null;
         },
         (value) => {
@@ -177,9 +187,9 @@ export const validationRules = {
     },
   },
 
-
- order: {
+  order: {
     user_name: {
+      required: true,
       min: 2,
       max: 50,
       pattern: /^[а-яА-ЯёЁ\s\-]+$/,
@@ -204,8 +214,10 @@ export const validationRules = {
     },
 
     phone: {
+      required: true,
       pattern: /^[+\s\-\(\)0-9]+$/,
-      patternError: "Номер может содержать только цифры, пробелы, скобки, дефисы и знак +",
+      patternError:
+        "Номер может содержать только цифры, пробелы, скобки, дефисы и знак +",
       custom: [
         (value) => {
           if (!/^(\+7|8)/.test(value)) {
@@ -235,13 +247,13 @@ export const validationRules = {
           const now = new Date();
           const minDate = new Date(now);
           minDate.setMinutes(minDate.getMinutes() + 30);
-          
+
           if (selected < minDate) {
-            const minTime = minDate.toLocaleTimeString('ru-RU', {
-              hour: '2-digit',
-              minute: '2-digit'
+            const minTime = minDate.toLocaleTimeString("ru-RU", {
+              hour: "2-digit",
+              minute: "2-digit",
             });
-            const minDateStr = minDate.toLocaleDateString('ru-RU');
+            const minDateStr = minDate.toLocaleDateString("ru-RU");
             return `Пожалуйста, выберите время не ранее ${minTime} ${minDateStr}`;
           }
           return null;
@@ -251,13 +263,13 @@ export const validationRules = {
           const maxDate = new Date();
           maxDate.setDate(maxDate.getDate() + 14);
           maxDate.setHours(16, 59, 0, 0);
-          
+
           if (selected > maxDate) {
-            const maxTime = maxDate.toLocaleTimeString('ru-RU', {
-              hour: '2-digit',
-              minute: '2-digit'
+            const maxTime = maxDate.toLocaleTimeString("ru-RU", {
+              hour: "2-digit",
+              minute: "2-digit",
             });
-            const maxDateStr = maxDate.toLocaleDateString('ru-RU');
+            const maxDateStr = maxDate.toLocaleDateString("ru-RU");
             return `Пожалуйста, выберите время не позднее ${maxTime} ${maxDateStr}`;
           }
           return null;
@@ -265,7 +277,7 @@ export const validationRules = {
         (value) => {
           const selected = new Date(value);
           const hours = selected.getHours();
-          
+
           if (hours < 10 || hours >= 17) {
             return "Пожалуйста, выберите время с 10:00 до 17:00";
           }
@@ -275,6 +287,3 @@ export const validationRules = {
     },
   },
 };
-
-
-
