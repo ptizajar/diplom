@@ -2,7 +2,6 @@
 export const validationRules = {
   category: {
     category_name: {
-      required: true,
       min: 2,
       max: 50,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\s\-]+$/,
@@ -32,7 +31,6 @@ export const validationRules = {
 
   item: {
     item_article: {
-      required: true,
       min: 3,
       max: 50,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\-_]+$/,
@@ -55,7 +53,6 @@ export const validationRules = {
     },
 
     item_name: {
-      required: true,
       min: 2,
       max: 200,
       pattern: /^[a-zA-Zа-яА-ЯёЁ0-9\s\-\.,;:!?"'()]+$/,
@@ -90,7 +87,6 @@ export const validationRules = {
   },
 
   registration: {
-    required: true,
     user_name: {
       min: 2,
       max: 50,
@@ -116,7 +112,6 @@ export const validationRules = {
     },
 
     phone: {
-      required: true,
       pattern: /^[+\s\-\(\)0-9]+$/,
       patternError:
         "Номер может содержать только цифры, пробелы, скобки, дефисы и знак +",
@@ -139,7 +134,6 @@ export const validationRules = {
     },
 
     email: {
-      required: true,
       pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       patternError: "Введите корректный email адрес",
       custom: [
@@ -162,7 +156,6 @@ export const validationRules = {
     },
 
     password: {
-      required: true,
       min: 6,
       max: 50,
       pattern: /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]+$/,
@@ -189,7 +182,6 @@ export const validationRules = {
 
   order: {
     user_name: {
-      required: true,
       min: 2,
       max: 50,
       pattern: /^[а-яА-ЯёЁ\s\-]+$/,
@@ -214,7 +206,6 @@ export const validationRules = {
     },
 
     phone: {
-      required: true,
       pattern: /^[+\s\-\(\)0-9]+$/,
       patternError:
         "Номер может содержать только цифры, пробелы, скобки, дефисы и знак +",

@@ -2,12 +2,10 @@ const express = require("express");
 const app = express();
 exports.app = app;
 const bodyParser = require("body-parser");
-const cors = require("cors");
 
 const cookieParser = require("cookie-parser");
-import { serialize } from "v8";
 import { adminRouter } from "./adminRouter";
-import { pool, redisConnection, client } from "./connections";
+import { pool} from "./connections";
 import path from "path";
 import { emailService } from "./sendEmail";
 import { sessionParser } from "./sessionParser";
@@ -17,7 +15,7 @@ const upload = multer();
 
 require("./sendEmail");
 
-app.use(cors());
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -68,7 +66,7 @@ app.get("/api/category/:id/items", async function (req, res) {
   try {
     const param = req.params.id;
     const result = await pool.query(
-      "select item_id, item_name, price, length, width, height from item where category_id=$1 and removed=$2",
+      "select item_id, item_name, price, length, width, height from item where category_id=$1 and removed=$2 order by item_name desc",
       [param, false],
     );
     if (req.user?.user_id) {
@@ -146,7 +144,7 @@ app.post("/api/favourites", upload.none(), async function (req, res) {
     }
     const { item_id, liked } = req.body;
     const findItem = await pool.query(
-      "select * from favourites where item_id=$1 and user_id=$2",
+      "select * from favourites where item_id=$1 and user_id=$2 ",
       [item_id, req.user.user_id],
     );
     if (!findItem.rowCount && liked === "true") {
@@ -319,7 +317,7 @@ app.post("/api/order/:id", upload.none(), async function (req, res) {
       return res.status(400).json({ errors });
     }
 
-    // --- ОСНОВНАЯ ЛОГИКА ---
+    //ОСНОВНАЯ ЛОГИКА 
     await pool.query("SET TIME ZONE 'Europe/Moscow'");
 
     const { rows } = await pool.query(

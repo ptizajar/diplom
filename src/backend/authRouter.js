@@ -2,16 +2,15 @@ const express = require("express");
 const multer = require("multer");
 const upload = multer();
 const crypto = require("crypto");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 export const authRouter = express.Router();
 import { pool, redisConnection, client } from "./connections";
 import { sessionParser } from "./sessionParser";
+import { emailService } from "./sendEmail";
 
 require("./sendEmail");
 
-authRouter.use(cors());
 authRouter.use(cookieParser());
 authRouter.use(sessionParser);
 authRouter.use(bodyParser.urlencoded({ extended: true }));
@@ -105,7 +104,7 @@ authRouter.post("/registrate", upload.none(), async function (req, res) {
       email,
     ]);
     if (findEmail.rowCount > 0) {
-      res
+      return res
         .status(400)
         .json({ error: "Пользователь с такой почтой уже существует" });
     } else {
@@ -133,7 +132,6 @@ authRouter.post("/registrate", upload.none(), async function (req, res) {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 const tries = new Map(); //key-email,value-array of tries by time
 
@@ -203,7 +201,6 @@ authRouter.post("/logout", async function (req, res) {
   }
 });
 
-
 authRouter.get("/user_data", async function (req, res) {
   try {
     if (!req.user) {
@@ -241,10 +238,8 @@ authRouter.put("/edit_user", upload.none(), async function (req, res) {
 
     const updatedUser = result.rows[0];
     const sessionCookie = req.cookies?.sessionId;
-    if (sessionCookie) {
-      await redisConnection;
-      await client.set(sessionCookie, JSON.stringify(updatedUser));
-    }
+    await redisConnection;
+    await client.set(sessionCookie, JSON.stringify(updatedUser));
     res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -273,7 +268,7 @@ authRouter.post("/send_code", upload.none(), async function (req, res) {
     }
 
     const code = Math.round(Math.random() * 1000000); //число от 1 до 1000000
-    emailService.sendVerificationCode(email, code).catch(console.error);
+    emailService.sendVerificationCode(email, code);
     const timer = Date.now();
     codes.set(email, { code, timer, tries: 0 });
     res.status(200).json({});
@@ -297,7 +292,7 @@ authRouter.post("/change_password", upload.none(), async function (req, res) {
         return;
       }
     }
-    if (!codeInfo) {
+    if (!codeInfo) {//чтобы нельзя было ввести чужой email
       res.status(400).json({ error: "Неверный email" });
       return;
     }

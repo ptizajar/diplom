@@ -87,7 +87,7 @@ video {
     vertical-align: baseline;
 }
 
-/* HTML5 display-role reset for older browsers */
+
 article,
 aside,
 details,
@@ -102,9 +102,9 @@ section {
     display: block;
 }
 
-body {
+ body {
     line-height: 1;
-}
+} 
 
 ol,
 ul {
@@ -145,6 +145,6 @@ body {
 }
 
 button {
-  all: unset; /* убирает все дефолтные стили */
+  all: unset; 
   cursor: pointer;
 }

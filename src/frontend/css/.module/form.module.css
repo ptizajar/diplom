@@ -10,6 +10,7 @@
     height: auto;
     gap: 10px;
     padding: 30px 10%;
+    background-color: white;
 }
 
 .title {
@@ -160,9 +161,7 @@ input:-moz-autofill {
     filter: none !important;
 }
 
-input[type="datetime-local"]::-webkit-datetime-edit {
-    color: transparent;
-}
+
 
 
 
