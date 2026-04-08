@@ -147,6 +147,7 @@ export function OrderForm({ onCloseClick, param }) {
 
                     <input
                         type="datetime-local"
+                        defaultValue={getMinDateTime()}
                         className={f.field}
                         name="preferred_datetime"
                         min={getMinDateTime()}
@@ -154,15 +155,17 @@ export function OrderForm({ onCloseClick, param }) {
                         required
                         disabled={isSubmitting}
                         style={{ width: '100%' }}
-                        onChange={(e) => checkField('preferred_datetime', e.target.value)}
-                        onBlur={(e) => checkField('preferred_datetime', e.target.value)}
+                    onChange={(e) => checkField('preferred_datetime', e.target.value)}
+                    onBlur={(e) => checkField('preferred_datetime', e.target.value)}
                     />
+
+                  
                     {errors.preferred_datetime?.length > 0 && (
                         <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                             {errors.preferred_datetime[0]}
                         </div>
                     )}
-                    <div className={f.label} style={{ fontSize: "12px", marginTop: "10px", textAlign:"center" }}>
+                    <div className={f.label} style={{ fontSize: "12px", marginTop: "10px", textAlign: "center" }}>
                         Рабочие часы: с 10:00 до 17:00<br />
                         Выберите время в ближайшие 14 дней
                     </div>

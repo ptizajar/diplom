@@ -8,6 +8,7 @@ function Layout() {
     <div className={l.layout}>
       <Header />
       <main className={l.content}>
+
         <Outlet />
       </main>
       <Footer />

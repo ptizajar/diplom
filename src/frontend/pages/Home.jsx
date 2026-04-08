@@ -35,7 +35,7 @@ export function Home() {
         {items.map(
           (item) =>
             !item.show && (
-              <div className={i.cardWrapper}>
+              <div className={i.cardWrapper} key={item.item_id}>
                 <ItemCard
                   key={item.item_id}
                   item_id={item.item_id}
