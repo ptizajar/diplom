@@ -35,19 +35,19 @@ app.get("/api/categories", async function (req, res) {
   }
 });
 
-app.get("/api/category/image/:id", async function (req, res) {
-  try {
-    const param = req.params.id;
-    const result = await pool.query(
-      "select category_picture from category where category_id= $1",
-      [param],
-    );
-    res.status(200).contentType("image/jpeg");
-    res.send(result.rows[0].category_picture);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.get("/api/category/image/:id", async function (req, res) {
+//   try {
+//     const param = req.params.id;
+//     const result = await pool.query(
+//       "select category_picture from category where category_id= $1",
+//       [param],
+//     );
+//     res.status(200).contentType("image/jpeg");
+//     res.send(result.rows[0].category_picture);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
 app.get("/api/category/:id", async function (req, res) {
   try {
@@ -86,19 +86,21 @@ app.get("/api/category/:id/items", async function (req, res) {
   }
 });
 
-app.get("/api/item/image/:id", async function (req, res) {
-  try {
-    const param = req.params.id;
-    const result = await pool.query(
-      "select item_picture from item where item_id= $1",
-      [param],
-    );
-    res.status(200).contentType("image/jpeg");
-    res.send(result.rows[0].item_picture);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.get("/api/item/image/:id", async function (req, res) {
+//   try {
+//     const param = req.params.id;
+//     const result = await pool.query(
+//       "select item_picture from item where item_id= $1",
+//       [param],
+//     );
+//     res.status(200).contentType("image/jpeg");
+//     res.send(result.rows[0].item_picture);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+
 
 app.get("/api/item/:id", async function (req, res) {
   try {
@@ -359,12 +361,12 @@ app.get("/api/bids", async function (req, res) {
   const userId = req.user?.user_id;
   try {
     const result = await pool.query(
-      `SELECT o.order_id, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
+      `SELECT o.order_id, o.date, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
       WHERE o.user_id =$1
-      ORDER BY o.date ASC `,
+      ORDER BY o.date DESC `,
       [userId],
     );
     res.status(200).json(result.rows);
@@ -375,6 +377,10 @@ app.get("/api/bids", async function (req, res) {
 
 
 app.use(express.static("static"));
+
+
+app.use('/api/item/image',express.static("/var/images/items"));
+app.use('/api/category/image',express.static("/var/images/categories"));
 
 app.get("/*splat", (req, res) => {
   res.sendFile(path.resolve("./static", "index.html"));

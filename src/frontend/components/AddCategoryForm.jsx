@@ -74,7 +74,6 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                     <input
                         type="text"
                         className={f.field}
-                        placeholder="Название"
                         name="category_name"
                         required
                         defaultValue={param?.name}
@@ -93,7 +92,6 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
                         <input
                             className={f.fileInput}
                             type="file"
-                            placeholder="Загрузите изображение"
                             name="category_image"
                             accept="image/png, image/jpeg"
                             required={!param}

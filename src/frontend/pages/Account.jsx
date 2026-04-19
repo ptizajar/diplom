@@ -154,13 +154,14 @@ export function Account() {
       <h1 className={l.title}>Аккаунт</h1>
       <div className={f.userData}>
         <p className={f.labelBold}><b style={{ fontWeight: "bold" }}>Имя:</b> {userData.user_name} </p>
+        <p className={f.labelBold}><b style={{ fontWeight: "bold" }}>Компания:</b> {userData?.company} </p>
         <p className={f.labelBold}><b style={{ fontWeight: "bold" }}>Номер телефона:</b> {userData.phone} </p>
         <p className={f.labelBold}><b style={{ fontWeight: "bold" }}>Email:</b> {userData.email}</p>
       </div>
       <div className={a.adminButtonContainer}>
         <button className={a.adminButton} onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
         <button className={a.adminButton} onClick={logout}>Выйти</button>
-        <button className={a.adminButton} style={{ backgroundColor: "#B71C1C" }} onClick={deleteAcc}>Удалить аккаунт</button>
+        <button className={`${i.adminButton} ${i.deleteButton}`}  onClick={deleteAcc}>Удалить аккаунт</button>
       </div>
 
       <h1 className={l.title} >Заявки</h1>
@@ -176,6 +177,7 @@ export function Account() {
             recall={formatDate(bid.recall_date)}
             phone={bid.phone}
             status={bid.status}
+            date={formatDate(bid.date)}
             onClose={loadBids}
           ></OrderCard>
         ))}

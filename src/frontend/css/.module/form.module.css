@@ -110,6 +110,7 @@
 
 }
 
+
 .buttonHolder {
     display: flex;
     flex-direction: row;
@@ -202,4 +203,71 @@ input:-moz-autofill {
     gap: 10px;
     white-space: nowrap;
     margin-left: 10px;
+}
+
+
+
+/* Обёртка для поля пароля */
+.passwordWrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Поле пароля — отступ справа под глазик (в процентах от ширины) */
+.fieldPassword {
+    padding-right: 12%;        /* основной отступ — адаптивный */
+    box-sizing: border-box;
+}
+
+/* Кнопка с глазом — позиционирование в процентах */
+.togglePasswordBtn {
+    position: absolute;
+    right: 4%;                 /* отступ от правого края */
+    top: 52%;                  /* чуть ниже середины, чтобы компенсировать padding */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 120%;           /* размер иконки относительно шрифта */
+}
+.checkboxConsent {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.checkboxConsent input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: #2A3E3C;
+    cursor: pointer;
+}
+
+.checkboxConsent label {
+    cursor: pointer;
+    user-select: none;
+}
+
+
+/* Стили для кнопки в отключённом состоянии */
+.button:disabled {
+    background-color: #8A9E9C;    /* более тусклый цвет */
+    color: #E3E0DA;
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+
+
+/* Дополнительно: лёгкое затемнение при hover на активной кнопке */
+.button:not(:disabled):hover {
+    background-color: #131f1e;   /* чуть темнее основной цвет */
+    transform: translateY(-1.5px);
+    transition: all 0.2s ease;
 }

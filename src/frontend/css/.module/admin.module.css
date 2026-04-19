@@ -71,3 +71,9 @@
     padding: 8px 8px;
 
 }
+
+.adminButton:hover {
+    background-color: #131f1e;   /* чуть темнее основной цвет */
+    transform: translateY(-1.5px);
+    transition: all 0.2s ease;
+}

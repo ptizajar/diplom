@@ -52,7 +52,7 @@ export function AdminItemCard({ item_id, name, price, onClose, liked, removed, l
           <button className={i.adminButton} onClick={() => showDialog(AddItemForm, { item_id }, onClose)}>Редактировать</button>
           <button className={i.adminButton} onClick={removeItem} >{removed ? 'Открыть' : 'Скрыть'}</button>
           <button className={i.adminButton} onClick={() => navigate(`/price_history/${item_id}`)}>История цен</button>
-          <button className={i.adminButton} style={{ backgroundColor: "#B71C1C" }} onClick={deleteItem} >Удалить</button>
+          <button className={`${i.adminButton} ${i.deleteButton}`}  onClick={deleteItem} >Удалить</button>
         </div>
       </div>
       {error && (

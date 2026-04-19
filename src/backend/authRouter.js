@@ -25,7 +25,7 @@ authRouter.get("/refresh-session", async function (req, res) {
 });
 
 authRouter.post("/registrate", upload.none(), async function (req, res) {
-  const { user_name, phone, email, password } = req.body;
+  const { user_name, phone, email, password, company } = req.body;
   const errors = [];
   try {
     // Имя
@@ -109,8 +109,8 @@ authRouter.post("/registrate", upload.none(), async function (req, res) {
         .json({ error: "Пользователь с такой почтой уже существует" });
     } else {
       const result = await pool.query(
-        "INSERT INTO users ( email, password, user_name, phone, is_admin) values ($1, $2, $3, $4, $5)  RETURNING user_id, user_name, phone, is_admin, email",
-        [email, hashPasswordMD5(password), user_name, phone.trim(), false],
+        "INSERT INTO users ( email, password, user_name, phone, is_admin, company) values ($1, $2, $3, $4, $5, $6)  RETURNING user_id, user_name, phone, is_admin, email, company",
+        [email, hashPasswordMD5(password), user_name, phone.trim(), false, company],
       );
       const cookie = crypto.randomBytes(64).toString("hex");
       const currentUser = result.rows[0];
@@ -210,7 +210,7 @@ authRouter.get("/user_data", async function (req, res) {
     }
     const userId = req.user?.user_id;
     const result = await pool.query(
-      "select user_name, phone, email from users where user_id = $1",
+      "select user_name, phone, email, company from users where user_id = $1",
       [userId],
     );
     res.status(200).json(result.rows[0]);

@@ -8,12 +8,13 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
-
+import { Eye, EyeOff } from "lucide-react";
 
 export function RegistrationForm({ onCloseClick }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
-    const [showPasswords, setShowPasswords] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [isConsentChecked, setIsConsentChecked] = useState(false);
     const dispatch = useDispatch();
 
     const { errors, checkField, checkForm, clearErrors } = useValidation('registration');
@@ -79,7 +80,6 @@ export function RegistrationForm({ onCloseClick }) {
                     <input
                         type="text"
                         className={f.field}
-                        placeholder="Имя"
                         name="user_name"
                         onChange={(e) => checkField('user_name', e.target.value)}
                         onBlur={(e) => checkField('user_name', e.target.value)}
@@ -91,12 +91,19 @@ export function RegistrationForm({ onCloseClick }) {
                         {errors.user_name[0]}
                     </div>
                 )}
+                 <div className={f.inputHolder}>
+                    <label className={f.label}>Компания</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        name="company"
+                        disabled={isSubmitting} />
+                </div>
                 <div className={f.inputHolder}>
                     <label className={f.label}>Email</label>
                     <input
                         type="text"
                         className={f.field}
-                        placeholder="Email"
                         name="email"
                         onChange={(e) => checkField('email', e.target.value)}
                         onBlur={(e) => checkField('email', e.target.value)}
@@ -113,7 +120,6 @@ export function RegistrationForm({ onCloseClick }) {
                     <input
                         type="tel"
                         className={f.field}
-                        placeholder="Номер телефона"
                         name="phone"
                         onChange={(e) => checkField('phone', e.target.value)}
                         onBlur={(e) => checkField('phone', e.target.value)}
@@ -125,12 +131,74 @@ export function RegistrationForm({ onCloseClick }) {
                         {errors.phone[0]}
                     </div>
                 )}
-                <div className={f.inputHolder}>
+                {/* Пароль с глазиком */}
+                <div className={`${f.inputHolder} ${f.passwordWrapper}`}>
+                    <label className={f.label}>Пароль</label>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        className={`${f.field} ${f.fieldPassword}`}
+                        name="password"
+                        onChange={(e) => checkField('password', e.target.value)}
+                        onBlur={(e) => checkField('password', e.target.value)}
+                        required
+                        disabled={isSubmitting} />
+                    
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        disabled={isSubmitting}
+                        className={f.togglePasswordBtn}
+                        aria-label={showPassword ? "Показать пароль" : "Скрыть пароль" }
+                    >
+                        {showPassword ? 
+                            <Eye size={18} strokeWidth={2.5} /> : 
+                            <EyeOff size={18} strokeWidth={2.5} />
+                        }
+                    </button>
+                </div>
+                {errors.password?.length > 0 && (
+                    <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
+                        {errors.password[0]}
+                    </div>
+                )}
+
+                {/* Повторите пароль */}
+                <div className={`${f.inputHolder} ${f.passwordWrapper}`}>
+                    <label className={f.label}>Повторите пароль</label>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        className={`${f.field} ${f.fieldPassword}`}
+                        name="password2"
+                        required
+                        disabled={isSubmitting} />
+                </div>
+
+                {/* Новый чекбокс согласия */}
+                <div className={f.checkboxConsent}>
+                    <input
+                        type="checkbox"
+                        id="consent"
+                        checked={isConsentChecked}
+                        onChange={(e) => setIsConsentChecked(e.target.checked)}
+                        disabled={isSubmitting}
+                        required
+                    />
+                    <label className={f.label} htmlFor="consent"  style={{ fontSize: "12px", marginTop: "10px", maxWidth:"300px"}}>
+                        Я соглашаюсь с{" "}
+                        <a href="/public/privacy-policy.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "#2A3E3C" }}>
+                            Политикой конфиденциальности
+                        </a>
+                        {" "}и{" "}
+                        <a href="/public/consent.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "#2A3E3C" }}>
+                            Согласием на обработку персональных данных
+                        </a>
+                    </label>
+                </div>
+                {/* <div className={f.inputHolder}>
                     <label className={f.label}>Пароль</label>
                     <input
                         type={showPasswords ? "text" : "password"}
                         className={f.field}
-                        placeholder="Пароль"
                         name="password"
                         onChange={(e) => checkField('password', e.target.value)}
                         onBlur={(e) => checkField('password', e.target.value)}
@@ -147,7 +215,6 @@ export function RegistrationForm({ onCloseClick }) {
                     <input
                         type={showPasswords ? "text" : "password"}
                         className={f.field}
-                        placeholder="Повторите пароль"
                         name="password2"
                         required />
                 </div>
@@ -171,9 +238,9 @@ export function RegistrationForm({ onCloseClick }) {
                     <a href="/public/consent.pdf" target="_blank" rel="noopener noreferrer" style={{color: "#2A3E3C"}}>
                         Согласием на обработку персональных данных
                     </a>
-                </div>
+                </div> */}
                 <div className={f.buttonHolder}>
-                    <button className={f.button} type="submit" disabled={isSubmitting}>
+                    <button className={f.button} type="submit" disabled={isSubmitting || !isConsentChecked}>
                         ОК
                     </button>
                     <button

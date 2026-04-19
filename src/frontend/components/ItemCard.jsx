@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { backend } from "../api-globals";
 import { useDispatch, useSelector } from "react-redux";
-import i from  "../css/.module/itemCard.module.css"
+import i from "../css/.module/itemCard.module.css"
 import { showDialog } from "./Dialog";
 import { SessionExpired } from "./SessionExpired";
 import { setUser } from "../store";
@@ -17,6 +17,11 @@ export function ItemCard({ item_id, name, price, liked, length, width, height, r
     e.preventDefault();
     if (!currentUser) {
       showDialog(LoginForm)
+      return;
+    }
+    if (currentUser.is_admin) {
+      setError('Администраторам нельзя добавлять товары в избранное');
+      setTimeout(() => setError(""), 5000);
       return;
     }
     const formData = new FormData();
