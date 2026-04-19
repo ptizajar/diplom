@@ -21,8 +21,10 @@ export function Header() {
         <ul className={h.menu}>
           <Link to={"/"} className={`${h.link} ${h.linkLogo}`}>
             <li className={`${h.item} ${h.itemLogo}`}>
+               <div className={h.logoContent}>
               <img src="/public/logo.svg" className={h.iconLogo}></img>
              <span>МАКС-МЕБЕЛЬ</span>
+             </div>
             </li>
           </Link>
           <Link to={"/catalog"} className={h.link}>
@@ -44,7 +46,7 @@ export function Header() {
               <span>Аккаунт</span>
             </li>
           </Link>}
-          {currentUser && <Link to={"/favourites"} className={h.link}>
+          {currentUser && !currentUser.is_admin && <Link to={"/favourites"} className={h.link}>
             <li className={h.item}>
               <img src="/public/heart.svg" className={h.icon}></img>
               <span>Избранное</span>

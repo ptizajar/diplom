@@ -89,7 +89,6 @@ export function ChangePassword({ onCloseClick }) {
                     <input 
                         type="text" 
                         className={f.field} 
-                        placeholder="email"
                         name="email" 
                         required 
                         onBlur={(e) => checkField('email', e.target.value)} 
@@ -105,11 +104,11 @@ export function ChangePassword({ onCloseClick }) {
                 {sent && <>
                     <div className={f.inputHolder}>
                         <label className={f.label}>Код</label>
-                        <input type="text" className={f.field} placeholder="Код" name="code" required />
+                        <input type="text" className={f.field}  name="code" required />
                     </div>
                     <div className={f.inputHolder}>
                         <label className={f.label}>Пароль</label>
-                        <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Пароль" name="password" required
+                        <input type={showPasswords ? "text" : "password"} className={f.field} name="password" required
                             onChange={(e) => checkField('password', e.target.value)}
                             onBlur={(e) => checkField('password', e.target.value)}
                         />
@@ -121,7 +120,7 @@ export function ChangePassword({ onCloseClick }) {
                     )}
                     <div className={f.inputHolder}>
                         <label className={f.label}>Повторите пароль</label>
-                        <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Повторите пароль" name="password2" required />
+                        <input type={showPasswords ? "text" : "password"} className={f.field} name="password2" required />
                     </div>
                     <div className={f.checkboxHolder}>
                         <label className={f.label} htmlFor="checkbox">Показать пароль</label>

@@ -55,6 +55,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.2.1",
+    "lucide-react": "^1.8.0",
     "multer": "^2.0.2",
     "nodemailer": "^8.0.2",
     "pg": "^8.16.3",

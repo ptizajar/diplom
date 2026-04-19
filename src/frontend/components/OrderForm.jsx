@@ -51,11 +51,6 @@ export function OrderForm({ onCloseClick, param }) {
             setTimeout(() => setError(""), 5000);
             return;
         }
-        if (currentUser.is_admin) {
-            setError('Администраторам нельзя оформлять заказы');
-            setTimeout(() => setError(""), 5000);
-            return;
-        }
 
         const formData = new FormData(e.target);
         const formObject = {
@@ -117,7 +112,6 @@ export function OrderForm({ onCloseClick, param }) {
                     </div>
                 )}
 
-
                 <div className={f.inputHolder}>
                     <label className={f.label}>
                         Номер телефона
@@ -147,19 +141,19 @@ export function OrderForm({ onCloseClick, param }) {
 
                     <input
                         type="datetime-local"
-                        defaultValue={getMinDateTime()}
+                        // defaultValue={getMinDateTime()}
                         className={f.field}
                         name="preferred_datetime"
-                        min={getMinDateTime()}
-                        max={getMaxDateTime()}
+                        // min={getMinDateTime()}
+                        // max={getMaxDateTime()}
                         required
                         disabled={isSubmitting}
                         style={{ width: '100%' }}
-                    onChange={(e) => checkField('preferred_datetime', e.target.value)}
-                    onBlur={(e) => checkField('preferred_datetime', e.target.value)}
+                        onChange={(e) => checkField('preferred_datetime', e.target.value)}
+                        onBlur={(e) => checkField('preferred_datetime', e.target.value)}
                     />
 
-                  
+
                     {errors.preferred_datetime?.length > 0 && (
                         <div style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>
                             {errors.preferred_datetime[0]}

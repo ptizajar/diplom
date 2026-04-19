@@ -104,7 +104,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                             <input
                                 type="text"
                                 className={f.field}
-                                placeholder="Артикул"
                                 name="article"
                                 required
                                 defaultValue={item?.article}
@@ -123,7 +122,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                             <input
                                 type="text"
                                 className={f.field}
-                                placeholder="Название"
                                 name="item_name"
                                 required
                                 defaultValue={item?.item_name}
@@ -143,7 +141,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                                 type="number"
                                 pattern="[0-9]*"
                                 className={f.field}
-                                placeholder="Длина"
                                 name="length"
                                 required
                                 defaultValue={item?.length}
@@ -155,7 +152,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                                 type="number"
                                 pattern="[0-9]*"
                                 className={f.field}
-                                placeholder="Ширина"
                                 name="width"
                                 required
                                 defaultValue={item?.width}
@@ -167,7 +163,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                                 <input
                                     className={f.fileInput}
                                     type="file"
-                                    placeholder="Загрузите изображение"
                                     name="item_image"
                                     accept="image/png, image/jpeg"
                                     required={!param}
@@ -182,7 +177,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                                 type="number"
                                 pattern="[0-9]*"
                                 className={f.field}
-                                placeholder="Высота"
                                 name="height"
                                 required
                                 defaultValue={item?.height}
@@ -194,7 +188,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                                 type="number"
                                 pattern="[0-9]*"
                                 className={f.field}
-                                placeholder="Заказ от"
                                 name="quantity"
                                 required
                                 defaultValue={item?.quantity}
@@ -206,7 +199,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                                 type="number"
                                 pattern="[0-9]*"
                                 className={f.field}
-                                placeholder="Цена"
                                 name="price"
                                 required
                                 defaultValue={item?.price}
@@ -219,7 +211,6 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
                             <textarea
                                 type="text"
                                 className={f.field}
-                                placeholder="Описание"
                                 name="description"
                                 defaultValue={item?.description}
                                 onChange={(e) => checkField('item_description', e.target.value)}

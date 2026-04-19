@@ -3,7 +3,7 @@ import { backend } from "../api-globals";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import f from "../css/.module/form.module.css"
-export function OrderCard({ order_id, email, user_name, item_id, article, price, recall, phone, status, onStatusChange }) {
+export function OrderCard({ order_id, email, user_name, item_id, article, price, recall, phone, status, company, date, onStatusChange }) {
     const currentUser = useSelector((state) => state.user.currentUser);
     const [error, setError] = useState("");
     const [currentStatus, setCurrentStatus] = useState(status);
@@ -38,12 +38,20 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
     return (
         <>
             <div className={f.form} style={{ width: "280px", padding: "30px 25px" }}>
-                <p className={f.title} style={{ fontSize: "20px" }}>Заказ №{order_id}</p>
+                <p className={f.title} style={{ fontSize: "20px" }}>Заявка от </p>
+                <p className={f.title} style={{ fontSize: "20px" }}>{date} </p>
 
                 {currentUser?.is_admin && (
                     <div className={f.inputHolder}>
                         <span className={f.label}>Email</span>
                         <p className={f.field}>{email} </p>
+                    </div>
+                )}
+
+                {currentUser?.is_admin && (
+                    <div className={f.inputHolder}>
+                        <span className={f.label}>Компания</span>
+                        <p className={f.field}>{company} </p>
                     </div>
                 )}
 
@@ -84,7 +92,7 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
                     <div className={f.buttonHolder} >
                         {status === 'Оформлен' && (
                             <>
-                                <button className={f.button} style={{width: "fit-content"}} onClick={confirmed}>Подтвердить</button>
+                                <button className={f.button} style={{ width: "fit-content" }} onClick={confirmed}>Подтвердить</button>
                                 <button className={f.button} onClick={canceled}>Отменить</button>
                             </>
                         )}

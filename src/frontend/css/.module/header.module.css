@@ -33,6 +33,7 @@
 
 .linkLogo {
   width: 40%;
+  cursor: default;
 }
 
 .item {
@@ -47,14 +48,17 @@
   font-weight: 400;
   color: black;
   font-size: 18px;
+  transition: all 0.2s ease;
 
 }
+
 
 .itemLogo {
   flex-direction: row;
   justify-content: start;
   gap: 2%;
   font-size: 20px;
+  
 }
 
 .icon {
@@ -67,7 +71,26 @@
   width: 34px;
 
 }
+.item:not(.itemLogo):hover {
+  transform: scale(1.06);
+}
+.item:hover .icon {
+    transform: scale(1.06);
+    color: #000000; 
+}
+.logoContent {
+  display: flex;
+  align-items: center;
+  gap: 5%;
+  width: fit-content;
+  transition: transform 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+}
 
+.logoContent:hover {
+  transform: scale(1.05);
+}
 
 @media screen and (max-width: 688px) {
   .item {

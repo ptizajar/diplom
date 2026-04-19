@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const upload = multer();
+const fs = require("fs").promises;
 export const adminRouter = express.Router();
 import { pool } from "./connections";
 
@@ -19,64 +20,67 @@ adminRouter.put(
   upload.single("category_image"),
   async function (req, res) {
     const { category_name, category_id } = req.body;
-    
+
     try {
       const binaryData = req.file?.buffer;
-      
+
       if (category_id) {
-        //РЕДАКТИРОВАНИЕ 
-        
+        //РЕДАКТИРОВАНИЕ
+
         // проверка уникальности названия
         const checkExisting = await pool.query(
           "SELECT COUNT(*) as count FROM category WHERE LOWER(TRIM(category_name)) = LOWER(TRIM($1)) AND category_id != $2",
           [category_name, category_id],
         );
-        
+
         if (checkExisting.rows[0]?.count > 0) {
           return res.status(409).json({
             error: "Категория с таким названием уже существует",
           });
         }
-        
+
         // само редактирование
-        if (!binaryData) {
-          await pool.query(
-            "UPDATE category SET category_name=$1 WHERE category_id=$2",
-            [category_name, category_id],
-          );
-        } else {
-          await pool.query(
-            "UPDATE category SET category_name=$1, category_picture=$2 WHERE category_id=$3",
-            [category_name, binaryData, category_id],
+
+        await pool.query(
+          "UPDATE category SET category_name=$1 WHERE category_id=$2",
+          [category_name, category_id],
+        );
+        if (binaryData) {
+          await fs.unlink(`/var/images/categories/${category_id}`);
+          await fs.writeFile(
+            `/var/images/categories/${category_id}`,
+            binaryData,
           );
         }
-        
+
         res.status(200).json({});
-        
       } else {
-        // ДОБАВЛЕНИЕ 
-        
+        // ДОБАВЛЕНИЕ
+
         // проверка уникальности названия
         const checkExisting = await pool.query(
           "SELECT COUNT(*) as count FROM category WHERE LOWER(TRIM(category_name)) = LOWER(TRIM($1))",
           [category_name],
         );
-        
+
         if (checkExisting.rows[0]?.count > 0) {
           return res.status(409).json({
             error: "Категория с таким названием уже существует",
           });
         }
-        
+
         // само добавление
         const result = await pool.query(
-          "INSERT INTO category (category_name, category_picture) VALUES ($1, $2) RETURNING *",
-          [category_name, binaryData],
+          "INSERT INTO category (category_name) VALUES ($1) RETURNING *",
+          [category_name],
         );
-        
+        await fs.writeFile(
+          `/var/images/categories/${result.rows[0].category_id}`,
+          binaryData,
+        );
+
         res.status(200).json(result.rows[0]);
       }
-      
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -99,6 +103,7 @@ adminRouter.delete(
         });
       }
       await pool.query("delete from category where category_id=$1", [param]);
+      await fs.unlink(`/var/images/categories/${param}`);
       res.status(200).json({});
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -122,6 +127,7 @@ adminRouter.delete(
           .json({ error: "На этот товар оформлялись заказы" });
       }
       await pool.query("delete from item where item_id=$1", [param]);
+      await fs.unlink(`/var/images/items/${param}`);
       res.status(200).json({});
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -153,25 +159,29 @@ adminRouter.put(
 
       if (item_id) {
         // РЕДАКТИРОВАНИЕ
-        
+
         // проверка уникальности названия
         const checkExistingName = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE LOWER(TRIM(item_name)) = LOWER(TRIM($1)) AND item_id != $2",
           [item_name, item_id],
         );
         if (checkExistingName.rows[0]?.count > 0) {
-          return res.status(409).json({ error: "Товар с таким названием уже существует" });
+          return res
+            .status(409)
+            .json({ error: "Товар с таким названием уже существует" });
         }
-        
+
         // проверка уникальности артикула
         const checkExistingArt = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE article = $1 AND item_id != $2",
           [article, item_id],
         );
         if (checkExistingArt.rows[0]?.count > 0) {
-          return res.status(409).json({ error: "Товар с таким артикулом уже существует" });
+          return res
+            .status(409)
+            .json({ error: "Товар с таким артикулом уже существует" });
         }
-        
+
         // само редактирование
         const currentItem = await pool.query(
           "SELECT price FROM item WHERE item_id = $1",
@@ -179,16 +189,25 @@ adminRouter.put(
         );
         const oldPrice = currentItem.rows[0]?.price;
 
-        if (!binaryData) {
-          await pool.query(
-            "UPDATE item SET article=$1, item_name=$2, length=$3, width=$4, height=$5, quantity=$6, price=$7, description=$8, show=$9 WHERE item_id=$10",
-            [parseInt(article), item_name, parseFloat(length), parseFloat(width), parseFloat(height), parseInt(quantity), parseFloat(price), description, show == "on", item_id],
-          );
-        } else {
-          await pool.query(
-            "UPDATE item SET article=$1, item_name=$2, length=$3, width=$4, height=$5, quantity=$6, price=$7, description=$8, show=$9, item_picture=$10 WHERE item_id=$11",
-            [parseInt(article), item_name, parseFloat(length), parseFloat(width), parseFloat(height), parseInt(quantity), parseFloat(price), description, show == "on", binaryData, item_id],
-          );
+        await pool.query(
+          "UPDATE item SET article=$1, item_name=$2, length=$3, width=$4, height=$5, quantity=$6, price=$7, description=$8, show=$9 WHERE item_id=$10",
+          [
+            article,
+            item_name,
+            parseFloat(length),
+            parseFloat(width),
+            parseFloat(height),
+            parseInt(quantity),
+            parseFloat(price),
+            description,
+            show == "on",
+            item_id,
+          ],
+        );
+
+        if (binaryData) {
+          await fs.unlink(`/var/images/items/${item_id}`);
+          await fs.writeFile(`/var/images/items/${item_id}`, binaryData);
         }
 
         if (oldPrice != price) {
@@ -199,42 +218,60 @@ adminRouter.put(
         }
 
         res.status(200).json({});
-        
       } else {
-        // ДОБАВЛЕНИЕ 
-        
+        // ДОБАВЛЕНИЕ
+
         // проверка уникальности названия
         const checkExistingName = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE LOWER(TRIM(item_name)) = LOWER(TRIM($1))",
           [item_name],
         );
         if (checkExistingName.rows[0]?.count > 0) {
-          return res.status(409).json({ error: "Товар с таким названием уже существует" });
+          return res
+            .status(409)
+            .json({ error: "Товар с таким названием уже существует" });
         }
-        
+
         // проверка уникальности артикула
         const checkExistingArt = await pool.query(
           "SELECT COUNT(*) as count FROM item WHERE article = $1",
           [article],
         );
         if (checkExistingArt.rows[0]?.count > 0) {
-          return res.status(409).json({ error: "Товар с таким артикулом уже существует" });
+          return res
+            .status(409)
+            .json({ error: "Товар с таким артикулом уже существует" });
         }
-        
+
         // само добавление
         const result = await pool.query(
-          "INSERT INTO item (item_name, article, length, width, height, item_picture, price, description, show, category_id, quantity, removed) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *",
-          [item_name, parseInt(article), parseFloat(length), parseFloat(width), parseFloat(height), binaryData, parseFloat(price), description, show == "on", category_id, parseInt(quantity), false],
+          "INSERT INTO item (item_name, article, length, width, height, price, description, show, category_id, quantity, removed) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *",
+          [
+            item_name,
+            article,
+            parseFloat(length),
+            parseFloat(width),
+            parseFloat(height),
+            parseFloat(price),
+            description,
+            show == "on",
+            category_id,
+            parseInt(quantity),
+            false,
+          ],
         );
-        
+
+        await fs.writeFile(
+          `/var/images/items/${result.rows[0].item_id}`,
+          binaryData,
+        );
         await pool.query(
           "INSERT INTO price_history (item_id, price) VALUES ($1, $2)",
           [result.rows[0].item_id, parseFloat(price)],
         );
-        
+
         res.status(200).json(result.rows[0]);
       }
-      
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -280,7 +317,6 @@ adminRouter.get(
   },
 );
 
-
 adminRouter.put("/changeStatus", upload.none(), async function (req, res) {
   try {
     const status = req.body.status;
@@ -295,29 +331,16 @@ adminRouter.put("/changeStatus", upload.none(), async function (req, res) {
   }
 });
 
-adminRouter.get("/filterOrders", async function (req, res) {
+adminRouter.get("/bids", async function (req, res) {
   try {
-    const status = req.query.status;
-    if (status === "Все") {
-      const result = await pool.query(
-        `SELECT o.order_id, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
-      FROM orders o 
-      LEFT JOIN users u ON o.user_id = u.user_id 
-      LEFT JOIN item i ON o.item_id = i.item_id 
-      ORDER BY o.date ASC `,
-      );
-      return res.status(200).json(result.rows);
-    }
     const result = await pool.query(
-      `SELECT o.order_id, u.email, o.user_name, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
+      `SELECT o.order_id, o.date, u.email, o.user_name, u.company, o.item_id, i.article, o.price, o.recall_date, o.phone, o.status 
       FROM orders o 
       LEFT JOIN users u ON o.user_id = u.user_id 
       LEFT JOIN item i ON o.item_id = i.item_id 
-      where o.status = $1
-      ORDER BY o.date ASC `,
-      [status],
+      ORDER BY o.date DESC `,
     );
-    res.status(200).json(result.rows);
+    return res.status(200).json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

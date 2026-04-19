@@ -38,6 +38,11 @@ export function ItemPage() {
       showDialog(LoginForm);
       return;
     }
+    if (currentUser.is_admin) {
+      setError('Администраторам нельзя оформлять заказы');
+      setTimeout(() => setError(""), 5000);
+      return;
+    }
     showDialog(OrderForm, { item_id });
   }
 
@@ -84,7 +89,7 @@ export function ItemPage() {
           <div className={i.priceHolder}>
             <p className={i.price}>{item?.price} ₽</p>
             {!item?.removed && <button className={a.adminButton} onClick={handleOrderClick}>Заказать</button>}
-            {item?.removed && <p className={i.price}>Товар закончился</p>}
+            {item?.removed && <p className={i.price}>Нет в продаже</p>}
           </div>
         </div>
       </div>

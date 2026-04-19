@@ -8,12 +8,13 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store";
 import { ChangePassword } from "./ChangePassword";
 import "../css/toast.css"
+import { Eye, EyeOff } from "lucide-react";
 
 
 export function LoginForm({ onCloseClick }) {
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showPasswords, setShowPasswords] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
     function switchForm(newform) {
         showDialog(newform);
@@ -51,11 +52,36 @@ export function LoginForm({ onCloseClick }) {
                 <p className={f.title}>Войти</p>
                 <div className={f.inputHolder}>
                     <label className={f.label}>Email</label>
-                    <input type="text" className={f.field} placeholder="Email" name="email" required />
+                    <input type="text" className={f.field} name="email" required />
                 </div>
-                <div className={f.inputHolder}>
+
+                {/* Поле Пароль с глазиком */}
+                <div className={`${f.inputHolder} ${f.passwordWrapper}`}>
                     <label className={f.label}>Пароль</label>
-                    <input type={showPasswords ? "text" : "password"} className={f.field} placeholder="Пароль" name="password" required />
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        className={`${f.field} ${f.fieldPassword}`}
+                        name="password"
+                        required
+                        disabled={isSubmitting}
+                    />
+
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        disabled={isSubmitting}
+                        className={f.togglePasswordBtn}
+                        aria-label={showPassword ? "Показать пароль" : "Скрыть пароль"}
+                    >
+                        {showPassword ?
+                            <Eye size={18} strokeWidth={2.5} /> :
+                            <EyeOff size={18} strokeWidth={2.5} />
+                        }
+                    </button>
+                </div>
+                {/* <div className={f.inputHolder}>
+                    <label className={f.label}>Пароль</label>
+                    <input type={showPasswords ? "text" : "password"} className={f.field}  name="password" required />
                 </div>
 
                 <div className={f.checkboxHolder}>
@@ -68,7 +94,7 @@ export function LoginForm({ onCloseClick }) {
                         disabled={isSubmitting}
                         style={{ marginRight: '8px', width: 'auto' }}
                     />
-                </div>
+                </div> */}
                 <div className={f.buttonHolder}>
                     <button className={f.button} type="submit">ОК</button>
                     <button className={f.button} onClick={onCloseClick}>Отмена</button>
@@ -77,7 +103,7 @@ export function LoginForm({ onCloseClick }) {
                     <button className={f.button} style={{ width: "60%" }} onClick={() => switchForm(ChangePassword)}>Забыли пароль?</button>
                 </div>
 
-                <p className={f.label} style={{marginTop:"10px"}}>Ещё нет аккаунта?</p>
+                <p className={f.label} style={{ marginTop: "10px" }}>Ещё нет аккаунта?</p>
                 <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
                     <button className={f.button} style={{ width: "60%" }} onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
                 </div>

@@ -65,7 +65,6 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                     <input
                         type="text"
                         className={f.field}
-                        placeholder="Имя"
                         name="user_name"
                         required
                         defaultValue={currentUser?.user_name}
@@ -83,7 +82,6 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                     <input
                         type="text"
                         className={f.field}
-                        placeholder="Email"
                         name="email"
                         required
                         defaultValue={currentUser?.email}
@@ -101,7 +99,6 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                     <input
                         type="text"
                         className={f.field}
-                        placeholder="Телефон"
                         name="phone"
                         required
                         defaultValue={currentUser?.phone}
