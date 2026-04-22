@@ -43,7 +43,7 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  gap: 5px;
+  /* gap: 5px; */
   font-family: 'Exo 2', sans-serif;
   font-weight: 400;
   color: black;
@@ -92,22 +92,19 @@
   transform: scale(1.05);
 }
 
-@media screen and (max-width: 688px) {
-  .item {
-    font-size: 14px;
+@media screen and (max-width: 550px) {
+ 
+  .itemLogo span {
+    display: none;
   }
-
-  .itemLogo {
-    font-size: 16px;
+   .item span {
+    display: none;
   }
 
 
 }
 
-@media screen and (max-width: 411px) {
-  .itemLogo span {
-    display: none;
-  }
+@media screen and (max-width: 400px) {
 
   .banner {
     display: none;

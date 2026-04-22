@@ -7,13 +7,14 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
     const currentUser = useSelector((state) => state.user.currentUser);
     const [error, setError] = useState("");
     const [currentStatus, setCurrentStatus] = useState(status);
-    function confirmed(e) {
-        e.preventDefault();
+    function confirmed() {
         changeStatus("Подтвержден");
     }
-    function canceled(e) {
-        e.preventDefault();
+    function canceled() {
         changeStatus("Отменен");
+    }
+    function completed ()  {
+        changeStatus('Выполнен');
     }
 
     async function changeStatus(newStatus) {
@@ -89,7 +90,7 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
 
                 {/* Блок кнопок управления для админа */}
                 {currentUser?.is_admin && (
-                    <div className={f.buttonHolder} >
+                    <div className={f.buttonHolder}>
                         {status === 'Оформлен' && (
                             <>
                                 <button className={f.button} style={{ width: "fit-content" }} onClick={confirmed}>Подтвердить</button>
@@ -97,8 +98,12 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
                             </>
                         )}
                         {status === 'Подтвержден' && (
-                            <button className={f.button} onClick={canceled}>Отменить </button>
+                            <>
+                                <button className={f.button} onClick={completed}>Выполнен</button>
+                                <button className={f.button} onClick={canceled}>Отменить</button>
+                            </>
                         )}
+                        {/* Статусы 'Выполнен' и 'Отменён' — конечные, кнопок нет */}
                     </div>
                 )}
             </div>

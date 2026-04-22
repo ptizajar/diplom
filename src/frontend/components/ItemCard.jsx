@@ -7,6 +7,7 @@ import { showDialog } from "./Dialog";
 import { SessionExpired } from "./SessionExpired";
 import { setUser } from "../store";
 import { LoginForm } from "./LoginForm";
+import { Heart } from "lucide-react";
 export function ItemCard({ item_id, name, price, liked, length, width, height, removed }) {
   const [error, setError] = useState("");
   const [currentLiked, setCurrentLiked] = useState(liked);
@@ -50,7 +51,11 @@ export function ItemCard({ item_id, name, price, liked, length, width, height, r
       <Link className={i.card} to={`/item/${item_id}`}>
         <div className={i.imageHolder} >
           <img className={i.image} src={`${backend}/api/item/image/${item_id}`} style={style} alt="товар" />
-          <button className={i.icon} onClick={like}><img src={currentLiked ? "/public/liked.svg" : "/public/heart.svg"} alt="в избранное" /></button>
+          <button className={i.icon} onClick={like}>
+            {currentLiked ? <Heart size={30} strokeWidth={2} fill="#2A3E3C" color="#2A3E3C" />
+            : <Heart size={30} strokeWidth={2} color="#2A3E3C" />
+          }
+          </button>
         </div>
         <p className={i.name}>{name}</p>
         <p className={i.size}>{length} х {width} х {height} см</p>

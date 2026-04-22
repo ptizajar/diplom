@@ -7,11 +7,14 @@
     align-items: center;
     /* gap: 25px; */
     width: 100%;
+    min-width: 280px;
     height: auto;
     gap: 10px;
     padding: 30px 10%;
     background-color: white;
 }
+
+
 
 .title {
     color: #2A3E3C;
@@ -270,4 +273,12 @@ input:-moz-autofill {
     background-color: #131f1e;   /* чуть темнее основной цвет */
     transform: translateY(-1.5px);
     transition: all 0.2s ease;
+}
+
+
+@media (max-width:400px){
+    .title{
+        font-size: 20px;
+    }
+    
 }

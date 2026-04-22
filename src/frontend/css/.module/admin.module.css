@@ -32,6 +32,9 @@
     height: fit-content;
     margin-top: 20px;
     margin-left: 5%;
+    align-items: center;
+    flex-wrap: wrap;
+    
 }
 
 .adminContainer {
@@ -58,22 +61,23 @@
     cursor: pointer;
     border: none;
     /* margin-left: 1vw; */
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.adminContainer .adminButton{
-     min-width: 140px;
-    padding: 8px 8px;
-}
 
 .adminButtonContainer .adminButton {
     min-width: 140px;
+    height: 32px;
     padding: 8px 8px;
+
 
 }
 
 .adminButton:hover {
-    background-color: #131f1e;   /* чуть темнее основной цвет */
+    background-color: #131f1e;
+    /* чуть темнее основной цвет */
     transform: translateY(-1.5px);
     transition: all 0.2s ease;
 }

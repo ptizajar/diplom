@@ -6,15 +6,11 @@ import "../css/toast.css";
 import { LoginForm } from "./LoginForm";
 import { showDialog } from "./Dialog";
 import { useSelector } from "react-redux";
+import {  CircleUser, SquareMenu } from 'lucide-react';
 
 export function Header() {
   const currentUser = useSelector((state) => state.user.currentUser);
-  function loadOrNavigate(action) {
-    if (action === 'navigate') {
-      dispatch(setUser(null));
-      navigate('/')
-    }
-  }
+ 
   return (
     <>
       <nav className={h.header}>
@@ -29,13 +25,15 @@ export function Header() {
           </Link>
           <Link to={"/catalog"} className={h.link}>
             <li className={h.item}>
-              <img src="/public/catalog.svg" className={h.icon}></img>
+              {/* <img src="/public/catalog.svg" className={h.icon}></img> */}
+              <SquareMenu size={32} strokeWidth={2} color="#2A3E3C"/>
               <span>Каталог</span>
             </li>
           </Link>
           {!currentUser && <Link onClick={(e) => { e.preventDefault(); showDialog(LoginForm); }} className={h.link}>
             <li className={h.item}>
-              <img src="/public/account.svg" className={h.icon}></img>
+              {/* <img src="/public/account.svg" className={h.icon}></img> */}
+              <CircleUser size={32} strokeWidth={2} color="#2A3E3C"/>
              <span>Войти</span>
             </li>
           </Link>}

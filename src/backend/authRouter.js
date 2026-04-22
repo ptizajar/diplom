@@ -230,10 +230,11 @@ authRouter.put("/edit_user", upload.none(), async function (req, res) {
     const newName = req.body.user_name;
     const newPhone = req.body.phone;
     const email = req.body.email;
+    const company=req.body.company;
 
     const result = await pool.query(
-      "UPDATE users SET user_name=$1, phone=$2, email=$3 WHERE user_id=$4 returning user_id, email, user_name, phone, is_admin",
-      [newName, newPhone, email, userId],
+      "UPDATE users SET user_name=$1, phone=$2, email=$3, company=$4 WHERE user_id=$5 returning user_id, email, user_name, phone, company, is_admin",
+      [newName, newPhone, email, company, userId],
     );
 
     const updatedUser = result.rows[0];
