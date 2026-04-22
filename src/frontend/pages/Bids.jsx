@@ -7,6 +7,8 @@ import l from "../css/.module/layout.module.css";
 import a from "../css/.module/admin.module.css";
 import i from "../css/.module/itemCard.module.css";
 import f from "../css/.module/favourites.module.css";
+import fm from "../css/.module/form.module.css";
+
 
 function Bids() {
   const [allBids, setAllBids] = useState([]); // все заявки
@@ -107,36 +109,37 @@ function Bids() {
 
       <div className={a.adminButtonContainer}>
 
-        {/* <button className={a.adminButton} onClick={() => applyFilters('Оформлен')}>Оформленные</button>
-        <button className={a.adminButton} onClick={() => applyFilters('Подтвержден')}>Подтвержденные</button>
-        <button className={a.adminButton} onClick={() => applyFilters('Отменен')}>Отмененные</button>
-        <button className={a.adminButton} onClick={() => applyFilters('Все')}>Все</button> */}
+        <span className={fm.label}>Начало периода</span>
+        <input
+          className={fm.field}
+          style={{ maxWidth: "200px", marginTop: "0" }}
+          type="date"
+          value={startDate}
+          name="startDate"
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <span className={fm.label}>Конец периода</span>
+        <input
+          className={fm.field}
+          style={{ maxWidth: "200px", marginTop: "0" }}
+          type="date"
+          value={endDate}
+          name="endDate"
+          onChange={(e) => setEndDate(e.target.value)}
+        />
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
           className={a.adminButton}
+          style={{ paddingTop: "5px" }}
+          name="dateSelect"
         >
           <option value="Оформлен">Оформленные</option>
           <option value="Подтвержден">Подтвержденные</option>
           <option value="Отменен">Отмененные</option>
+          <option value="Выполнен">Выполненные</option>
           <option value="Все">Все</option>
         </select>
-
-
-      </div>
-      <div className={a.adminButtonContainer}>
-        <input
-          type="date"
-          value={startDate}
-          placeholder="C"
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <input
-          type="date"
-          value={endDate}
-          placeholder="До"
-          onChange={(e) => setEndDate(e.target.value)}
-        />
         <button className={a.adminButton} onClick={applyFilters}>
           Применить
         </button>

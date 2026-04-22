@@ -128,9 +128,7 @@
 
 .deleteButton{
     background-color: #B71C1C; 
-    width:fit-content;
-    padding-left: 10px;
-    padding-right: 10px;
+  
 }
 .deleteButton:hover{
     transform: translateY(-1px);

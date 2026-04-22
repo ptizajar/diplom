@@ -26,7 +26,8 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
         const formObject = {
             user_name: formData.get('user_name'),
             phone: formData.get('phone'),
-            email: formData.get('email')
+            email: formData.get('email'),
+            company: formData.get('company')
         };
         const isValid = checkForm(formObject);
         if (!isValid) {
@@ -50,7 +51,6 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
             return;
         }
         const updatedUser = await res.json();
-        console.log('Updated user:', updatedUser);
         dispatch(updateUser(updatedUser));
         clearErrors();
         onCloseClick();
@@ -94,6 +94,16 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
                         {errors.email[0]}
                     </div>
                 )}
+                 <div className={f.inputHolder}>
+                    <label className={f.label}>Компания</label>
+                    <input
+                        type="text"
+                        className={f.field}
+                        name="company"
+                        required
+                        defaultValue={currentUser?.company}
+                        disabled={isSubmitting} />
+                </div>
                 <div className={f.inputHolder}>
                     <label className={f.label}>Телефон</label>
                     <input

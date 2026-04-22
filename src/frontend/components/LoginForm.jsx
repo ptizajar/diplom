@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store";
 import { ChangePassword } from "./ChangePassword";
 import "../css/toast.css"
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 
 
 export function LoginForm({ onCloseClick }) {
@@ -74,8 +74,8 @@ export function LoginForm({ onCloseClick }) {
                         aria-label={showPassword ? "Показать пароль" : "Скрыть пароль"}
                     >
                         {showPassword ?
-                            <Eye size={18} strokeWidth={2.5} /> :
-                            <EyeOff size={18} strokeWidth={2.5} />
+                            <Eye size={18} strokeWidth={2.5} color="#2A3E3C"/> :
+                            <EyeClosed size={18} strokeWidth={2.5} color="#2A3E3C"/>
                         }
                     </button>
                 </div>
@@ -100,12 +100,12 @@ export function LoginForm({ onCloseClick }) {
                     <button className={f.button} onClick={onCloseClick}>Отмена</button>
                 </div>
                 <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
-                    <button className={f.button} style={{ width: "60%" }} onClick={() => switchForm(ChangePassword)}>Забыли пароль?</button>
+                    <button className={f.button} style={{ width: "70%" }} onClick={() => switchForm(ChangePassword)}>Не помню пароль</button>
                 </div>
 
                 <p className={f.label} style={{ marginTop: "10px" }}>Ещё нет аккаунта?</p>
                 <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
-                    <button className={f.button} style={{ width: "60%" }} onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
+                    <button className={f.button} style={{ width: "70%" }} onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
                 </div>
             </form>
             {error && (

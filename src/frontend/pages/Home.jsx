@@ -7,6 +7,7 @@ import l from "../css/.module/layout.module.css";
 import h from "../css/.module/home.module.css";
 import i from "../css/.module/itemCard.module.css"
 import "../css/toast.css"
+import { MapPin } from "lucide-react";
 
 export function Home() {
   const [items, setItems] = useState([]);
@@ -59,7 +60,7 @@ export function Home() {
 
         <div className={h.adressInfo}>
           <div className={h.adress}>
-            <img src="/public/map.svg"></img>
+            <MapPin size={24} strokeWidth={2} color="#2A3E3C"></MapPin>
             г. Ростов-на-Дону, ул. Извилистая 7
           </div>
           <div className={h.mapHolder}>

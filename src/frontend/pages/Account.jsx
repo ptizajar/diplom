@@ -161,7 +161,9 @@ export function Account() {
       <div className={a.adminButtonContainer}>
         <button className={a.adminButton} onClick={() => showDialog(EditUserForm, undefined, loadOrNavigate)}>Редактировать</button>
         <button className={a.adminButton} onClick={logout}>Выйти</button>
-        <button className={`${i.adminButton} ${i.deleteButton}`}  onClick={deleteAcc}>Удалить аккаунт</button>
+        <button className={`${i.adminButton} ${i.deleteButton}`}
+          style={{ width: "fit-content", paddingLeft: "10px", paddingRight: "10px" }}
+          onClick={deleteAcc}>Удалить аккаунт</button>
       </div>
 
       <h1 className={l.title} >Заявки</h1>

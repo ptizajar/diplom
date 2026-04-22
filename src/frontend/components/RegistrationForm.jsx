@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 
 export function RegistrationForm({ onCloseClick }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -152,7 +152,7 @@ export function RegistrationForm({ onCloseClick }) {
                     >
                         {showPassword ? 
                             <Eye size={18} strokeWidth={2.5} /> : 
-                            <EyeOff size={18} strokeWidth={2.5} />
+                            <EyeClosed size={18} strokeWidth={2.5} />
                         }
                     </button>
                 </div>
@@ -257,7 +257,7 @@ export function RegistrationForm({ onCloseClick }) {
                 <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
                     <button
                         className={f.button}
-                        style={{ width: "60%" }}
+                        style={{ width: "70%" }}
                         onClick={() => {
                             clearErrors();
                             switchForm(LoginForm)

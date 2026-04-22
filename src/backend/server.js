@@ -27,7 +27,7 @@ app.use("/api", authRouter);
 app.get("/api/categories", async function (req, res) {
   try {
     const result = await pool.query(
-      "SELECT category_name, category_id from category order by category_name desc",
+      "SELECT category_name, category_id from category order by category_name",
     );
     res.status(200).json(result.rows);
   } catch (err) {
@@ -106,7 +106,7 @@ app.get("/api/item/:id", async function (req, res) {
   try {
     const param = req.params.id;
     const result = await pool.query(
-      "select item_id,item_name,article,length,width,height,item_picture,price,description,quantity, show, removed from item where item_id=$1 ",
+      "select item_id,item_name,article,length,width,height,price,description,quantity, show, removed from item where item_id=$1 ",
       [param],
     );
     res.status(200).json(result.rows[0]);
