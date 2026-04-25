@@ -105,7 +105,7 @@ export function LoginForm({ onCloseClick }) {
 
                 <p className={f.label} style={{ marginTop: "10px" }}>Ещё нет аккаунта?</p>
                 <div className={f.buttonHolder} style={{ justifyContent: "center" }}>
-                    <button className={f.button} style={{ width: "70%" }} onClick={() => switchForm(RegistrationForm)}>Зарегестрироваться</button>
+                    <button className={f.button} style={{ width: "70%" }} onClick={() => switchForm(RegistrationForm)}>Зарегистрироваться</button>
                 </div>
             </form>
             {error && (

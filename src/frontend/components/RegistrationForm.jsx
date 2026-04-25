@@ -74,7 +74,7 @@ export function RegistrationForm({ onCloseClick }) {
     return (
         <>
             <form className={f.form} onSubmit={save} id="registrationForm" method="POST" encType="multipart/form-data">
-                <p className={f.title}>Зарегестрироваться</p>
+                <p className={f.title}>Зарегистрироваться</p>
                 <div className={f.inputHolder}>
                     <label className={f.label}>Имя</label>
                     <input

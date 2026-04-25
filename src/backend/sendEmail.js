@@ -35,8 +35,8 @@ async sendNewOrderNotification(orderData) {
   const mailOptions = {
     from: `МАКС-МЕБЕЛЬ`,
     to: this.adminEmail,
-    subject: `Новый заказ №${orderData.order_id}`,
-    text: `Поступил новый заказ №${orderData.order_id} в ${new Date(orderData.created_at).toLocaleString('ru-RU')}`,
+    subject: `Новый заказ `,
+    text: `Поступил новый заказ от ${new Date(orderData.created_at).toLocaleString('ru-RU')}`,
   };
 
   await this.transporter.sendMail(mailOptions);
