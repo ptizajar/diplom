@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react"
 import f from "../css/.module/form.module.css"
-import "../api-globals"
-import { backend } from "../api-globals";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
 
@@ -30,7 +28,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
     };
 
     async function loadItem() {
-        const res = await fetch(`${backend}/api/item/${param.item_id}`);
+        const res = await fetch(`/api/item/${param.item_id}`);
         if (!res.ok) {
             const err = await res.json();
             setError(err.error);
@@ -68,7 +66,7 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
 
         setIsSubmitting(true);
 
-        const res = await fetch(`${backend}/api/admin/item`, {
+        const res = await fetch(`/api/admin/item`, {
             method: 'PUT',
             body: formData
         });
@@ -87,10 +85,10 @@ export function AddItemForm({ onCloseClick, param }) {//получает из Di
     // Определяем, какую картинку показывать: новую выбранную, старую из БД или ничего
     const getBackgroundImage = () => {
         if (preview) return `url('${preview}')`;
-        if (param?.item_id) return `url('${backend}/api/item/image/${param.item_id}')`;
+        if (param?.item_id) return `url('$/api/item/image/${param.item_id}')`;
         return 'none';
     };
-    // const style = param ? { backgroundImage: `url('${backend}/api/item/image/${item?.item_id}')` } : {};
+    // const style = param ? { backgroundImage: `url('/api/item/image/${item?.item_id}')` } : {};
     const style = { backgroundImage: getBackgroundImage() };
 
     return (

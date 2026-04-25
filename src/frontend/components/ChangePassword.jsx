@@ -1,7 +1,5 @@
 import React, { useState } from "react"
 import f from "../css/.module/form.module.css"
-import "../api-globals"
-import { backend } from "../api-globals"
 import "../css/toast.css"
 import { useValidation } from "../validation/useValidation"
 
@@ -30,7 +28,7 @@ export function ChangePassword({ onCloseClick }) {
             return;
         }
         setIsSubmitting(true)
-        const res = await fetch(`${backend}/api/change_password`, {
+        const res = await fetch(`/api/change_password`, {
             method: 'POST',
             body: formData
         });
@@ -55,7 +53,7 @@ export function ChangePassword({ onCloseClick }) {
         const isValid = checkForm({ email: emailValue });
         if (!isValid) return;
         setIsSubmitting(true);
-        const res = await fetch(`${backend}/api/send_code`, {
+        const res = await fetch(`/api/send_code`, {
             method: 'POST',
             body: formData
         });

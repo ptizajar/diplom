@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { backend } from "../api-globals";
 import { useDispatch, useSelector } from "react-redux";
 import i from "../css/.module/itemCard.module.css"
 import { showDialog } from "./Dialog";
@@ -29,7 +28,7 @@ export function ItemCard({ item_id, name, price, liked, length, width, height, r
     const formData = new FormData();
     formData.append("item_id", item_id);
     formData.append("liked", !currentLiked);
-    const res = await fetch(`${backend}/api/favourites`, {
+    const res = await fetch(`/api/favourites`, {
       method: 'POST',
       body: formData
     })
@@ -62,7 +61,7 @@ export function ItemCard({ item_id, name, price, liked, length, width, height, r
          <div className={`${i.imageHolder} ${removed ? i.removed : ""}`}>
         <img
           className={i.image}
-          src={`${backend}/api/item/image/${item_id}`}
+          src={`/api/item/image/${item_id}`}
           alt="товар"
         />
 
@@ -95,7 +94,7 @@ export function ItemCard({ item_id, name, price, liked, length, width, height, r
         <div className={`${i.imageHolder} ${removed ? i.removed : ""}`}>
           <img
             className={i.image}
-            src={`${backend}/api/item/image/${item_id}`}
+            src={`/api/item/image/${item_id}`}
             alt="товар"
           />
 

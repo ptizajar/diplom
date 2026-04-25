@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import f from "../css/.module/form.module.css"
-import "../api-globals"
 import { showDialog } from "./Dialog";
 import { RegistrationForm } from "./RegistrationForm";
-import { backend } from "../api-globals";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store";
 import { ChangePassword } from "./ChangePassword";
@@ -23,7 +21,7 @@ export function LoginForm({ onCloseClick }) {
     async function save(e) {
         e.preventDefault();
         setIsSubmitting(true);
-        const res = await fetch(`${backend}/api/login`, {
+        const res = await fetch(`/api/login`, {
             method: 'POST',
             body: new FormData(loginForm)
 

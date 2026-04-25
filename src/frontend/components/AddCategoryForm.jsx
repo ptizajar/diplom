@@ -1,6 +1,5 @@
 import f from "../css/.module/form.module.css"
-import "../api-globals"
-import { backend } from "../api-globals";
+
 import { useState, useEffect } from "react";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
@@ -40,7 +39,7 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
 
         setIsSubmitting(true);
 
-        const res = await fetch(`${backend}/api/admin/category`, {
+        const res = await fetch(`/api/admin/category`, {
             method: 'PUT',
             body: formData
         });
@@ -60,11 +59,11 @@ export function AddCategoryForm({ onCloseClick, param }) {//получает и�
 // Определяем, какую картинку показывать: новую выбранную, старую из БД или ничего
     const getBackgroundImage = () => {
         if (preview) return `url('${preview}')`;
-        if (param?.category_id) return `url('${backend}/api/category/image/${param.category_id}')`;
+        if (param?.category_id) return `url('/api/category/image/${param.category_id}')`;
         return 'none';
     };
     const style = { backgroundImage: getBackgroundImage() };
-    // const style = param ? { backgroundImage: `url('${backend}/api/category/image/${param?.category_id}')` } : {};
+    // const style = param ? { backgroundImage: `url(/api/category/image/${param?.category_id}')` } : {};
     return (
         <>
             <form className={f.form} onSubmit={save} id="addCategoryForm" method="PUT" encType="multipart/form-data">

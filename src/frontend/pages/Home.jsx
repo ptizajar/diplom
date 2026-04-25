@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { ItemCard } from "../components/ItemCard";
-import { backend } from "../api-globals";
 import { useEffect } from "react";
 import l from "../css/.module/layout.module.css";
 import h from "../css/.module/home.module.css";
@@ -13,7 +12,7 @@ export function Home() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState("");
   async function loadItems() {
-    const res = await fetch(`${backend}/api/showed_items`);
+    const res = await fetch(`/api/showed_items`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);

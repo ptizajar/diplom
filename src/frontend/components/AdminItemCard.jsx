@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ItemCard } from "./ItemCard";
 import { showDialog } from "./Dialog";
-import { backend } from "../api-globals";
 import { AddItemForm } from "./AddItemForm";
 import i from "../css/.module/itemCard.module.css"
 import "../css/toast.css"
@@ -11,7 +10,7 @@ export function AdminItemCard({ item_id, name, price, onClose, liked, removed, l
   const navigate = useNavigate();
   async function deleteItem() {
     setError("");
-    const res = await fetch(`${backend}/api/admin/delete_item/${item_id}`, {
+    const res = await fetch(`/api/admin/delete_item/${item_id}`, {
       method: 'delete'
     });
     if (!res.ok) {
@@ -25,7 +24,7 @@ export function AdminItemCard({ item_id, name, price, onClose, liked, removed, l
 
   async function removeItem() {
     setError("");
-    const res = await fetch(`${backend}/api/admin/remove_item/${item_id}`, {
+    const res = await fetch(`/api/admin/remove_item/${item_id}`, {
       method: 'post'
     });
     if (!res.ok) {

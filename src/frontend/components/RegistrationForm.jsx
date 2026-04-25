@@ -1,8 +1,6 @@
 import React, { useState } from "react"
 import f from "../css/.module/form.module.css"
-import "../api-globals"
 import { showDialog } from "./Dialog";
-import { backend } from "../api-globals";
 import { LoginForm } from "./LoginForm";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store";
@@ -46,7 +44,7 @@ export function RegistrationForm({ onCloseClick }) {
         setIsSubmitting(true);
 
 
-        const res = await fetch(`${backend}/api/registrate`, {
+        const res = await fetch(`/api/registrate`, {
             method: 'POST',
             body: new FormData(registrationForm)
 

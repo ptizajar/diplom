@@ -1,6 +1,5 @@
 import React from "react"
 import f from "../css/.module/form.module.css"
-import "../api-globals"
 import { showDialog } from "./Dialog";
 import { LoginForm } from "./LoginForm";
 import "../css/toast.css"

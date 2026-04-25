@@ -1,6 +1,4 @@
 import f from "../css/.module/form.module.css"
-import "../api-globals"
-import { backend } from "../api-globals";
 import { useState } from "react";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
@@ -34,7 +32,7 @@ export function EditUserForm({ onCloseClick }) {//получает из Dialog
             return;
         }
         setIsSubmitting(true);
-        const res = await fetch(`${backend}/api/edit_user`, {
+        const res = await fetch(`/api/edit_user`, {
             method: 'PUT',
             body: formData
         });

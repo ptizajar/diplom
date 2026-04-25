@@ -1,6 +1,4 @@
 import f from "../css/.module/form.module.css"
-import "../api-globals"
-import { backend } from "../api-globals";
 import { useState } from "react";
 import { useValidation } from "../validation/useValidation";
 import "../css/toast.css"
@@ -65,7 +63,7 @@ export function OrderForm({ onCloseClick, param }) {
 
         setIsSubmitting(true);
 
-        const res = await fetch(`${backend}/api/order/${param.item_id}`, {
+        const res = await fetch(`/api/order/${param.item_id}`, {
             method: 'POST',
             body: formData
         });

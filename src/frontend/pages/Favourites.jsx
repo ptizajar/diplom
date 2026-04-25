@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ItemCard } from "../components/ItemCard";
-import { backend } from "../api-globals";
 import { useEffect } from "react";
 import i from  "../css/.module/itemCard.module.css";
 import f from  "../css/.module/favourites.module.css";
@@ -18,7 +17,7 @@ export function Favourites() {
     if (!currentUser) {
       return;
     }
-    const res = await fetch(`${backend}/api/liked_items`);
+    const res = await fetch(`/api/liked_items`);
     if (res.status === 401) {
       showDialog(SessionExpired);
       return;

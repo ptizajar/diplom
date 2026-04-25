@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { backend } from "../api-globals";
 import "../css/toast.css"
 import i from "../css/.module/itemCard.module.css";
 import l from "../css/.module/layout.module.css";
@@ -28,7 +27,7 @@ export function Account() {
     if (!currentUser) {
       return;
     }
-    const res = await fetch(`${backend}/api/bids`, {
+    const res = await fetch(`/api/bids`, {
       method: 'GET'
     });
     if (res.status === 401 && !error401.current) {
@@ -55,7 +54,7 @@ export function Account() {
     if (!currentUser) {
       return;
     }
-    const res = await fetch(`${backend}/api/user_data`, {
+    const res = await fetch(`/api/user_data`, {
       method: 'GET'
     });
     if (res.status === 401 && !error401.current) {
@@ -81,7 +80,7 @@ export function Account() {
   async function logout() {
     setError("");
 
-    const res = await fetch(`${backend}/api/logout`, {
+    const res = await fetch(`/api/logout`, {
       method: 'POST'
     });
 
@@ -97,7 +96,7 @@ export function Account() {
 
   async function deleteAcc() {
     setError("");
-    const res = await fetch(`${backend}/api/delete_acc`, {
+    const res = await fetch(`/api/delete_acc`, {
       method: 'DELETE'
     });
     if (res.status === 401 && !error401.current) {

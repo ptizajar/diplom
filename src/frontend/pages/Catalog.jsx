@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/toast.css"
 import { CategoryCard } from "../components/CategoryCard";
-import { backend } from "../api-globals";
 import c from "../css/.module/categoryCard.module.css"
 import l from "../css/.module/layout.module.css";
 
@@ -9,7 +8,7 @@ export function Catalog() {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   async function load() {
-    const res = await fetch(`${backend}/api/categories`);
+    const res = await fetch(`/api/categories`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
