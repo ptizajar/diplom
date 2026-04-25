@@ -1,6 +1,5 @@
 import { forAdminOnly } from "../components/ForAdminOnly";
 import React, { useEffect, useState } from "react";
-import { backend } from "../api-globals";
 import "../css/toast.css"
 import { OrderCard } from "../components/OrderCard";
 import l from "../css/.module/layout.module.css";
@@ -18,7 +17,7 @@ function Bids() {
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState('Оформлен');
   // async function filterOrders(status) {
-  //   const res = await fetch(`${backend}/api/admin/filterOrders?status=${status}`, {
+  //   const res = await fetch(`/api/admin/filterOrders?status=${status}`, {
   //     method: 'GET',
   //   });
   //   if (!res.ok) {
@@ -35,7 +34,7 @@ function Bids() {
   // }, [])
 
   async function fetchAllOrders() {
-    const res = await fetch(`${backend}/api/admin/bids`);
+    const res = await fetch(`/api/admin/bids`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);

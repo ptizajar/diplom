@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { backend } from "../api-globals";
 import { forAdminOnly } from "../components/ForAdminOnly";
 import l from "../css/.module/layout.module.css";
 import t from "../css/.module/priceHistory.module.css";
@@ -10,7 +9,7 @@ import t from "../css/.module/priceHistory.module.css";
     const [prices, setPrices] = useState([]);
 
     async function loadPrices() {
-        const res = await fetch(`${backend}/api/admin/price_history/${item_id}`, {
+        const res = await fetch(`/api/admin/price_history/${item_id}`, {
             method: 'GET',
         });
         if (!res.ok) {

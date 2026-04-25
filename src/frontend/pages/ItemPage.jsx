@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { backend } from "../api-globals";
 import "../css/toast.css"
 import { OrderForm } from "../components/OrderForm";
 import { showDialog } from "../components/Dialog";
@@ -23,7 +22,7 @@ export function ItemPage() {
   const [toast, setToast] = useState("");
   async function load() {
 
-    const res = await fetch(`${backend}/api/item/${item_id}`);
+    const res = await fetch(`/api/item/${item_id}`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -62,7 +61,7 @@ export function ItemPage() {
     <>
       <h1 className={l.title}>{item?.item_name}</h1>
       <div className={i.itemHolder}>
-        <div className={i.image} style={{ backgroundImage: `url('${backend}/api/item/image/${item_id}')` }}></div>
+        <div className={i.image} style={{ backgroundImage: `url('/api/item/image/${item_id}')` }}></div>
         <div className={i.tableHolder}>
           <table className={i.table}>
             <tbody>

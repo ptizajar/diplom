@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { AdminCategoryCard } from "../components/AdminCategoryCard";
 import { showDialog } from "../components/Dialog";
 import { AddCategoryForm } from "../components/AddCategoryForm";
-import { backend } from "../api-globals";
 import c from "../css/.module/categoryCard.module.css";
 import l from "../css/.module/layout.module.css";
 import a from "../css/.module/admin.module.css";
@@ -19,7 +18,7 @@ function Admin() {
   const dispatch = useDispatch();
 
   async function load() {
-    const res = await fetch(`${backend}/api/categories`);
+    const res = await fetch(`/api/categories`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -33,7 +32,7 @@ function Admin() {
     e.preventDefault();
     setError("");
 
-    const res = await fetch(`${backend}/api/logout`, {
+    const res = await fetch(`/api/logout`, {
       method: 'POST'
 
     });

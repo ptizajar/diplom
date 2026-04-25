@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { backend } from "../api-globals";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import f from "../css/.module/form.module.css"
@@ -21,7 +20,7 @@ export function OrderCard({ order_id, email, user_name, item_id, article, price,
         const formData = new FormData();
         formData.append("status", newStatus);
         formData.append("id", order_id);
-        const res = await fetch(`${backend}/api/admin/changeStatus`, {
+        const res = await fetch(`/api/admin/changeStatus`, {
             method: 'PUT',
             body: formData
         })

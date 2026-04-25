@@ -4,7 +4,6 @@ import { AddItemForm } from "../components/AddItemForm";
 import { AdminItemCard } from "../components/AdminItemCard";
 import l from "../css/.module/layout.module.css";
 import a from "../css/.module/admin.module.css";
-import { backend } from "../api-globals";
 import { showDialog } from "../components/Dialog";
 import i from "../css/.module/itemCard.module.css"
 import { forAdminOnly } from "../components/ForAdminOnly";
@@ -21,7 +20,7 @@ function AdminCategory() {
   const navigate=useNavigate();
 
   async function loadCategory() {
-    const res = await fetch(`${backend}/api/category/${category_id}`);
+    const res = await fetch(`/api/category/${category_id}`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -33,7 +32,7 @@ function AdminCategory() {
   }
 
   async function loadItems() {
-    const res = await fetch(`${backend}/api/admin/category/${category_id}/all_items`);
+    const res = await fetch(`/api/admin/category/${category_id}/all_items`);
     if (!res.ok) {
       const err = await res.json();
       setError(err.error);
@@ -47,7 +46,7 @@ function AdminCategory() {
     e.preventDefault();
     setError("");
 
-    const res = await fetch(`${backend}/api/logout`, {
+    const res = await fetch(`/api/logout`, {
       method: 'POST'
 
     });

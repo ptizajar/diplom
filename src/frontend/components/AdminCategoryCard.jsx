@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import {CategoryCard} from "./CategoryCard";
 import { AddCategoryForm } from "./AddCategoryForm";
 import { showDialog } from "./Dialog";
-import { backend } from "../api-globals";
 import c from "../css/.module/categoryCard.module.css"
 import "../css/toast.css"
 
@@ -12,7 +11,7 @@ export function AdminCategoryCard({ category_id, name, onClose }) {
 
   async function deleteCategory() {
     setError("");
-    const res = await fetch(`${backend}/api/admin/delete_category/${category_id}`, {
+    const res = await fetch(`/api/admin/delete_category/${category_id}`, {
       method: 'delete'
     });
     if (!res.ok) {
