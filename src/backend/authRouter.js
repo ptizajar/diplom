@@ -248,7 +248,7 @@ authRouter.put("/edit_user", upload.none(), async function (req, res) {
 });
 
 const codes = new Map();
-authRouter.post("/send_code", upload.none(), async function (req, res) {
+authRouter.put("/send_code", upload.none(), async function (req, res) {
   try {
     const email = req.body.email;
     const currentTries = tries.get(email) || [];
@@ -264,7 +264,7 @@ authRouter.post("/send_code", upload.none(), async function (req, res) {
       [email],
     );
     if (currentUser.rows.length === 0) {
-      res.status(400).json({ error: "Вы не зарегестрированы" });
+      res.status(400).json({ error: "Вы не зарегистрированы" });
       return;
     }
 
@@ -278,7 +278,7 @@ authRouter.post("/send_code", upload.none(), async function (req, res) {
   }
 });
 
-authRouter.post("/change_password", upload.none(), async function (req, res) {
+authRouter.put("/change_password", upload.none(), async function (req, res) {
   const errors = [];
   try {
     const code = req.body.code;
@@ -307,7 +307,7 @@ authRouter.post("/change_password", upload.none(), async function (req, res) {
       [email],
     );
     if (!currentUser.rows.length) {
-      res.status(400).json({ error: "Вы не зарегестрированы" });
+      res.status(400).json({ error: "Вы не зарегистрированы" });
       return;
     }
 

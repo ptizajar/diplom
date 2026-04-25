@@ -84,7 +84,7 @@ export function OrderForm({ onCloseClick, param }) {
 
         await res.json();
         clearErrors();
-        onCloseClick();
+        onCloseClick("success");
     }
 
     return (

@@ -20,6 +20,7 @@ export function ItemPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user.currentUser);
+  const [toast, setToast] = useState("");
   async function load() {
 
     const res = await fetch(`${backend}/api/item/${item_id}`);
@@ -43,7 +44,12 @@ export function ItemPage() {
       setTimeout(() => setError(""), 5000);
       return;
     }
-    showDialog(OrderForm, { item_id });
+    showDialog(OrderForm, { item_id }, (action) => {
+      if (action === "success") {
+        setToast("Заявка оформлена");
+        setTimeout(() => setToast(""), 5000);
+      }
+    });
   }
 
   useEffect(() => {
@@ -104,6 +110,15 @@ export function ItemPage() {
             <button onClick={() => setError("")} className="toast-close">×</button>
           </div>
           {/* Прогресс-бар для автоскрытия */}
+          <div className="toast-progress"></div>
+        </div>
+      )}
+      {toast && (
+        <div className="toast-notification">
+          <div className="toast-content">
+            <span className="toast-message">{toast}</span>
+            <button onClick={() => setToast("")} className="toast-close">×</button>
+          </div>
           <div className="toast-progress"></div>
         </div>
       )}

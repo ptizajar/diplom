@@ -5,12 +5,17 @@ const { Pool } = require("pg");
 
 
 const { createClient } = require("redis");
-export const client = createClient();
+export const client = createClient({
+  socket: {
+    host: 'redis',
+    port: 6379
+  }
+});
 client.on("error", (err) => console.log("Redis client error", err));
 
 export const pool = new Pool({
   user: "postgres",
-  host: "localhost",
+  host: "postgres",
   database: "maksmebel",
 });
 

@@ -1,0 +1,8 @@
+import { User } from "lucide-react"
+
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+test-user.txt
